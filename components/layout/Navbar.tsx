@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Link } from "@digdir/designsystemet-react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
-import { FiSun, FiMoon } from "react-icons/fi";
+import { FiSun, FiMoon, FiHome } from "react-icons/fi";
 
 const Navbar = () => {
   const [expand, setExpand] = useState(false);
@@ -57,9 +57,23 @@ const Navbar = () => {
       }}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Logo */}
-        <NextLink href="/" className="text-xl font-bold" style={{ color: 'var(--ds-color-accent-base-default)' }}>
-          VU
+        {/* Home */}
+        <NextLink
+          href="/"
+          aria-label="Hjem"
+          style={{
+            width: '2rem',
+            height: '2rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px solid var(--ds-color-neutral-border-default)',
+            borderRadius: '0.375rem',
+            color: 'var(--ds-color-accent-base-default)',
+            transition: 'all 0.2s'
+          }}
+        >
+          <FiHome style={{ fontSize: '1.125rem' }} />
         </NextLink>
 
         {/* Right side: Theme toggle + Hamburger */}
@@ -86,46 +100,67 @@ const Navbar = () => {
           </button>
 
           {/* Hamburger Menu */}
-          <button
-            onClick={() => setExpand(!expand)}
-            aria-label={expand ? "Lukk meny" : "Åpne meny"}
-            style={{
-              width: '2rem',
-              height: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '1px solid var(--ds-color-neutral-border-default)',
-              borderRadius: '0.375rem',
-              backgroundColor: 'transparent',
-              color: 'var(--ds-color-accent-base-default)',
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            {expand ? <IoMdClose style={{ fontSize: '1.125rem' }} /> : <GiHamburgerMenu style={{ fontSize: '1.125rem' }} />}
-          </button>
-        </div>
-      </div>
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => setExpand(!expand)}
+              aria-label={expand ? "Lukk meny" : "Åpne meny"}
+              style={{
+                width: '2rem',
+                height: '2rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1px solid var(--ds-color-neutral-border-default)',
+                borderRadius: '0.375rem',
+                backgroundColor: 'transparent',
+                color: 'var(--ds-color-accent-base-default)',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              {expand ? <IoMdClose style={{ fontSize: '1.125rem' }} /> : <GiHamburgerMenu style={{ fontSize: '1.125rem' }} />}
+            </button>
 
-      {/* Menu */}
-      {expand && (
-        <div className="overflow-hidden">
-          <div className="flex flex-col gap-4 pt-6 pb-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                href={item.path}
-                asChild
+            {/* Dropdown Menu */}
+            {expand && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '2.5rem',
+                  right: 0,
+                  minWidth: '10rem',
+                  backgroundColor: 'var(--ds-color-neutral-background-default)',
+                  border: '1px solid var(--ds-color-neutral-border-default)',
+                  borderRadius: '0.375rem',
+                  padding: '0.5rem',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
               >
-                <NextLink href={item.path} onClick={() => setExpand(false)}>
-                  {item.name}
-                </NextLink>
-              </Link>
-            ))}
+                {navItems.map((item) => (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    asChild
+                  >
+                    <NextLink
+                      href={item.path}
+                      onClick={() => setExpand(false)}
+                      style={{
+                        display: 'block',
+                        padding: '0.5rem 0.75rem',
+                        borderRadius: '0.25rem',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {item.name}
+                    </NextLink>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 };
