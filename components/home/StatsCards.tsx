@@ -25,7 +25,7 @@ const StatsCards = () => {
         <Card
           key={stat.label}
           style={{
-            padding: '0.75rem',
+            padding: '0.625rem',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -33,11 +33,11 @@ const StatsCards = () => {
             border: '2px solid var(--ds-color-neutral-border-strong)'
           }}
         >
-          <div style={{ marginBottom: '0.5rem' }}>
+          <div style={{ marginBottom: '0.375rem' }}>
             {stat.icon}
           </div>
           <div>
-            <Heading data-size="sm" style={{ color: stat.color, marginBottom: '0.125rem' }}>
+            <Heading data-size="xs" style={{ color: stat.color, marginBottom: '0' }}>
               {stat.value}
             </Heading>
             <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>

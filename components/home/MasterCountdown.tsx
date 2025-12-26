@@ -37,16 +37,16 @@ const MasterCountdown = () => {
     <Card
       style={{
         background: 'linear-gradient(to bottom right, var(--ds-color-accent-base-subtle), var(--ds-color-accent-second-subtle))',
-        padding: '1rem',
+        padding: '0.75rem',
         height: '100%',
         transition: 'all 0.2s',
         border: '2px solid var(--ds-color-neutral-border-strong)'
       }}
     >
-      <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', marginBottom: '0.75rem' }}>
+      <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', marginBottom: '0.5rem' }}>
         🎓 Tid til mastergrad
       </Paragraph>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-1.5">
         {[
           { label: "d", value: timeLeft.days },
           { label: "t", value: timeLeft.hours },
@@ -54,7 +54,7 @@ const MasterCountdown = () => {
           { label: "s", value: timeLeft.seconds },
         ].map((item) => (
           <div key={item.label} style={{ textAlign: 'center' }}>
-            <Heading data-size="md" style={{ color: 'var(--ds-color-accent-base-default)', marginBottom: '0.125rem' }}>
+            <Heading data-size="sm" style={{ color: 'var(--ds-color-accent-base-default)', marginBottom: '0' }}>
               {item.value}
             </Heading>
             <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>

@@ -9,35 +9,35 @@ import StatsCards from "./StatsCards";
 
 const BentoGrid = () => {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       {/* Hero Section */}
-      <div className="mb-6">
-        <div className="grid md:grid-cols-[1fr,200px] gap-6 items-center">
+      <div className="mb-4">
+        <div className="grid md:grid-cols-[1fr,160px] gap-4 items-center">
           {/* Left: Intro */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <div>
-              <Heading data-size="xl" style={{ marginBottom: '0.25rem', color: 'var(--ds-color-accent-base-default)' }}>
+              <Heading data-size="lg" style={{ marginBottom: '0.125rem', color: 'var(--ds-color-accent-base-default)' }}>
                 Victor Uhnger
               </Heading>
-              <Paragraph data-size="md" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>
+              <Paragraph data-size="sm" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>
                 Masterstudent i Informatikk · UiO
               </Paragraph>
             </div>
 
-            <Paragraph data-size="sm" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
+            <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
               Full-stack utvikler med fokus på åpen kildekode og komplekse problemer.
             </Paragraph>
 
             {/* Social Links */}
-            <div className="flex gap-2">
+            <div className="flex gap-1.5">
               <Link
                 href="https://github.com/vuhnger"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"
                 style={{
-                  width: '2.25rem',
-                  height: '2.25rem',
+                  width: '2rem',
+                  height: '2rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -54,8 +54,8 @@ const BentoGrid = () => {
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
                 style={{
-                  width: '2.25rem',
-                  height: '2.25rem',
+                  width: '2rem',
+                  height: '2rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -72,8 +72,8 @@ const BentoGrid = () => {
                 rel="noopener noreferrer"
                 aria-label="Strava"
                 style={{
-                  width: '2.25rem',
-                  height: '2.25rem',
+                  width: '2rem',
+                  height: '2rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -84,7 +84,7 @@ const BentoGrid = () => {
               >
                 <FaStrava style={{ fontSize: '1rem' }} />
               </Link>
-              <Button asChild data-size="sm" variant="primary">
+              <Button asChild data-size="sm" variant="primary" style={{ height: '2rem', padding: '0 1rem' }}>
                 <NextLink href="/cv">CV</NextLink>
               </Button>
             </div>
@@ -94,9 +94,9 @@ const BentoGrid = () => {
           <div className="flex justify-center md:justify-end">
             <div
               style={{
-                width: '8rem',
-                height: '8rem',
-                borderRadius: '0.75rem',
+                width: '6rem',
+                height: '6rem',
+                borderRadius: '0.5rem',
                 background: 'linear-gradient(to bottom right, var(--ds-color-accent-base-default), var(--ds-color-accent-second-default))',
                 padding: '0.125rem'
               }}
@@ -105,14 +105,14 @@ const BentoGrid = () => {
                 style={{
                   width: '100%',
                   height: '100%',
-                  borderRadius: '0.75rem',
+                  borderRadius: '0.5rem',
                   backgroundColor: 'var(--ds-color-neutral-background-default)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
               >
-                <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: 'var(--ds-color-accent-base-default)' }}>
+                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--ds-color-accent-base-default)' }}>
                   VU
                 </span>
               </div>
@@ -122,7 +122,7 @@ const BentoGrid = () => {
       </div>
 
       {/* Bento Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         <div className="col-span-2">
           <MasterCountdown />
         </div>
