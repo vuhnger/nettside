@@ -2,8 +2,7 @@
 
 import NextLink from "next/link";
 import { useState, useEffect } from "react";
-import { Link, Button } from "@digdir/designsystemet-react";
-import { AiFillGithub } from "react-icons/ai";
+import { Link } from "@digdir/designsystemet-react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import { FiSun, FiMoon } from "react-icons/fi";
@@ -11,16 +10,18 @@ import { FiSun, FiMoon } from "react-icons/fi";
 const Navbar = () => {
   const [expand, setExpand] = useState(false);
   const [navColour, setNavColour] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (isDark) {
+        document.documentElement.setAttribute('data-color-scheme', 'dark');
+      }
+      return isDark;
+    }
+    return false;
+  });
 
   useEffect(() => {
-    // Check initial theme preference
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDarkMode(isDark);
-    if (isDark) {
-      document.documentElement.setAttribute('data-color-scheme', 'dark');
-    }
-
     const scrollHandler = () => {
       if (window.scrollY >= 20) {
         setNavColour(true);
@@ -58,21 +59,11 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <NextLink href="/" className="text-xl font-bold" style={{ color: 'var(--ds-color-accent-base-default)' }}>
-        VU
+          VU
         </NextLink>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              href={item.path}
-              asChild
-            >
-              <NextLink href={item.path}>{item.name}</NextLink>
-            </Link>
-          ))}
-
+        {/* Right side: Theme toggle + Hamburger */}
+        <div className="flex items-center gap-2">
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -93,34 +84,33 @@ const Navbar = () => {
           >
             {darkMode ? <FiSun style={{ fontSize: '1.125rem' }} /> : <FiMoon style={{ fontSize: '1.125rem' }} />}
           </button>
-        </div>
 
-        {/* Mobile Hamburger */}
-        <button
-          onClick={() => setExpand(!expand)}
-          className="md:hidden"
-          aria-label={expand ? "Lukk meny" : "Åpne meny"}
-          style={{
-            width: '2rem',
-            height: '2rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '1px solid var(--ds-color-neutral-border-default)',
-            borderRadius: '0.375rem',
-            backgroundColor: 'transparent',
-            color: 'var(--ds-color-accent-base-default)',
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-          }}
-        >
-          {expand ? <IoMdClose style={{ fontSize: '1.125rem' }} /> : <GiHamburgerMenu style={{ fontSize: '1.125rem' }} />}
-        </button>
+          {/* Hamburger Menu */}
+          <button
+            onClick={() => setExpand(!expand)}
+            aria-label={expand ? "Lukk meny" : "Åpne meny"}
+            style={{
+              width: '2rem',
+              height: '2rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid var(--ds-color-neutral-border-default)',
+              borderRadius: '0.375rem',
+              backgroundColor: 'transparent',
+              color: 'var(--ds-color-accent-base-default)',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            {expand ? <IoMdClose style={{ fontSize: '1.125rem' }} /> : <GiHamburgerMenu style={{ fontSize: '1.125rem' }} />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Menu */}
       {expand && (
-        <div className="md:hidden overflow-hidden">
+        <div className="overflow-hidden">
           <div className="flex flex-col gap-4 pt-6 pb-4">
             {navItems.map((item) => (
               <Link
@@ -133,48 +123,6 @@ const Navbar = () => {
                 </NextLink>
               </Link>
             ))}
-
-            {/* Theme Toggle Mobile */}
-            <div className="flex items-center gap-3 px-4">
-              <button
-                onClick={toggleTheme}
-                aria-label={darkMode ? "Bytt til lys modus" : "Bytt til mørk modus"}
-                style={{
-                  width: '2rem',
-                  height: '2rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid var(--ds-color-neutral-border-default)',
-                  borderRadius: '0.375rem',
-                  backgroundColor: 'transparent',
-                  color: 'var(--ds-color-accent-base-default)',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                {darkMode ? <FiSun style={{ fontSize: '1.125rem' }} /> : <FiMoon style={{ fontSize: '1.125rem' }} />}
-              </button>
-              <span style={{ fontSize: '0.875rem', color: 'var(--ds-color-neutral-text-default)' }}>
-                {darkMode ? "Lys modus" : "Mørk modus"}
-              </span>
-            </div>
-
-            <Button
-              asChild
-              variant="primary"
-              data-size="sm"
-            >
-              <a
-                href="https://github.com/vuhnger"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}
-              >
-                <AiFillGithub style={{ fontSize: '1.25rem' }} />
-                <span>GitHub</span>
-              </a>
-            </Button>
           </div>
         </div>
       )}
