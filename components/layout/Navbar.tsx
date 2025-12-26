@@ -2,10 +2,11 @@
 
 import NextLink from "next/link";
 import { useState, useEffect } from "react";
-import { Link, Button, Switch } from "@digdir/designsystemet-react";
+import { Link, Button } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
+import { FiSun, FiMoon } from "react-icons/fi";
 
 const Navbar = () => {
   const [expand, setExpand] = useState(false);
@@ -75,29 +76,25 @@ const Navbar = () => {
           ))}
 
           {/* Theme Toggle */}
-          <Switch
-            checked={darkMode}
-            onChange={toggleTheme}
-            data-size="sm"
-            aria-label="Bytt til mørk modus"
-          />
-
-          {/* GitHub Button */}
-          <Button
-            asChild
-            data-size="sm"
-            variant="primary"
+          <button
+            onClick={toggleTheme}
+            aria-label={darkMode ? "Bytt til lys modus" : "Bytt til mørk modus"}
+            style={{
+              width: '2rem',
+              height: '2rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid var(--ds-color-neutral-border-default)',
+              borderRadius: '0.375rem',
+              backgroundColor: 'transparent',
+              color: 'var(--ds-color-accent-base-default)',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
           >
-            <a
-              href="https://github.com/vuhnger"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}
-            >
-              <AiFillGithub style={{ fontSize: '1rem' }} />
-              <span>GitHub</span>
-            </a>
-          </Button>
+            {darkMode ? <FiSun style={{ fontSize: '1.125rem' }} /> : <FiMoon style={{ fontSize: '1.125rem' }} />}
+          </button>
         </div>
 
         {/* Mobile Hamburger */}
@@ -128,13 +125,28 @@ const Navbar = () => {
 
             {/* Theme Toggle Mobile */}
             <div className="flex items-center gap-3 px-4">
-              <span style={{ fontSize: '0.875rem' }}>Mørk modus</span>
-              <Switch
-                checked={darkMode}
-                onChange={toggleTheme}
-                data-size="sm"
-                aria-label="Bytt til mørk modus"
-              />
+              <button
+                onClick={toggleTheme}
+                aria-label={darkMode ? "Bytt til lys modus" : "Bytt til mørk modus"}
+                style={{
+                  width: '2rem',
+                  height: '2rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--ds-color-neutral-border-default)',
+                  borderRadius: '0.375rem',
+                  backgroundColor: 'transparent',
+                  color: 'var(--ds-color-accent-base-default)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {darkMode ? <FiSun style={{ fontSize: '1.125rem' }} /> : <FiMoon style={{ fontSize: '1.125rem' }} />}
+              </button>
+              <span style={{ fontSize: '0.875rem', color: 'var(--ds-color-neutral-text-default)' }}>
+                {darkMode ? "Lys modus" : "Mørk modus"}
+              </span>
             </div>
 
             <Button
