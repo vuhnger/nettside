@@ -1,7 +1,7 @@
 "use client";
 
 import NextLink from "next/link";
-import { Heading, Paragraph, Link, Button, Avatar } from "@digdir/designsystemet-react";
+import { Heading, Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
 import MasterCountdown from "./MasterCountdown";
@@ -84,9 +84,25 @@ const BentoGrid = () => {
               >
                 <FaStrava style={{ fontSize: '1rem' }} />
               </Link>
-              <Button asChild data-size="sm" variant="primary" style={{ width: '2rem', height: '2rem', padding: 0, minWidth: 'unset' }}>
+              <Link
+                href="/cv"
+                asChild
+                style={{
+                  width: '2rem',
+                  height: '2rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'var(--ds-color-accent-base-default)',
+                  color: 'white',
+                  borderRadius: '0.375rem',
+                  fontWeight: 500,
+                  fontSize: '0.75rem',
+                  transition: 'all 0.2s'
+                }}
+              >
                 <NextLink href="/cv">CV</NextLink>
-              </Button>
+              </Link>
             </div>
           </div>
 
