@@ -84,7 +84,7 @@ const BentoGrid = () => {
               >
                 <FaStrava style={{ fontSize: '1rem' }} />
               </Link>
-              <Button asChild data-size="sm" variant="primary" style={{ height: '2rem', padding: '0 1rem' }}>
+              <Button asChild data-size="sm" variant="primary" style={{ width: '2rem', height: '2rem', padding: 0, minWidth: 'unset' }}>
                 <NextLink href="/cv">CV</NextLink>
               </Button>
             </div>
