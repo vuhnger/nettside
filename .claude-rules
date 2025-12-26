@@ -1,0 +1,48 @@
+# Claude Rules for Victor Uhnger Portfolio
+
+## Tech Stack
+- **Framework**: Next.js 16 (App Router)
+- **Styling**: Tailwind CSS 4 (ALWAYS use pure Tailwind classes, NEVER use CSS variables like `var(--color-purple)`)
+- **UI Components**: Shadcn/ui
+- **Animations**: Framer Motion
+- **Language**: TypeScript
+- **Icons**: react-icons
+
+## Color Scheme (Tailwind utilities)
+- Primary: `text-purple`, `bg-purple`, `border-purple` (#c770f0)
+- Secondary: `text-ocean`, `bg-ocean`, `border-ocean` (#4A90E2)
+- Accent: `text-accent-green`, `bg-accent-green` (#D2DCB6)
+- Use variants: `-light` and `-dark` for each color
+
+## Design Principles
+- Dark theme (black background)
+- Bento-box card layout
+- Minimalistic and clean
+- Everything should fit on one screen (no unnecessary scrolling)
+- Norwegian language for content
+
+## Development Workflow
+1. Always use Tailwind CSS utilities (never `var(--color-*)`)
+2. Make git commits after completing features
+3. Use Norwegian for UI text and labels
+4. Keep components simple and focused
+
+## API Integrations (to implement)
+- WakaTime: Coding statistics
+- Strava: Running/cycling statistics (via backend proxy at api.vuhnger.dev)
+- Spotify: Music listening stats
+- Untappd: Beer stats
+- GitHub: Contribution calendar
+
+## Git Commit Format
+```
+<type>: <subject>
+
+<body>
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
+
+Types: feat, fix, docs, style, refactor, test, chore
