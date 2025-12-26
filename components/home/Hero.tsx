@@ -43,13 +43,13 @@ const Hero = () => {
       >
         <a
           href="/cv"
-          className="px-6 py-2.5 rounded-lg bg-[var(--color-purple)] text-white font-medium hover:bg-[var(--color-purple-dark)] transition-all"
+          className="px-6 py-2.5 rounded-lg bg-transparent border border-[var(--color-purple)] text-[var(--color-purple)] font-medium hover:border-[var(--color-purple-dark)] transition-all"
         >
           CV
         </a>
         <a
           href="/projects"
-          className="px-6 py-2.5 rounded-lg border border-[var(--color-purple)] text-[var(--color-purple)] font-medium hover:bg-[var(--color-purple)] hover:text-white transition-all"
+          className="px-6 py-2.5 rounded-lg bg-transparent border border-[var(--color-purple)] text-[var(--color-purple)] font-medium hover:border-[var(--color-purple-dark)] transition-all"
         >
           Prosjekter
         </a>

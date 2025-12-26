@@ -10,16 +10,8 @@ import { FiSun, FiMoon, FiHome } from "react-icons/fi";
 const Navbar = () => {
   const [expand, setExpand] = useState(false);
   const [navColour, setNavColour] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (isDark) {
-        document.documentElement.setAttribute('data-color-scheme', 'dark');
-      }
-      return isDark;
-    }
-    return false;
-  });
+  const [darkMode, setDarkMode] = useState(false);
+  const [apiStatus, setApiStatus] = useState<"unknown" | "up" | "down">("unknown");
 
   useEffect(() => {
     const scrollHandler = () => {
@@ -32,6 +24,40 @@ const Navbar = () => {
 
     window.addEventListener("scroll", scrollHandler);
     return () => window.removeEventListener("scroll", scrollHandler);
+  }, []);
+
+  useEffect(() => {
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setDarkMode(isDark);
+    document.documentElement.setAttribute('data-color-scheme', isDark ? 'dark' : 'light');
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+
+    const checkApi = async () => {
+      try {
+        const response = await fetch("https://api.vuhnger.dev/strava/health", {
+          signal: controller.signal,
+          cache: "no-store"
+        });
+        if (!active) return;
+        setApiStatus(response.ok ? "up" : "down");
+      } catch {
+        if (!active) return;
+        setApiStatus("down");
+      }
+    };
+
+    checkApi();
+    const interval = setInterval(checkApi, 60000);
+
+    return () => {
+      active = false;
+      controller.abort();
+      clearInterval(interval);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -57,24 +83,65 @@ const Navbar = () => {
       }}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Home */}
-        <NextLink
-          href="/"
-          aria-label="Hjem"
-          style={{
-            width: '2rem',
-            height: '2rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '1px solid var(--ds-color-neutral-border-default)',
-            borderRadius: '0.375rem',
-            color: 'var(--ds-color-accent-base-default)',
-            transition: 'all 0.2s'
-          }}
-        >
-          <FiHome style={{ fontSize: '1.125rem' }} />
-        </NextLink>
+        {/* Home + API status */}
+        <div className="flex items-center gap-2">
+          <NextLink
+            href="/"
+            aria-label="Hjem"
+            style={{
+              width: '2rem',
+              height: '2rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid var(--ds-color-neutral-border-default)',
+              borderRadius: '0.375rem',
+              color: 'var(--ds-color-accent-base-default)',
+              transition: 'all 0.2s'
+            }}
+          >
+            <FiHome style={{ fontSize: '1.125rem' }} />
+          </NextLink>
+
+          <a
+            href="https://api.vuhnger.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="API status"
+            style={{
+              height: '2rem',
+              padding: '0 0.625rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              border: '1px solid var(--ds-color-neutral-border-default)',
+              borderRadius: '0.5rem',
+              backgroundColor: 'var(--ds-color-neutral-background-default)',
+              color: 'var(--ds-color-neutral-text-default)',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              letterSpacing: '0.02em',
+              textTransform: 'uppercase',
+              transition: 'all 0.2s'
+            }}
+          >
+            API
+            <span
+              aria-hidden="true"
+              style={{
+                width: '0.5rem',
+                height: '0.5rem',
+                borderRadius: '999px',
+                backgroundColor:
+                  apiStatus === "up"
+                    ? "var(--ds-color-success-base-default, #22c55e)"
+                    : apiStatus === "down"
+                    ? "var(--ds-color-danger-base-default, #ef4444)"
+                    : "var(--ds-color-neutral-border-default, #a3a3a3)"
+              }}
+            />
+          </a>
+        </div>
 
         {/* Right side: Theme toggle + Hamburger */}
         <div className="flex items-center gap-2">
