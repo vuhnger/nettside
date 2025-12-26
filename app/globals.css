@@ -1,3 +1,7 @@
+/* Designsystemet CSS - must be imported before Tailwind */
+@import "@digdir/designsystemet-css";
+@import "@digdir/designsystemet-css/theme";
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -45,22 +49,22 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
-  /* Custom brand colors - accessible via Tailwind utilities */
-  --color-accent-green: #D2DCB6;
-  --color-accent-green-light: #E8F0D0;
-  --color-accent-green-dark: #B8C99A;
-  --color-purple: #c770f0;
-  --color-purple-light: #e0a8ff;
-  --color-purple-dark: #9f4dd4;
-  --color-ocean: #4A90E2;
-  --color-ocean-light: #74B4E8;
-  --color-ocean-dark: #2E5F9E;
+  /* Semantic brand colors - change these to update entire site theme */
+  --color-primary: #2563eb;        /* Blue - main brand color */
+  --color-primary-light: #60a5fa;
+  --color-primary-dark: #1e40af;
+  --color-secondary: #10b981;      /* Green - secondary/accent */
+  --color-secondary-light: #34d399;
+  --color-secondary-dark: #059669;
+  --color-accent: #f59e0b;         /* Amber - highlights */
+  --color-accent-light: #fbbf24;
+  --color-accent-dark: #d97706;
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --background: oklch(0.99 0 0);     /* Light gray background */
+  --foreground: oklch(0.2 0 0);      /* Dark gray text */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);

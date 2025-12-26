@@ -2,30 +2,42 @@
 
 ## Tech Stack
 - **Framework**: Next.js 16 (App Router)
-- **Styling**: Tailwind CSS 4 (ALWAYS use pure Tailwind classes, NEVER use CSS variables like `var(--color-purple)`)
-- **UI Components**: Shadcn/ui
-- **Animations**: Framer Motion
+- **Styling**: Tailwind CSS 4 + Designsystemet CSS
+- **UI Components**: Designsystemet React (@digdir/designsystemet-react)
+  - ONLY use Designsystemet components
+  - NO custom components unless explicitly requested
+  - Documentation: https://designsystemet.no/no
+- **Animations**: Removed (not needed with Designsystemet)
 - **Language**: TypeScript
-- **Icons**: react-icons
+- **Icons**: react-icons (only for icons not provided by Designsystemet)
 
-## Color Scheme (Tailwind utilities)
-- Primary: `text-purple`, `bg-purple`, `border-purple` (#c770f0)
-- Secondary: `text-ocean`, `bg-ocean`, `border-ocean` (#4A90E2)
-- Accent: `text-accent-green`, `bg-accent-green` (#D2DCB6)
-- Use variants: `-light` and `-dark` for each color
+## Design System - Designsystemet.no
+- **Official Norwegian government design system**
+- Uses CSS variables with `--ds-` prefix
+- Built-in light/dark mode support via `data-color-scheme` attribute
+- Components: Button, Link, Card, Heading, Paragraph, Switch, etc.
+- Theme customization: https://theme.designsystemet.no/en
+
+## Color Scheme (Designsystemet CSS variables)
+Use Designsystemet's semantic color tokens:
+- Accent colors: `var(--ds-color-accent-base-default)`, `var(--ds-color-accent-second-default)`
+- Neutral colors: `var(--ds-color-neutral-background-default)`, `var(--ds-color-neutral-text-subtle)`
+- Borders: `var(--ds-color-neutral-border-default)`, `var(--ds-color-neutral-border-subtle)`
 
 ## Design Principles
-- Dark theme (black background)
-- Bento-box card layout
+- Light theme by default with dark mode toggle
+- Compact, bento-box card layout
 - Minimalistic and clean
 - Everything should fit on one screen (no unnecessary scrolling)
 - Norwegian language for content
+- Accessibility-first (WCAG compliant via Designsystemet)
 
 ## Development Workflow
-1. Always use Tailwind CSS utilities (never `var(--color-*)`)
-2. Make git commits after completing features
-3. Use Norwegian for UI text and labels
-4. Keep components simple and focused
+1. ONLY use Designsystemet React components
+2. Use Designsystemet CSS variables for colors (never custom colors)
+3. Make git commits after completing features
+4. Use Norwegian for UI text and labels
+5. Keep components simple and focused
 
 ## API Integrations (to implement)
 - WakaTime: Coding statistics

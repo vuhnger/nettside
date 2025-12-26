@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Card, Paragraph, Heading } from "@digdir/designsystemet-react";
 
 const MasterCountdown = () => {
   const targetDate = new Date("2027-06-15T00:00:00").getTime();
@@ -33,26 +34,36 @@ const MasterCountdown = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-purple/20 to-ocean/20 rounded-2xl p-8 border border-purple/30 hover:border-purple/50 transition-all h-full">
-      <div className="flex flex-col justify-center h-full">
-        <p className="text-sm text-gray-400 mb-6">🎓 Tid til mastergrad</p>
-        <div className="grid grid-cols-4 gap-4">
-          {[
-            { label: "Dager", value: timeLeft.days },
-            { label: "Timer", value: timeLeft.hours },
-            { label: "Min", value: timeLeft.minutes },
-            { label: "Sek", value: timeLeft.seconds },
-          ].map((item) => (
-            <div key={item.label} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-purple mb-2">
-                {item.value}
-              </div>
-              <div className="text-xs text-gray-400">{item.label}</div>
-            </div>
-          ))}
-        </div>
+    <Card
+      style={{
+        background: 'linear-gradient(to bottom right, var(--ds-color-accent-base-subtle), var(--ds-color-accent-second-subtle))',
+        padding: '1rem',
+        height: '100%',
+        transition: 'all 0.2s',
+        border: '2px solid var(--ds-color-neutral-border-strong)'
+      }}
+    >
+      <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', marginBottom: '0.75rem' }}>
+        🎓 Tid til mastergrad
+      </Paragraph>
+      <div className="grid grid-cols-4 gap-2">
+        {[
+          { label: "d", value: timeLeft.days },
+          { label: "t", value: timeLeft.hours },
+          { label: "m", value: timeLeft.minutes },
+          { label: "s", value: timeLeft.seconds },
+        ].map((item) => (
+          <div key={item.label} style={{ textAlign: 'center' }}>
+            <Heading data-size="md" style={{ color: 'var(--ds-color-accent-base-default)', marginBottom: '0.125rem' }}>
+              {item.value}
+            </Heading>
+            <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>
+              {item.label}
+            </Paragraph>
+          </div>
+        ))}
       </div>
-    </div>
+    </Card>
   );
 };
 

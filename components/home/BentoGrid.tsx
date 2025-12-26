@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import NextLink from "next/link";
+import { Heading, Paragraph, Link, Button, Avatar } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
 import MasterCountdown from "./MasterCountdown";
@@ -8,122 +9,123 @@ import StatsCards from "./StatsCards";
 
 const BentoGrid = () => {
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-12"
-      >
-        <div className="grid md:grid-cols-[1fr,300px] gap-8 items-start">
+      <div className="mb-6">
+        <div className="grid md:grid-cols-[1fr,200px] gap-6 items-center">
           {/* Left: Intro */}
-          <div className="space-y-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <div>
-              <p className="text-gray-400 text-sm mb-2">Velkommen</p>
-              <h1 className="text-5xl md:text-6xl font-bold mb-2">
-                Hei, jeg er <span className="text-purple">Victor Uhnger</span>
-              </h1>
-              <p className="text-xl text-gray-400">
-                masterstudent i Informatikk med fokus på programmering og nettverk.
-              </p>
+              <Heading data-size="xl" style={{ marginBottom: '0.25rem', color: 'var(--ds-color-accent-base-default)' }}>
+                Victor Uhnger
+              </Heading>
+              <Paragraph data-size="md" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>
+                Masterstudent i Informatikk · UiO
+              </Paragraph>
             </div>
 
-            <p className="text-gray-300 max-w-2xl">
-              Brenner for utvikling, åpen kildekode, og løsning av komplekse problemer.
-              Jobber med alt fra full-stack utvikling til edge computing.
-            </p>
+            <Paragraph data-size="sm" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
+              Full-stack utvikler med fokus på åpen kildekode og komplekse problemer.
+            </Paragraph>
 
             {/* Social Links */}
-            <div className="flex gap-3">
-              <a
+            <div className="flex gap-2">
+              <Link
                 href="https://github.com/vuhnger"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-12 h-12 flex items-center justify-center rounded-lg border border-gray-700 hover:border-purple hover:bg-purple/10 transition-all"
+                aria-label="GitHub"
+                style={{
+                  width: '2.25rem',
+                  height: '2.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--ds-color-neutral-border-default)',
+                  borderRadius: '0.375rem',
+                  transition: 'all 0.2s'
+                }}
               >
-                <AiFillGithub className="text-xl" />
-              </a>
-              <a
+                <AiFillGithub style={{ fontSize: '1.125rem' }} />
+              </Link>
+              <Link
                 href="https://www.linkedin.com/in/victoruhnger"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-12 h-12 flex items-center justify-center rounded-lg border border-gray-700 hover:border-ocean hover:bg-ocean/10 transition-all"
+                aria-label="LinkedIn"
+                style={{
+                  width: '2.25rem',
+                  height: '2.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--ds-color-neutral-border-default)',
+                  borderRadius: '0.375rem',
+                  transition: 'all 0.2s'
+                }}
               >
-                <FaLinkedinIn className="text-lg" />
-              </a>
-              <a
+                <FaLinkedinIn style={{ fontSize: '1rem' }} />
+              </Link>
+              <Link
                 href="https://www.strava.com/athletes/34349129"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-12 h-12 flex items-center justify-center rounded-lg border border-gray-700 hover:border-orange-500 hover:bg-orange-500/10 transition-all"
+                aria-label="Strava"
+                style={{
+                  width: '2.25rem',
+                  height: '2.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--ds-color-neutral-border-default)',
+                  borderRadius: '0.375rem',
+                  transition: 'all 0.2s'
+                }}
               >
-                <FaStrava className="text-lg" />
-              </a>
-              <a
-                href="/cv"
-                className="px-6 h-12 flex items-center justify-center rounded-lg bg-purple hover:bg-purple-dark transition-all font-medium"
-              >
-                Se CV
-              </a>
+                <FaStrava style={{ fontSize: '1rem' }} />
+              </Link>
+              <Button asChild data-size="sm" variant="primary">
+                <NextLink href="/cv">CV</NextLink>
+              </Button>
             </div>
           </div>
 
           {/* Right: Avatar */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex justify-center md:justify-end"
-          >
-            <div className="w-48 h-48 rounded-2xl bg-gradient-to-br from-purple to-ocean p-1">
-              <div className="w-full h-full rounded-2xl bg-black flex items-center justify-center">
-                <span className="text-6xl font-bold text-purple">VU</span>
+          <div className="flex justify-center md:justify-end">
+            <div
+              style={{
+                width: '8rem',
+                height: '8rem',
+                borderRadius: '0.75rem',
+                background: 'linear-gradient(to bottom right, var(--ds-color-accent-base-default), var(--ds-color-accent-second-default))',
+                padding: '0.125rem'
+              }}
+            >
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '0.75rem',
+                  backgroundColor: 'var(--ds-color-neutral-background-default)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <span style={{ fontSize: '1.875rem', fontWeight: 'bold', color: 'var(--ds-color-accent-base-default)' }}>
+                  VU
+                </span>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Master Countdown - Large Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="lg:col-span-2"
-        >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="col-span-2">
           <MasterCountdown />
-        </motion.div>
-
-        {/* About Me Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-gray-900 rounded-2xl p-6 border border-gray-800 hover:border-gray-700 transition-all"
-        >
-          <h3 className="text-xl font-bold mb-4">Om meg</h3>
-          <p className="text-sm text-gray-400 mb-4">
-            Full-stack utvikler, løper, og teknologientusiast ved UiO.
-          </p>
-          <div className="space-y-2">
-            <p className="text-xs text-gray-500">Tech stack:</p>
-            <div className="flex flex-wrap gap-2">
-              {["TypeScript", "React", "Next.js", "Node.js", "Python", "Kotlin"].map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2 py-1 rounded-md bg-gray-800 text-xs text-gray-300"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Stats Cards */}
+        </div>
         <StatsCards />
       </div>
     </div>

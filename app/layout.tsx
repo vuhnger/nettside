@@ -24,9 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="no" className="dark">
+    <html lang="no">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{
+          backgroundColor: 'var(--ds-color-neutral-background-default)',
+          color: 'var(--ds-color-neutral-text-default)'
+        }}
       >
         <Navbar />
         {children}
