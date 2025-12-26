@@ -1,177 +1,188 @@
 "use client";
 
-import NextLink from "next/link";
-import { Card, Heading, Link, Paragraph } from "@digdir/designsystemet-react";
-import { MASTER_INFO, MASTER_TIMELINE } from "@/lib/master";
+import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
+import { MASTER_TIMELINE } from "@/lib/master";
+import EdgeComputingVisualization from "@/components/master/EdgeComputingVisualization";
 
 const MasterPage = () => {
-  const timeline = [
-    { label: "Oppstart", value: MASTER_TIMELINE.start.split("T")[0] },
-    { label: "Levering", value: MASTER_TIMELINE.end.split("T")[0] },
-  ];
+  const startDate = Date.parse(MASTER_TIMELINE.start);
+  const endDate = Date.parse(MASTER_TIMELINE.end);
+  const now = Date.now();
+  const rawProgress = ((now - startDate) / (endDate - startDate)) * 100;
+  const progress = Number.isFinite(rawProgress)
+    ? Math.min(100, Math.max(0, rawProgress))
+    : 0;
 
   return (
     <div
       className="min-h-screen pt-20 pb-12 px-4"
       style={{ backgroundColor: "var(--ds-color-neutral-background-default)" }}
     >
-      <div className="mx-auto max-w-3xl">
-        <Card
-          className="relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700"
-          style={{
-            padding: "1.5rem",
-            backgroundColor:
-              "color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, transparent)",
-            backgroundImage:
-              "linear-gradient(140deg, color-mix(in srgb, var(--ds-color-accent-second-subtle) 55%, transparent), transparent 60%)",
-            border: "2px solid var(--ds-color-neutral-border-strong)",
-            boxShadow: "0 18px 30px rgba(0, 0, 0, 0.08)",
-          }}
-        >
-          <header className="border-b pb-4" style={{ borderColor: "var(--ds-color-neutral-border-subtle)" }}>
-            <div className="flex flex-wrap items-center gap-3">
+      <div className="mx-auto max-w-6xl">
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
+          <Card
+            className="relative h-full overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700"
+            style={{
+              padding: "1.5rem",
+              backgroundColor:
+                "color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, transparent)",
+              backgroundImage:
+                "linear-gradient(140deg, color-mix(in srgb, var(--ds-color-accent-second-subtle) 55%, transparent), transparent 60%)",
+              border: "2px solid var(--ds-color-neutral-border-strong)",
+              boxShadow: "0 18px 30px rgba(0, 0, 0, 0.08)",
+            }}
+          >
+            <div className="flex h-full flex-col justify-center gap-4">
               <Heading data-size="lg" style={{ marginBottom: 0 }}>
-                {MASTER_INFO.title}
+                Masteroppgave
               </Heading>
-              <span
-                className="rounded-full border px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em]"
-                style={{
-                  borderColor: "var(--ds-color-accent-base-default)",
-                  color: "var(--ds-color-accent-base-default)",
-                }}
+              <Paragraph
+                data-size="sm"
+                style={{ margin: 0, color: "var(--ds-color-neutral-text-default)", fontWeight: 600 }}
               >
-                {MASTER_INFO.status}
+                Kort fortalt: Jeg tester hvor robust KubeEdge-nettverk er når edge-noder mister
+                kontakten med skyen.
+              </Paragraph>
+              <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
+                Denne visualiseringen er min korte forklaring på hvordan trafikk flyter mellom
+                CloudCore og edge-noder, og hva som skjer når vi justerer link-status og pakketap.
+                Jeg bruker den for å vise forskjellene mellom Standard K8s, KubeEdge basis og
+                KubeEdge mesh.
+              </Paragraph>
+              <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
+                I min oppgave betyr edge computing små, ressurs-svake noder nær datakilden som skal
+                kunne kjøre lokale tjenester selv om forbindelsen til skyen er ustabil. Jeg bruker
+                KubeEdge fordi det utvider Kubernetes ved å flytte deler av kontrollplanet nær edge,
+                mens CloudCore er skykomponenten som synkroniserer status når forbindelsen tillater det.
+              </Paragraph>
+              <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
+                Med vanlig Kubernetes forventer noder stabil kontakt med kontrollplanet, så når
+                CloudCore eller API-serveren faller ut kan noder desynkronisere, service-oppdagelse
+                blir treg eller feil, og gjenoppretting tar tid. EdgeMesh er et mesh/overlay som gir
+                edge-til-edge-ruting når skyen er nede, og jeg sammenligner derfor KubeEdge med og
+                uten EdgeMesh mot en Kubernetes-baseline på OpenWrt-maskinvare under ustabile lenker.
+              </Paragraph>
+            </div>
+          </Card>
+
+          <Card
+            className="relative h-full overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150"
+            style={{
+              padding: "1.5rem",
+              backgroundColor:
+                "color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, transparent)",
+              backgroundImage:
+                "linear-gradient(140deg, color-mix(in srgb, var(--ds-color-accent-base-subtle) 45%, transparent), transparent 60%)",
+              border: "2px solid var(--ds-color-neutral-border-strong)",
+              boxShadow: "0 18px 30px rgba(0, 0, 0, 0.08)",
+            }}
+          >
+            <EdgeComputingVisualization />
+          </Card>
+        </div>
+
+        <div className="mt-6 grid gap-6">
+          <Card
+            className="relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700"
+            style={{
+              padding: "1.5rem",
+              backgroundColor:
+                "color-mix(in srgb, var(--ds-color-neutral-background-default) 94%, transparent)",
+              border: "2px solid var(--ds-color-neutral-border-strong)",
+              boxShadow: "0 12px 24px rgba(0, 0, 0, 0.06)",
+            }}
+          >
+            <Heading data-size="sm" style={{ marginBottom: "0.5rem" }}>
+              Detaljer fra prosjektet
+            </Heading>
+            <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
+              Oppgaven er i samarbeid med FFI og handler om å evaluere nettverksrobusthet på
+              OpenWrt-klasse rutere og små edge-enheter. Jeg kjører eksperimentelle benchmark-tester
+              med MicroK8s/CloudCore og sammenligner tre oppsett: ren Kubernetes, KubeEdge uten
+              EdgeMesh og KubeEdge med EdgeMesh. Målingene ser på pakketap, latens, throughput,
+              gjenopprettingstid og ressursbruk når forbindelsen er ustabil.
+            </Paragraph>
+          </Card>
+
+          <Card
+            className="relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100"
+            style={{
+              padding: "1.5rem",
+              backgroundColor:
+                "color-mix(in srgb, var(--ds-color-neutral-background-default) 94%, transparent)",
+              border: "2px solid var(--ds-color-neutral-border-strong)",
+              boxShadow: "0 12px 24px rgba(0, 0, 0, 0.06)",
+            }}
+          >
+            <Heading data-size="sm" style={{ marginBottom: "0.75rem" }}>
+              Nøkkelinfo
+            </Heading>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { label: "Samarbeid", value: "FFI" },
+                { label: "Levering", value: MASTER_TIMELINE.end.split("T")[0] },
+                { label: "Metode", value: "Eksperimentell benchmarking" },
+                { label: "Testbed", value: "OpenWrt-rutere + MicroK8s" },
+                { label: "Oppsett", value: "K8s, KubeEdge, EdgeMesh" },
+                { label: "Fokus", value: "Robusthet og gjenoppretting" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-md border px-3 py-2"
+                  style={{
+                    borderColor: "var(--ds-color-neutral-border-subtle)",
+                    backgroundColor:
+                      "color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, transparent)",
+                  }}
+                >
+                  <Paragraph data-size="xs" style={{ margin: 0, fontWeight: 600 }}>
+                    {item.label}
+                  </Paragraph>
+                  <Paragraph data-size="xs" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
+                    {item.value}
+                  </Paragraph>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card
+            className="relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150"
+            style={{
+              padding: "1.5rem",
+              backgroundColor:
+                "color-mix(in srgb, var(--ds-color-neutral-background-default) 94%, transparent)",
+              border: "2px solid var(--ds-color-neutral-border-strong)",
+              boxShadow: "0 12px 24px rgba(0, 0, 0, 0.06)",
+            }}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <Heading data-size="sm" style={{ marginBottom: 0 }}>
+                Fremdrift
+              </Heading>
+              <span className="text-xs font-semibold" style={{ color: "var(--ds-color-neutral-text-default)" }}>
+                {Math.round(progress)}%
               </span>
             </div>
-            <Paragraph data-size="sm" style={{ margin: "0.25rem 0 0", color: "var(--ds-color-neutral-text-default)" }}>
-              {MASTER_INFO.subtitle}
-            </Paragraph>
-            <Paragraph data-size="xs" style={{ margin: "0.5rem 0 0", color: "var(--ds-color-neutral-text-default)" }}>
-              {MASTER_INFO.summary}
-            </Paragraph>
-          </header>
-
-          <section className="mt-6 grid gap-4 sm:grid-cols-3">
-            {MASTER_INFO.highlights.map((item) => (
+            <div
+              className="mt-2 h-2 w-full rounded-full"
+              style={{ backgroundColor: "var(--ds-color-neutral-border-subtle)" }}
+              aria-hidden="true"
+            >
               <div
-                key={item.label}
-                className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[var(--ds-color-accent-base-default)] hover:shadow-sm motion-reduce:transform-none"
+                className="h-full rounded-full transition-all"
                 style={{
-                  borderColor: "var(--ds-color-neutral-border-subtle)",
-                  backgroundColor:
-                    "color-mix(in srgb, var(--ds-color-neutral-background-default) 88%, transparent)",
+                  width: `${progress}%`,
+                  backgroundColor: "var(--ds-color-accent-base-default)",
                 }}
-              >
-                <Paragraph data-size="xs" style={{ marginBottom: "0.25rem", fontWeight: 600 }}>
-                  {item.label}
-                </Paragraph>
-                <Paragraph data-size="xs" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
-                  {item.value}
-                </Paragraph>
-              </div>
-            ))}
-          </section>
-
-          <section className="mt-6 grid gap-4 sm:grid-cols-2">
-            <div
-              className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[var(--ds-color-accent-second-default)] hover:shadow-sm motion-reduce:transform-none"
-              style={{
-                borderColor: "var(--ds-color-neutral-border-subtle)",
-                backgroundColor:
-                  "color-mix(in srgb, var(--ds-color-neutral-background-default) 88%, transparent)",
-              }}
-            >
-              <Heading data-size="sm" style={{ marginBottom: "0.5rem", color: "var(--ds-color-accent-second-default)" }}>
-                Fokusomrader
-              </Heading>
-              <ul className="list-disc pl-4 text-xs" style={{ color: "var(--ds-color-neutral-text-default)" }}>
-                {MASTER_INFO.focusAreas.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+              />
             </div>
-
-            <div
-              className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[var(--ds-color-accent-second-default)] hover:shadow-sm motion-reduce:transform-none"
-              style={{
-                borderColor: "var(--ds-color-neutral-border-subtle)",
-                backgroundColor:
-                  "color-mix(in srgb, var(--ds-color-neutral-background-default) 88%, transparent)",
-              }}
-            >
-              <Heading data-size="sm" style={{ marginBottom: "0.5rem", color: "var(--ds-color-accent-second-default)" }}>
-                Metode
-              </Heading>
-              <ul className="list-disc pl-4 text-xs" style={{ color: "var(--ds-color-neutral-text-default)" }}>
-                {MASTER_INFO.methods.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </section>
-
-          <section className="mt-6 grid gap-4 sm:grid-cols-2">
-            <div
-              className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[var(--ds-color-accent-base-default)] hover:shadow-sm motion-reduce:transform-none"
-              style={{
-                borderColor: "var(--ds-color-neutral-border-subtle)",
-                backgroundColor:
-                  "color-mix(in srgb, var(--ds-color-neutral-background-default) 88%, transparent)",
-              }}
-            >
-              <Heading data-size="sm" style={{ marginBottom: "0.5rem", color: "var(--ds-color-accent-base-default)" }}>
-                Teknologi
-              </Heading>
-              <div className="flex flex-wrap gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.15em]">
-                {MASTER_INFO.stack.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border px-2 py-1"
-                    style={{
-                      borderColor: "var(--ds-color-neutral-border-default)",
-                      color: "var(--ds-color-neutral-text-default)",
-                    }}
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div
-              className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[var(--ds-color-accent-base-default)] hover:shadow-sm motion-reduce:transform-none"
-              style={{
-                borderColor: "var(--ds-color-neutral-border-subtle)",
-                backgroundColor:
-                  "color-mix(in srgb, var(--ds-color-neutral-background-default) 88%, transparent)",
-              }}
-            >
-              <Heading data-size="sm" style={{ marginBottom: "0.5rem", color: "var(--ds-color-accent-base-default)" }}>
-                Tidslinje
-              </Heading>
-              <div className="space-y-2 text-xs" style={{ color: "var(--ds-color-neutral-text-default)" }}>
-                {timeline.map((item) => (
-                  <div key={item.label} className="flex items-center justify-between">
-                    <span>{item.label}</span>
-                    <span>{item.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <div className="mt-6 text-center">
-            <Link href="/" asChild>
-              <NextLink
-                href="/"
-                className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition hover:-translate-y-0.5 hover:border-[var(--ds-color-accent-base-default)] hover:text-[var(--ds-color-accent-base-default)] motion-reduce:transform-none"
-                style={{ borderColor: "var(--ds-color-neutral-border-default)" }}
-              >
-                Tilbake til forsiden
-              </NextLink>
-            </Link>
-          </div>
-        </Card>
+            <Paragraph data-size="xs" style={{ margin: "0.5rem 0 0", color: "var(--ds-color-neutral-text-default)" }}>
+              Basert på tidslinjen fra {MASTER_TIMELINE.start.split("T")[0]} til{" "}
+              {MASTER_TIMELINE.end.split("T")[0]}.
+            </Paragraph>
+          </Card>
+        </div>
       </div>
     </div>
   );

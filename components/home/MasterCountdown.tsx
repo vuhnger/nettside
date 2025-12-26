@@ -38,21 +38,40 @@ const MasterCountdown = () => {
           padding: '0.5rem',
           height: '100%',
           transition: 'all 0.2s',
-          border: '1px solid var(--ds-color-neutral-border-strong)',
+          border: '1px solid var(--ds-color-accent-base-default)',
           cursor: 'pointer',
           position: 'relative'
         }}
       >
         <span
-          className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse"
+          className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse motion-reduce:animate-none"
           style={{
             borderColor: 'var(--ds-color-accent-base-default)',
-            opacity: 0.35
+            opacity: 0.45
           }}
           aria-hidden="true"
         />
+        <span
+          className="pointer-events-none absolute right-3 top-3 inline-flex h-2.5 w-2.5"
+          aria-hidden="true"
+        >
+          <span
+            className="absolute inline-flex h-full w-full rounded-full animate-ping motion-reduce:animate-none"
+            style={{
+              backgroundColor: 'var(--ds-color-accent-base-default)',
+              opacity: 0.5
+            }}
+          />
+          <span
+            className="relative inline-flex h-2.5 w-2.5 rounded-full"
+            style={{
+              backgroundColor: 'var(--ds-color-accent-base-default)',
+              opacity: 0.85
+            }}
+          />
+        </span>
         <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', marginBottom: '0.375rem' }}>
-          🎓 Om masteren min
+          🎓 Masteroppgaven min
         </Paragraph>
         <div className="mt-2 flex items-center gap-2">
           <div

@@ -38,7 +38,7 @@ const BentoGrid = () => {
                 Skriver masteroppgave om Edge Computing for Forsvarets Forskningsinstitutt.
               </Paragraph>
               <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Interessert i distribuerte systemert og nettverk.
+                Interessert i distribuerte systemert og nettverk. 
               </Paragraph>
               <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
                 Liker også automatisering og KI!
@@ -162,7 +162,7 @@ const BentoGrid = () => {
                 padding: '0.75rem',
                 height: '100%',
                 backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
-                border: '2px solid var(--ds-color-neutral-border-strong)',
+                border: '2px solid var(--ds-color-accent-base-default)',
                 cursor: 'pointer'
               }}
             >

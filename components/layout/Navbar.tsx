@@ -1,7 +1,7 @@
 "use client";
 
 import NextLink from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "@digdir/designsystemet-react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [navColour, setNavColour] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [apiStatus, setApiStatus] = useState<"unknown" | "up" | "down">("unknown");
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const scrollHandler = () => {
@@ -60,6 +61,19 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!expand) return;
+      const target = event.target as Node | null;
+      if (menuRef.current && target && !menuRef.current.contains(target)) {
+        setExpand(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [expand]);
+
   const toggleTheme = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
@@ -67,9 +81,7 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { name: "Om meg?", path: "/about" },
     { name: "Prosjekter", path: "/projects" },
-    { name: "Spill", path: "/game" },
   ];
 
   return (
@@ -167,7 +179,7 @@ const Navbar = () => {
           </button>
 
           {/* Hamburger Menu */}
-          <div style={{ position: 'relative' }}>
+          <div ref={menuRef} style={{ position: 'relative' }}>
             <button
               onClick={() => setExpand(!expand)}
               aria-label={expand ? "Lukk meny" : "Åpne meny"}
