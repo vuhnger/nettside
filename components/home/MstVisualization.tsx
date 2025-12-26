@@ -18,13 +18,13 @@ type Edge = {
   weight: number;
 };
 
-const NODE_COUNT = 12;
-const NODE_RADIUS = 8;
+const NODE_COUNT = 15;
+const NODE_RADIUS = 9;
 const GRID_SIZE = 32;
-const START_DELAY = 700;
+const START_DELAY = 200;
 const STEP_DELAY = 40;
 const SKIP_DELAY = 20;
-const RESET_DELAY = 4500;
+const RESET_DELAY = 400;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -215,12 +215,12 @@ const MstVisualization = () => {
       await wait(RESET_DELAY);
       if (cancelled || runIdRef.current !== runId) return;
 
-      setIsCompleted(false);
       const newNodes = generateNodes(viewport.width, viewport.height);
       const newEdges = generateEdges(newNodes);
       setNodes(newNodes);
       setEdges(newEdges);
       setMstEdges([]);
+      setIsCompleted(false);
     };
 
     run();

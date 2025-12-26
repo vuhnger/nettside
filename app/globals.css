@@ -1,11 +1,12 @@
 /* Designsystemet CSS - must be imported before Tailwind */
 @import "@digdir/designsystemet-css";
-@import "@digdir/designsystemet-css/theme";
+/* Custom portfolio theme generated with: npx @digdir/designsystemet tokens create && npx @digdir/designsystemet tokens build */
+@import "../design-tokens-build/portfolio.css";
 
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is([data-color-scheme="dark"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -137,4 +138,39 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* CV Page Card Styles */
+.cv-card.ds-card {
+  background-color: #fdfcfa !important;
+  background-image:
+    linear-gradient(135deg, rgba(255, 248, 240, 0.8) 0%, rgba(253, 252, 250, 0.9) 50%, rgba(248, 246, 243, 0.8) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E") !important;
+  background-blend-mode: normal, soft-light !important;
+  border: 1px solid #e8e4df !important;
+  box-shadow:
+    0 1px 1px rgba(0,0,0,0.02),
+    0 2px 2px rgba(0,0,0,0.02),
+    0 4px 4px rgba(0,0,0,0.02),
+    0 8px 8px rgba(0,0,0,0.02),
+    0 16px 16px rgba(0,0,0,0.02),
+    0 32px 32px rgba(0,0,0,0.03),
+    inset 0 0 80px rgba(255, 252, 245, 0.5) !important;
+}
+
+[data-color-scheme="dark"] .cv-card.ds-card {
+  background-color: #1e1e2e !important;
+  background-image:
+    linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(24, 24, 37, 0.98) 50%, rgba(20, 20, 32, 0.95) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E") !important;
+  background-blend-mode: normal, soft-light !important;
+  border: 1px solid #313244 !important;
+  box-shadow:
+    0 1px 1px rgba(0,0,0,0.15),
+    0 2px 2px rgba(0,0,0,0.15),
+    0 4px 4px rgba(0,0,0,0.12),
+    0 8px 8px rgba(0,0,0,0.1),
+    0 16px 16px rgba(0,0,0,0.08),
+    0 32px 32px rgba(0,0,0,0.06),
+    inset 0 0 80px rgba(30, 30, 50, 0.4) !important;
 }

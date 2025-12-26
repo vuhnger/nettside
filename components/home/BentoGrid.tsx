@@ -4,6 +4,7 @@ import NextLink from "next/link";
 import { Card, Heading, Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
+import { FiFileText } from "react-icons/fi";
 import MasterCountdown from "./MasterCountdown";
 import StatsCards from "./StatsCards";
 
@@ -16,7 +17,7 @@ const BentoGrid = () => {
             style={{
               padding: '1rem',
               height: '100%',
-              backgroundColor: 'transparent',
+              backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
               border: '2px solid var(--ds-color-neutral-border-strong)'
             }}
           >
@@ -26,15 +27,27 @@ const BentoGrid = () => {
                   Victor Uhnger
                 </Heading>
                 <Paragraph data-size="sm" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>
-                  Masterstudent i programmering og systemarkitektur · Universitetet i Oslo
+                  Masterstudent i programmering og systemarkitektur · Universitetet i Oslo (4. år)
                 </Paragraph>
               </div>
 
               <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Full-stack utvikler med interesse for nettverk, distribuerte systemer og effektivitet.
+                Full-stack utvikler med erfaring fra Bekk.
               </Paragraph>
               <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                test
+                Skriver masteroppgave om Edge Computing for Forsvarets Forskningsinstitutt.
+              </Paragraph>
+              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
+                Interessert i distribuerte systemert og nettverk.
+              </Paragraph>
+              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
+                Liker også automatisering og KI!
+              </Paragraph>
+              <Paragraph></Paragraph>
+              <Paragraph></Paragraph>
+              <Paragraph></Paragraph>
+              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
+                Denne siden bruker <a href="https://github.com/digdir/designsystemet">Designsystemet</a> fra DigDir for universell utforming.
               </Paragraph>
             </div>
           </Card>
@@ -45,7 +58,7 @@ const BentoGrid = () => {
             style={{
               padding: '0.75rem',
               height: '100%',
-              backgroundColor: 'transparent',
+              backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
               border: '2px solid var(--ds-color-neutral-border-strong)'
             }}
           >
@@ -70,12 +83,12 @@ const BentoGrid = () => {
           </Card>
         </div>
 
-        <div className="md:col-span-1">
+        <div className="md:col-span-2">
           <Card
             style={{
               padding: '0.75rem',
               height: '100%',
-              backgroundColor: 'transparent',
+              backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
               border: '2px solid var(--ds-color-neutral-border-strong)'
             }}
           >
@@ -137,32 +150,40 @@ const BentoGrid = () => {
               >
                 <FaStrava style={{ fontSize: '1.25rem' }} />
               </Link>
-              <Link
-                href="/cv"
-                asChild
-                style={{
-                  flex: 1,
-                  minWidth: 0,
-                  height: '2.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: 'transparent',
-                  color: 'var(--ds-color-accent-base-default)',
-                  border: '1px solid var(--ds-color-accent-base-default)',
-                  borderRadius: '0.375rem',
-                  fontWeight: 500,
-                  fontSize: '0.8rem',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <NextLink href="/cv">CV</NextLink>
-              </Link>
             </div>
           </Card>
         </div>
 
-        <div className="md:col-span-1">
+        <div className="md:col-span-2">
+          <NextLink href="/cv" aria-label="CV" className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2">
+            <Card
+              className="relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-sm motion-reduce:transform-none"
+              style={{
+                padding: '0.75rem',
+                height: '100%',
+                backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
+                border: '2px solid var(--ds-color-neutral-border-strong)',
+                cursor: 'pointer'
+              }}
+            >
+              <span
+                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse"
+                style={{
+                  borderColor: 'var(--ds-color-accent-base-default)',
+                  opacity: 0.35
+                }}
+                aria-hidden="true"
+              />
+              <div className="flex h-full items-center justify-center gap-2">
+                <FiFileText style={{ fontSize: '2rem', color: 'var(--ds-color-accent-base-default)' }} />
+                <Paragraph data-size="xs" style={{ margin: 0, color: 'var(--ds-color-accent-base-default)', fontWeight: 600 }}>
+                  CV
+                </Paragraph>
+              </div>
+            </Card>
+          </NextLink>
+        </div>
+        <div className="md:col-span-2">
           <MasterCountdown />
         </div>
         <StatsCards />
