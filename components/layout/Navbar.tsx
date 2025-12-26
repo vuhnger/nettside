@@ -40,9 +40,7 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { name: "Hjem", path: "/" },
-    { name: "Mer om meg?", path: "/about" },
-    { name: "CV", path: "/cv" },
+    { name: "Om meg?", path: "/about" },
     { name: "Prosjekter", path: "/projects" },
     { name: "Spill", path: "/game" },
   ];
@@ -60,7 +58,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <NextLink href="/" className="text-xl font-bold" style={{ color: 'var(--ds-color-accent-base-default)' }}>
-          VU
+        VU
         </NextLink>
 
         {/* Desktop Navigation */}
@@ -100,10 +98,23 @@ const Navbar = () => {
         {/* Mobile Hamburger */}
         <button
           onClick={() => setExpand(!expand)}
-          className="md:hidden text-xl transition-colors"
-          style={{ color: 'var(--ds-color-accent-base-default)' }}
+          className="md:hidden"
+          aria-label={expand ? "Lukk meny" : "Åpne meny"}
+          style={{
+            width: '2rem',
+            height: '2rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px solid var(--ds-color-neutral-border-default)',
+            borderRadius: '0.375rem',
+            backgroundColor: 'transparent',
+            color: 'var(--ds-color-accent-base-default)',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+          }}
         >
-          {expand ? <IoMdClose /> : <GiHamburgerMenu />}
+          {expand ? <IoMdClose style={{ fontSize: '1.125rem' }} /> : <GiHamburgerMenu style={{ fontSize: '1.125rem' }} />}
         </button>
       </div>
 
