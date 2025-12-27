@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
 type Position = {
   x: number;
@@ -18,13 +18,37 @@ type Edge = {
   weight: number;
 };
 
-const NODE_COUNT = 15;
-const NODE_RADIUS = 9;
-const GRID_SIZE = 32;
-const START_DELAY = 200;
-const STEP_DELAY = 40;
-const SKIP_DELAY = 20;
-const RESET_DELAY = 400;
+const BASE_SETTINGS = {
+  nodeCount: 15,
+  nodeRadius: 9,
+  gridSize: 32,
+  startDelay: 200,
+  stepDelay: 40,
+  skipDelay: 20,
+  resetDelay: 400,
+};
+
+const MOBILE_SETTINGS = {
+  nodeCount: 10,
+  nodeRadius: 8,
+  gridSize: 40,
+  startDelay: 260,
+  stepDelay: 70,
+  skipDelay: 35,
+  resetDelay: 600,
+};
+
+const REDUCED_SETTINGS = {
+  nodeCount: 8,
+  nodeRadius: 7,
+  gridSize: 48,
+  startDelay: 320,
+  stepDelay: 90,
+  skipDelay: 50,
+  resetDelay: 800,
+};
+
+const MOBILE_BREAKPOINT = 768;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -72,10 +96,55 @@ const MstVisualization = () => {
   const [mstEdges, setMstEdges] = useState<Edge[]>([]);
   const [currentEdge, setCurrentEdge] = useState<Edge | null>(null);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const runIdRef = useRef(0);
+
+  const settings = useMemo(() => {
+    if (prefersReducedMotion) {
+      return REDUCED_SETTINGS;
+    }
+    if (isMobile) {
+      return MOBILE_SETTINGS;
+    }
+    return BASE_SETTINGS;
+  }, [isMobile, prefersReducedMotion]);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const updateIsMobile = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    updateIsMobile();
+    window.addEventListener("resize", updateIsMobile);
+    return () => window.removeEventListener("resize", updateIsMobile);
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setPrefersReducedMotion(mediaQuery.matches);
+    update();
+    if ("addEventListener" in mediaQuery) {
+      mediaQuery.addEventListener("change", update);
+    } else {
+      mediaQuery.addListener(update);
+    }
+    return () => {
+      if ("removeEventListener" in mediaQuery) {
+        mediaQuery.removeEventListener("change", update);
+      } else {
+        mediaQuery.removeListener(update);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleVisibility = () => setIsPaused(document.hidden);
+    handleVisibility();
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
   }, []);
 
   useEffect(() => {
@@ -107,7 +176,7 @@ const MstVisualization = () => {
     const rangeY = Math.min(height * 0.35, 320);
     const newNodes: Node[] = [];
 
-    for (let i = 0; i < NODE_COUNT; i += 1) {
+    for (let i = 0; i < settings.nodeCount; i += 1) {
       let position: Position = { x: centerX, y: centerY };
       let attempts = 0;
 
@@ -125,7 +194,7 @@ const MstVisualization = () => {
               node.position.x - position.x,
               node.position.y - position.y
             ) <
-            NODE_RADIUS * 4
+            settings.nodeRadius * 4
         )
       );
 
@@ -133,7 +202,7 @@ const MstVisualization = () => {
     }
 
     return newNodes;
-  }, []);
+  }, [settings.nodeCount, settings.nodeRadius]);
 
   const calculateDistance = useCallback((node1: Node, node2: Node): number => {
     return Math.hypot(
@@ -171,10 +240,10 @@ const MstVisualization = () => {
     setMstEdges([]);
     setCurrentEdge(null);
     setIsCompleted(false);
-  }, [mounted, viewport.width, viewport.height, generateNodes, generateEdges]);
+  }, [mounted, viewport.width, viewport.height, generateNodes, generateEdges, settings]);
 
   useEffect(() => {
-    if (!mounted || nodes.length === 0 || edges.length === 0) return;
+    if (!mounted || nodes.length === 0 || edges.length === 0 || isPaused) return;
 
     let cancelled = false;
     const runId = (runIdRef.current += 1);
@@ -184,7 +253,7 @@ const MstVisualization = () => {
       setCurrentEdge(null);
       setIsCompleted(false);
 
-      await wait(START_DELAY);
+      await wait(settings.startDelay);
       if (cancelled || runIdRef.current !== runId) return;
 
       const uf = new UnionFind(nodes.length);
@@ -194,16 +263,16 @@ const MstVisualization = () => {
         if (cancelled || runIdRef.current !== runId) return;
 
         setCurrentEdge(edge);
-        await wait(STEP_DELAY);
+        await wait(settings.stepDelay);
 
         if (uf.union(edge.from.id, edge.to.id)) {
           mst.push(edge);
           setMstEdges([...mst]);
 
           if (mst.length === nodes.length - 1) break;
-          await wait(STEP_DELAY);
+          await wait(settings.stepDelay);
         } else {
-          await wait(SKIP_DELAY);
+          await wait(settings.skipDelay);
         }
       }
 
@@ -212,7 +281,7 @@ const MstVisualization = () => {
       setCurrentEdge(null);
       setIsCompleted(true);
 
-      await wait(RESET_DELAY);
+      await wait(settings.resetDelay);
       if (cancelled || runIdRef.current !== runId) return;
 
       const newNodes = generateNodes(viewport.width, viewport.height);
@@ -228,7 +297,17 @@ const MstVisualization = () => {
     return () => {
       cancelled = true;
     };
-  }, [mounted, nodes, edges, viewport.width, viewport.height, generateNodes, generateEdges]);
+  }, [
+    mounted,
+    nodes,
+    edges,
+    viewport.width,
+    viewport.height,
+    generateNodes,
+    generateEdges,
+    isPaused,
+    settings,
+  ]);
 
   if (!mounted || viewport.width === 0 || viewport.height === 0) {
     return (
@@ -252,12 +331,12 @@ const MstVisualization = () => {
         <defs>
           <pattern
             id={patternId}
-            width={GRID_SIZE}
-            height={GRID_SIZE}
+            width={settings.gridSize}
+            height={settings.gridSize}
             patternUnits="userSpaceOnUse"
           >
             <path
-              d={`M ${GRID_SIZE} 0 L 0 0 0 ${GRID_SIZE}`}
+              d={`M ${settings.gridSize} 0 L 0 0 0 ${settings.gridSize}`}
               fill="none"
               stroke="var(--ds-color-neutral-border-subtle)"
               strokeOpacity="0.35"
@@ -315,7 +394,7 @@ const MstVisualization = () => {
             key={`node-${node.id}`}
             cx={node.position.x}
             cy={node.position.y}
-            r={NODE_RADIUS}
+            r={settings.nodeRadius}
             fill="var(--ds-color-neutral-text-default)"
             fillOpacity={isCompleted ? "0.65" : "0.25"}
             stroke="var(--ds-color-neutral-background-default)"
