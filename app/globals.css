@@ -49,86 +49,75 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-
-  /* Semantic brand colors - change these to update entire site theme */
-  --color-primary: #2563eb;        /* Blue - main brand color */
-  --color-primary-light: #60a5fa;
-  --color-primary-dark: #1e40af;
-  --color-secondary: #10b981;      /* Green - secondary/accent */
-  --color-secondary-light: #34d399;
-  --color-secondary-dark: #059669;
-  --color-accent: #f59e0b;         /* Amber - highlights */
-  --color-accent-light: #fbbf24;
-  --color-accent-dark: #d97706;
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.965 0 0);     /* Light gray background */
-  --foreground: oklch(0.2 0 0);      /* Dark gray text */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --background: var(--ds-color-neutral-background-default);
+  --foreground: var(--ds-color-neutral-text-default);
+  --card: var(--ds-color-neutral-surface-default);
+  --card-foreground: var(--ds-color-neutral-text-default);
+  --popover: var(--ds-color-neutral-surface-default);
+  --popover-foreground: var(--ds-color-neutral-text-default);
+  --primary: var(--ds-color-accent-base-default);
+  --primary-foreground: var(--ds-color-accent-base-contrast-default);
+  --secondary: var(--ds-color-neutral-surface-tinted);
+  --secondary-foreground: var(--ds-color-neutral-text-default);
+  --muted: var(--ds-color-neutral-surface-tinted);
+  --muted-foreground: var(--ds-color-neutral-text-subtle);
+  --accent: var(--ds-color-accent-surface-tinted);
+  --accent-foreground: var(--ds-color-accent-text-default);
+  --destructive: var(--ds-color-danger-base-default);
+  --border: var(--ds-color-neutral-border-subtle);
+  --input: var(--ds-color-neutral-border-subtle);
+  --ring: var(--ds-color-accent-border-default);
+  --chart-1: var(--ds-color-accent-base-default);
+  --chart-2: var(--ds-color-brand1-base-default);
+  --chart-3: var(--ds-color-brand2-base-default);
+  --chart-4: var(--ds-color-warning-base-default);
+  --chart-5: var(--ds-color-info-base-default);
+  --sidebar: var(--ds-color-neutral-background-default);
+  --sidebar-foreground: var(--ds-color-neutral-text-default);
+  --sidebar-primary: var(--ds-color-accent-base-default);
+  --sidebar-primary-foreground: var(--ds-color-accent-base-contrast-default);
+  --sidebar-accent: var(--ds-color-neutral-surface-tinted);
+  --sidebar-accent-foreground: var(--ds-color-neutral-text-default);
+  --sidebar-border: var(--ds-color-neutral-border-subtle);
+  --sidebar-ring: var(--ds-color-accent-border-default);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --background: var(--ds-color-neutral-background-default);
+  --foreground: var(--ds-color-neutral-text-default);
+  --card: var(--ds-color-neutral-surface-default);
+  --card-foreground: var(--ds-color-neutral-text-default);
+  --popover: var(--ds-color-neutral-surface-default);
+  --popover-foreground: var(--ds-color-neutral-text-default);
+  --primary: var(--ds-color-accent-base-default);
+  --primary-foreground: var(--ds-color-accent-base-contrast-default);
+  --secondary: var(--ds-color-neutral-surface-tinted);
+  --secondary-foreground: var(--ds-color-neutral-text-default);
+  --muted: var(--ds-color-neutral-surface-tinted);
+  --muted-foreground: var(--ds-color-neutral-text-subtle);
+  --accent: var(--ds-color-accent-surface-tinted);
+  --accent-foreground: var(--ds-color-accent-text-default);
+  --destructive: var(--ds-color-danger-base-default);
+  --border: var(--ds-color-neutral-border-subtle);
+  --input: var(--ds-color-neutral-border-subtle);
+  --ring: var(--ds-color-accent-border-default);
+  --chart-1: var(--ds-color-accent-base-default);
+  --chart-2: var(--ds-color-brand1-base-default);
+  --chart-3: var(--ds-color-brand2-base-default);
+  --chart-4: var(--ds-color-warning-base-default);
+  --chart-5: var(--ds-color-info-base-default);
+  --sidebar: var(--ds-color-neutral-background-default);
+  --sidebar-foreground: var(--ds-color-neutral-text-default);
+  --sidebar-primary: var(--ds-color-accent-base-default);
+  --sidebar-primary-foreground: var(--ds-color-accent-base-contrast-default);
+  --sidebar-accent: var(--ds-color-neutral-surface-tinted);
+  --sidebar-accent-foreground: var(--ds-color-neutral-text-default);
+  --sidebar-border: var(--ds-color-neutral-border-subtle);
+  --sidebar-ring: var(--ds-color-accent-border-default);
 }
 
 :root, [data-color-scheme="light"] {
@@ -184,35 +173,37 @@
 
 /* CV Page Card Styles */
 .cv-card.ds-card {
-  background-color: #fdfcfa !important;
+  background-color:
+    color-mix(in srgb, var(--ds-color-neutral-background-default) 96%, var(--ds-color-neutral-background-tinted)) !important;
   background-image:
-    linear-gradient(135deg, rgba(255, 248, 240, 0.8) 0%, rgba(253, 252, 250, 0.9) 50%, rgba(248, 246, 243, 0.8) 100%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--ds-color-neutral-background-default) 88%, var(--ds-color-accent-background-tinted) 12%) 0%,
+      color-mix(in srgb, var(--ds-color-neutral-background-default) 94%, transparent) 50%,
+      color-mix(in srgb, var(--ds-color-neutral-surface-tinted) 90%, transparent) 100%
+    ),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E") !important;
   background-blend-mode: normal, soft-light !important;
-  border: 1px solid #e8e4df !important;
+  border: 1px solid var(--ds-color-neutral-border-subtle) !important;
   box-shadow:
-    0 1px 1px rgba(0,0,0,0.02),
-    0 2px 2px rgba(0,0,0,0.02),
-    0 4px 4px rgba(0,0,0,0.02),
-    0 8px 8px rgba(0,0,0,0.02),
-    0 16px 16px rgba(0,0,0,0.02),
-    0 32px 32px rgba(0,0,0,0.03),
-    inset 0 0 80px rgba(255, 252, 245, 0.5) !important;
+    var(--ds-shadow-lg),
+    inset 0 0 80px color-mix(in srgb, var(--ds-color-neutral-background-tinted) 60%, transparent) !important;
 }
 
 [data-color-scheme="dark"] .cv-card.ds-card {
-  background-color: #1e1e2e !important;
+  background-color:
+    color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, var(--ds-color-neutral-background-tinted)) !important;
   background-image:
-    linear-gradient(135deg, rgba(30, 30, 46, 0.95) 0%, rgba(24, 24, 37, 0.98) 50%, rgba(20, 20, 32, 0.95) 100%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--ds-color-neutral-background-default) 88%, var(--ds-color-accent-surface-tinted) 12%) 0%,
+      color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, transparent) 50%,
+      color-mix(in srgb, var(--ds-color-neutral-surface-tinted) 85%, transparent) 100%
+    ),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E") !important;
   background-blend-mode: normal, soft-light !important;
-  border: 1px solid #313244 !important;
+  border: 1px solid var(--ds-color-neutral-border-subtle) !important;
   box-shadow:
-    0 1px 1px rgba(0,0,0,0.15),
-    0 2px 2px rgba(0,0,0,0.15),
-    0 4px 4px rgba(0,0,0,0.12),
-    0 8px 8px rgba(0,0,0,0.1),
-    0 16px 16px rgba(0,0,0,0.08),
-    0 32px 32px rgba(0,0,0,0.06),
-    inset 0 0 80px rgba(30, 30, 50, 0.4) !important;
+    var(--ds-shadow-xl),
+    inset 0 0 80px color-mix(in srgb, var(--ds-color-neutral-background-default) 60%, transparent) !important;
 }

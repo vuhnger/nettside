@@ -68,7 +68,7 @@ const Navbar = () => {
         navColour ? "backdrop-blur-md border-b shadow-sm" : ""
       }`}
       style={{
-        backgroundColor: navColour ? 'var(--ds-color-neutral-background-subtle)' : 'transparent',
+        backgroundColor: navColour ? 'var(--ds-color-neutral-background-tinted)' : 'transparent',
         borderColor: 'var(--ds-color-neutral-border-subtle)'
       }}
     >
@@ -87,7 +87,7 @@ const Navbar = () => {
               border: '2px solid var(--ds-color-accent-base-default)',
               borderRadius: '0.375rem',
               color: 'var(--ds-color-accent-base-default)',
-              boxShadow: '0 12px 20px rgba(37, 99, 235, 0.18)',
+              boxShadow: 'var(--accent-shadow)',
               transition: 'all 0.2s'
             }}
           >
@@ -113,7 +113,7 @@ const Navbar = () => {
               fontWeight: 600,
               letterSpacing: '0.02em',
               textTransform: 'uppercase',
-              boxShadow: '0 12px 20px rgba(37, 99, 235, 0.18)',
+              boxShadow: 'var(--accent-shadow)',
               transition: 'all 0.2s'
             }}
           >
@@ -126,10 +126,10 @@ const Navbar = () => {
                 borderRadius: '999px',
                 backgroundColor:
                   apiStatus === "up"
-                    ? "var(--ds-color-success-base-default, #22c55e)"
+                    ? "var(--ds-color-success-base-default)"
                     : apiStatus === "down"
-                    ? "var(--ds-color-danger-base-default, #ef4444)"
-                    : "var(--ds-color-neutral-border-default, #a3a3a3)"
+                    ? "var(--ds-color-danger-base-default)"
+                    : "var(--ds-color-neutral-border-default)"
               }}
             />
           </a>
@@ -151,7 +151,7 @@ const Navbar = () => {
               backgroundColor: 'transparent',
               color: 'var(--ds-color-accent-base-default)',
               cursor: 'pointer',
-              boxShadow: '0 12px 20px rgba(37, 99, 235, 0.18)',
+              boxShadow: 'var(--accent-shadow)',
               transition: 'all 0.2s'
             }}
           >

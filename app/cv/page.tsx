@@ -277,11 +277,11 @@ export default function CVPage() {
               padding: "1.5rem"
             }}
           >
-            <header className="border-b pb-4 border-neutral-200 dark:border-neutral-700">
-              <Heading data-size="lg" style={{ marginBottom: "0.25rem" }} className="text-neutral-800 dark:text-neutral-100">
+            <header className="border-b pb-4 border-[color:var(--ds-color-neutral-border-subtle)]">
+              <Heading data-size="lg" style={{ marginBottom: "0.25rem" }} className="text-[color:var(--ds-color-neutral-text-default)]">
                 Victor Rørslett Uhnger
               </Heading>
-              <Paragraph data-size="sm" style={{ margin: 0 }} className="text-neutral-600 dark:text-neutral-400">
+              <Paragraph data-size="sm" style={{ margin: 0 }} className="text-[color:var(--ds-color-neutral-text-subtle)]">
                 Masterstudent i informatikk, 4. år
               </Paragraph>
 
@@ -331,10 +331,10 @@ export default function CVPage() {
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className="h-2 w-2 rounded-full bg-teal-600 dark:bg-teal-400"
+                    className="h-2 w-2 rounded-full bg-[color:var(--ds-color-brand1-base-default)]"
                     aria-hidden="true"
                   />
-                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-teal-600 dark:text-teal-400">
+                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-[color:var(--ds-color-brand1-base-default)]">
                     Utdanning
                   </Heading>
                 </div>
@@ -348,7 +348,7 @@ export default function CVPage() {
                     <motion.div
                       key={`${item.school}-${item.program}`}
                       variants={cardItem}
-                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-teal-600 dark:hover:border-teal-400 hover:shadow-sm motion-reduce:transform-none border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70"
+                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-brand1-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
                         <div>
@@ -383,10 +383,10 @@ export default function CVPage() {
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className="h-2 w-2 rounded-full bg-red-600 dark:bg-red-400"
+                    className="h-2 w-2 rounded-full bg-[color:var(--ds-color-danger-base-default)]"
                     aria-hidden="true"
                   />
-                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-red-600 dark:text-red-400">
+                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-[color:var(--ds-color-danger-base-default)]">
                     Erfaring
                   </Heading>
                 </div>
@@ -403,23 +403,23 @@ export default function CVPage() {
                       type="button"
                       onClick={() => setActiveId(item.id)}
                       aria-haspopup="dialog"
-                      whileHover={{ y: -2, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
+                      whileHover={{ y: -2, boxShadow: "var(--ds-shadow-md)" }}
                       whileTap={{ scale: 0.98 }}
-                      className="group w-full rounded-md border p-3 text-left cursor-pointer relative hover:border-red-600 dark:hover:border-red-400 border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70"
+                      className="group w-full rounded-md border p-3 text-left cursor-pointer relative hover:border-[color:var(--ds-color-danger-border-default)] border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
                       {item.id === "bekk" && (
                         <motion.span
-                          className="pointer-events-none absolute inset-0 rounded-md border-2 border-red-500"
+                          className="pointer-events-none absolute inset-0 rounded-md border-2 border-[color:var(--ds-color-danger-border-strong)]"
                           aria-hidden="true"
                           animate={{ opacity: [0.2, 0.5, 0.2] }}
                           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         />
                       )}
                       <FiChevronRight
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-base opacity-0 translate-x-1 transition-all group-hover:opacity-70 group-hover:translate-x-0 text-red-600 dark:text-red-400"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-base opacity-0 translate-x-1 transition-all group-hover:opacity-70 group-hover:translate-x-0 text-[color:var(--ds-color-danger-base-default)]"
                       />
                       <div className="flex items-start gap-3 pr-5">
-                        <div className="w-10 h-10 flex-shrink-0 rounded-md border border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-100 p-1 flex items-center justify-center overflow-hidden">
+                        <div className="w-10 h-10 flex-shrink-0 rounded-md border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:var(--ds-color-neutral-surface-default)] p-1 flex items-center justify-center overflow-hidden">
                           <Image
                             src={item.logo}
                             alt={item.company}
@@ -457,10 +457,10 @@ export default function CVPage() {
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400"
+                    className="h-2 w-2 rounded-full bg-[color:var(--ds-color-success-base-default)]"
                     aria-hidden="true"
                   />
-                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-emerald-600 dark:text-emerald-400">
+                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-[color:var(--ds-color-success-base-default)]">
                     Ferdigheter
                   </Heading>
                 </div>
@@ -472,16 +472,16 @@ export default function CVPage() {
                 >
                   <motion.div
                     variants={cardItem}
-                    className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-emerald-600 dark:hover:border-emerald-400 hover:shadow-sm motion-reduce:transform-none border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70"
+                    className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                   >
-                    <Paragraph data-size="xs" style={{ marginBottom: "0.5rem", fontWeight: 600 }} className="text-neutral-800 dark:text-neutral-100">
+                    <Paragraph data-size="xs" style={{ marginBottom: "0.5rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                       Verktøy
                     </Paragraph>
                     <div className="flex flex-wrap gap-3">
                       {tools.map((tool) => (
                         <div
                           key={tool.name}
-                          className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-400"
+                          className="flex items-center gap-1.5 text-[color:var(--ds-color-neutral-text-subtle)]"
                           title={tool.name}
                         >
                           <tool.icon className="text-lg" />
@@ -492,16 +492,16 @@ export default function CVPage() {
                   </motion.div>
                   <motion.div
                     variants={cardItem}
-                    className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-emerald-600 dark:hover:border-emerald-400 hover:shadow-sm motion-reduce:transform-none border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70"
+                    className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                   >
-                    <Paragraph data-size="xs" style={{ marginBottom: "0.5rem", fontWeight: 600 }} className="text-neutral-800 dark:text-neutral-100">
+                    <Paragraph data-size="xs" style={{ marginBottom: "0.5rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                       Programmeringsspråk
                     </Paragraph>
                     <div className="flex flex-wrap gap-3">
                       {technologies.map((tech) => (
                         <div
                           key={tech.name}
-                          className="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-400"
+                          className="flex items-center gap-1.5 text-[color:var(--ds-color-neutral-text-subtle)]"
                           title={tech.name}
                         >
                           <tech.icon className="text-lg" />
@@ -514,12 +514,12 @@ export default function CVPage() {
                     <motion.div
                       key={skill.label}
                       variants={cardItem}
-                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-emerald-600 dark:hover:border-emerald-400 hover:shadow-sm motion-reduce:transform-none border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70"
+                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
-                      <Paragraph data-size="xs" style={{ marginBottom: "0.25rem", fontWeight: 600 }} className="text-neutral-800 dark:text-neutral-100">
+                      <Paragraph data-size="xs" style={{ marginBottom: "0.25rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                         {skill.label}
                       </Paragraph>
-                      <Paragraph data-size="xs" style={{ margin: 0 }} className="text-neutral-600 dark:text-neutral-400">
+                      <Paragraph data-size="xs" style={{ margin: 0 }} className="text-[color:var(--ds-color-neutral-text-subtle)]">
                         {skill.value}
                       </Paragraph>
                     </motion.div>
@@ -541,10 +541,10 @@ export default function CVPage() {
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className="h-2 w-2 rounded-full bg-purple-600 dark:bg-purple-400"
+                    className="h-2 w-2 rounded-full bg-[color:var(--ds-color-accent-base-default)]"
                     aria-hidden="true"
                   />
-                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-purple-600 dark:text-purple-400">
+                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-[color:var(--ds-color-accent-base-default)]">
                     Prosjekter
                   </Heading>
                 </div>
@@ -557,15 +557,15 @@ export default function CVPage() {
                   <NextLink href="/projects">
                     <motion.div
                       variants={cardItem}
-                      className="group rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-purple-600 dark:hover:border-purple-400 hover:shadow-sm motion-reduce:transform-none border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70 cursor-pointer relative"
+                      className="group rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-accent-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] cursor-pointer relative"
                     >
                       <FiChevronRight
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-base opacity-0 translate-x-1 transition-all group-hover:opacity-70 group-hover:translate-x-0 text-purple-600 dark:text-purple-400"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-base opacity-0 translate-x-1 transition-all group-hover:opacity-70 group-hover:translate-x-0 text-[color:var(--ds-color-accent-base-default)]"
                       />
-                      <Paragraph data-size="sm" style={{ marginBottom: "0.25rem", fontWeight: 600 }} className="text-neutral-800 dark:text-neutral-100">
+                      <Paragraph data-size="sm" style={{ marginBottom: "0.25rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                         Se alle prosjekter
                       </Paragraph>
-                      <Paragraph data-size="xs" style={{ margin: 0 }} className="text-neutral-600 dark:text-neutral-400 pr-5">
+                      <Paragraph data-size="xs" style={{ margin: 0 }} className="text-[color:var(--ds-color-neutral-text-subtle)] pr-5">
                         Se mine prosjekter og hva jeg har jobbet med
                       </Paragraph>
                     </motion.div>
@@ -582,10 +582,10 @@ export default function CVPage() {
               >
                 <div className="flex items-center gap-2">
                   <span
-                    className="h-2 w-2 rounded-full bg-amber-600 dark:bg-amber-400"
+                    className="h-2 w-2 rounded-full bg-[color:var(--ds-color-warning-base-default)]"
                     aria-hidden="true"
                   />
-                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-amber-600 dark:text-amber-400">
+                  <Heading data-size="sm" style={{ marginBottom: 0 }} className="text-[color:var(--ds-color-warning-base-default)]">
                     Frivillig arbeid
                   </Heading>
                 </div>
@@ -599,12 +599,12 @@ export default function CVPage() {
                     <motion.div
                       key={org.name}
                       variants={cardItem}
-                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-amber-600 dark:hover:border-amber-400 hover:shadow-sm motion-reduce:transform-none border-neutral-200 dark:border-neutral-700 bg-white/70 dark:bg-neutral-800/70"
+                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-warning-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
-                      <Paragraph data-size="sm" style={{ marginBottom: "0.125rem", fontWeight: 600 }} className="text-neutral-800 dark:text-neutral-100">
+                      <Paragraph data-size="sm" style={{ marginBottom: "0.125rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                         {org.name}
                       </Paragraph>
-                      <Paragraph data-size="xs" style={{ margin: 0 }} className="text-neutral-600 dark:text-neutral-400">
+                      <Paragraph data-size="xs" style={{ margin: 0 }} className="text-[color:var(--ds-color-neutral-text-subtle)]">
                         {org.role}
                       </Paragraph>
                     </motion.div>
@@ -631,7 +631,7 @@ export default function CVPage() {
       <AnimatePresence>
         {activeExperience && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[color:color-mix(in_srgb,var(--ds-color-neutral-base-default)_70%,transparent)] px-4 py-6 backdrop-blur-sm"
             variants={modalOverlay}
             initial="hidden"
             animate="visible"
@@ -664,7 +664,7 @@ export default function CVPage() {
                 <button
                   type="button"
                   onClick={() => setActiveId(null)}
-                  className="rounded-md border px-2 py-1 text-xs transition hover:bg-[var(--ds-color-neutral-background-subtle)]"
+                  className="rounded-md border px-2 py-1 text-xs transition hover:bg-[var(--ds-color-neutral-background-tinted)]"
                   style={{
                     borderColor: "var(--ds-color-neutral-border-default)",
                     color: "var(--ds-color-neutral-text-default)"

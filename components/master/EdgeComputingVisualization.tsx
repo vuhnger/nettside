@@ -181,7 +181,9 @@ const EdgeComputingVisualization = () => {
           delay: (i * 0.22) % 1.1,
           dropAt,
           stutter: lossLevel,
-          color: link.kind === "mesh" ? "rgba(251, 191, 36, 0.9)" : "rgba(59, 130, 246, 0.9)",
+          color: link.kind === "mesh"
+            ? "var(--ds-color-warning-base-default)"
+            : "var(--ds-color-accent-base-default)",
         });
       }
     });
@@ -200,17 +202,34 @@ const EdgeComputingVisualization = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 text-slate-900 dark:text-slate-100">
-      <div className="rounded-xl border border-slate-200/80 bg-white/90 p-4 shadow-lg dark:border-slate-800/70 dark:bg-slate-900/80">
+    <div className="flex flex-col gap-4 text-[color:var(--ds-color-neutral-text-default)]">
+      <div
+        className="rounded-xl border p-4"
+        style={{
+          borderColor: "var(--ds-color-neutral-border-subtle)",
+          backgroundColor:
+            "color-mix(in srgb, var(--ds-color-neutral-surface-default) 92%, transparent)",
+          boxShadow: "var(--ds-shadow-lg)",
+        }}
+      >
         <div className="flex flex-col gap-4">
           <div className="flex justify-center">
             <Tabs value={mode} onValueChange={(value) => setMode(value as Mode)}>
-              <TabsList className="flex h-auto w-full max-w-[640px] flex-col gap-1.5 rounded-2xl border border-slate-200/80 bg-white/80 p-2 text-slate-600 shadow-[0_8px_22px_rgba(15,23,42,0.12)] dark:border-slate-600/70 dark:bg-slate-950/80 dark:text-slate-200 dark:shadow-[0_8px_22px_rgba(3,7,18,0.6)] sm:flex-row sm:flex-nowrap sm:gap-1 sm:rounded-full">
+              <TabsList
+                className="flex h-auto w-full max-w-[640px] flex-col gap-1.5 rounded-2xl border p-2 sm:flex-row sm:flex-nowrap sm:gap-1 sm:rounded-full"
+                style={{
+                  borderColor: "var(--ds-color-neutral-border-subtle)",
+                  backgroundColor:
+                    "color-mix(in srgb, var(--ds-color-neutral-surface-default) 85%, transparent)",
+                  color: "var(--ds-color-neutral-text-subtle)",
+                  boxShadow: "var(--ds-shadow-lg)",
+                }}
+              >
                 {MODES.map((item) => (
                   <TabsTrigger
                     key={item.value}
                     value={item.value}
-                    className="w-full cursor-pointer rounded-xl bg-white/70 px-3 py-2 text-center text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/70 data-[state=active]:bg-slate-100 data-[state=active]:text-slate-900 data-[state=active]:shadow-lg data-[state=active]:ring-1 data-[state=active]:ring-slate-200/80 dark:bg-slate-900/40 dark:text-slate-300 dark:hover:bg-slate-800/80 dark:hover:text-white dark:data-[state=active]:bg-slate-800 dark:data-[state=active]:text-white dark:data-[state=active]:ring-slate-500/70 sm:flex-1 sm:min-w-0 sm:rounded-full sm:px-3 sm:py-2.5 sm:text-[0.55rem] sm:tracking-[0.12em] whitespace-normal leading-tight sm:whitespace-nowrap"
+                    className="w-full cursor-pointer rounded-xl px-3 py-2 text-center text-[0.65rem] font-semibold uppercase tracking-[0.16em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ds-color-accent-border-default)] data-[state=active]:shadow-[var(--ds-shadow-md)] data-[state=active]:ring-1 data-[state=active]:ring-[color:var(--ds-color-neutral-border-subtle)] bg-[color:var(--ds-color-neutral-surface-default)] text-[color:var(--ds-color-neutral-text-subtle)] hover:bg-[color:var(--ds-color-neutral-surface-hover)] hover:text-[color:var(--ds-color-neutral-text-default)] data-[state=active]:bg-[color:var(--ds-color-neutral-surface-hover)] data-[state=active]:text-[color:var(--ds-color-neutral-text-default)] sm:flex-1 sm:min-w-0 sm:rounded-full sm:px-3 sm:py-2.5 sm:text-[0.55rem] sm:tracking-[0.12em] whitespace-normal leading-tight sm:whitespace-nowrap"
                   >
                     <span className="sm:hidden">{item.shortLabel}</span>
                     <span className="hidden sm:inline">{item.label}</span>
@@ -221,17 +240,23 @@ const EdgeComputingVisualization = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-300">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
               <Switch checked={cloudOnline} onCheckedChange={setCloudOnline} />
               Skykobling
               <Badge
                 variant={cloudOnline ? "outline" : "destructive"}
-                className={cn(
-                  "flex items-center gap-1.5",
+                className="flex items-center gap-1.5"
+                style={
                   cloudOnline
-                    ? "border-emerald-400/60 text-emerald-700 dark:border-emerald-400/50 dark:text-emerald-100"
-                    : "bg-red-500/90 text-white"
-                )}
+                    ? {
+                        borderColor: "var(--ds-color-success-border-default)",
+                        color: "var(--ds-color-success-text-default)",
+                      }
+                    : {
+                        backgroundColor: "var(--ds-color-danger-base-default)",
+                        color: "var(--ds-color-danger-base-contrast-default)",
+                      }
+                }
               >
                 {cloudOnline ? (
                   <Wifi className="h-3.5 w-3.5" aria-hidden="true" />
@@ -244,7 +269,10 @@ const EdgeComputingVisualization = () => {
             {syncing && (
               <Badge
                 variant="secondary"
-                className="bg-slate-100 text-slate-700 dark:bg-slate-800/80 dark:text-slate-200"
+                style={{
+                  backgroundColor: "var(--ds-color-neutral-surface-tinted)",
+                  color: "var(--ds-color-neutral-text-default)",
+                }}
               >
                 Synkroniserer...
               </Badge>
@@ -253,7 +281,7 @@ const EdgeComputingVisualization = () => {
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-300">
+          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
             Pakketap
           </span>
           <div className="flex min-w-[160px] flex-1 items-center gap-3">
@@ -263,19 +291,25 @@ const EdgeComputingVisualization = () => {
               min={0}
               max={90}
               step={1}
-              className="accent-amber-400"
+              className="accent-[var(--ds-color-warning-base-default)]"
             />
-            <span className="text-xs font-semibold tabular-nums text-slate-800 dark:text-slate-200">
+            <span className="text-xs font-semibold tabular-nums text-[color:var(--ds-color-neutral-text-default)]">
               {impairment}%
             </span>
           </div>
           {impairment > 50 && (
-            <Badge variant="destructive" className="bg-red-500/90 text-white">
+            <Badge
+              variant="destructive"
+              style={{
+                backgroundColor: "var(--ds-color-danger-base-default)",
+                color: "var(--ds-color-danger-base-contrast-default)",
+              }}
+            >
               Høyt tap
             </Badge>
           )}
         </div>
-        <p className="mt-2 text-xs text-slate-600 dark:text-slate-300">
+        <p className="mt-2 text-xs text-[color:var(--ds-color-neutral-text-subtle)]">
           Tips: Juster pakketapet oppover og bytt konfigurasjon for å se hvordan nettverket oppfører seg.
         </p>
       </div>
@@ -283,7 +317,7 @@ const EdgeComputingVisualization = () => {
       <div className="grid gap-4">
         <div
           ref={mapRef}
-          className="relative h-[320px] rounded-2xl border border-slate-200/80 bg-white/90 p-4 shadow-xl [--edge-grid-color:rgba(148,163,184,0.35)] dark:border-slate-800/70 dark:bg-slate-900/95 dark:[--edge-grid-color:rgba(30,41,59,0.6)]"
+          className="relative h-[320px] rounded-2xl border p-4 shadow-[var(--ds-shadow-xl)] [--edge-grid-color:color-mix(in_srgb,var(--ds-color-neutral-border-subtle)_35%,transparent)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_92%,transparent)] border-[color:var(--ds-color-neutral-border-subtle)]"
           style={{
             backgroundImage:
               "linear-gradient(90deg, var(--edge-grid-color) 1px, transparent 1px), linear-gradient(var(--edge-grid-color) 1px, transparent 1px)",
@@ -313,9 +347,10 @@ const EdgeComputingVisualization = () => {
               const show = isCloud ? cloudLinesActive : meshLinesActive;
               const stroke = isCloud
                 ? cloudOnline
-                  ? "rgba(59, 130, 246, 0.85)"
-                  : "rgba(239, 68, 68, 0.7)"
-                : "rgba(251, 191, 36, 0.85)";
+                  ? "var(--ds-color-accent-base-default)"
+                  : "var(--ds-color-danger-base-default)"
+                : "var(--ds-color-warning-base-default)";
+              const strokeOpacity = isCloud ? (cloudOnline ? 0.85 : 0.7) : 0.85;
               return (
                 <motion.line
                   key={link.id}
@@ -324,6 +359,7 @@ const EdgeComputingVisualization = () => {
                   x2={to.position.x}
                   y2={to.position.y}
                   stroke={stroke}
+                  strokeOpacity={strokeOpacity}
                   strokeWidth={isMesh ? 1.6 : 2}
                   strokeDasharray={isMesh ? "6 6" : "0"}
                   strokeLinecap="round"
@@ -351,8 +387,8 @@ const EdgeComputingVisualization = () => {
               const show = isCloud ? flowCloud : flowMesh;
               if (!show) return null;
               const stroke = isCloud
-                ? "rgba(96, 165, 250, 0.9)"
-                : "rgba(251, 191, 36, 0.9)";
+                ? "var(--ds-color-accent-base-hover)"
+                : "var(--ds-color-warning-base-default)";
               return (
                 <motion.line
                   key={`${link.id}-flow`}
@@ -361,6 +397,7 @@ const EdgeComputingVisualization = () => {
                   x2={to.position.x}
                   y2={to.position.y}
                   stroke={stroke}
+                  strokeOpacity={0.9}
                   strokeWidth={1.4}
                   strokeDasharray={isCloud ? "4 10" : "3 8"}
                   strokeLinecap="round"
@@ -418,12 +455,14 @@ const EdgeComputingVisualization = () => {
             const isError = !cloudOnline && mode === "k8s" && node.type === "edge";
             const nodeTone = isCloud
               ? cloudOnline
-                ? "text-blue-600 dark:text-blue-500"
-                : "text-red-600 dark:text-red-500"
+                ? "text-[color:var(--ds-color-accent-base-default)]"
+                : "text-[color:var(--ds-color-danger-base-default)]"
               : isError
-              ? "text-red-600 dark:text-red-500"
-              : "text-emerald-600 dark:text-emerald-500";
-            const labelTone = isError ? "text-red-600 dark:text-red-200" : "text-slate-700 dark:text-slate-200";
+              ? "text-[color:var(--ds-color-danger-base-default)]"
+              : "text-[color:var(--ds-color-success-base-default)]";
+            const labelTone = isError
+              ? "text-[color:var(--ds-color-danger-text-default)]"
+              : "text-[color:var(--ds-color-neutral-text-subtle)]";
 
             return (
               <motion.div
@@ -435,7 +474,7 @@ const EdgeComputingVisualization = () => {
                 <div className="flex flex-col items-center gap-1">
                   <div
                     className={cn(
-                      "flex h-12 w-12 items-center justify-center rounded-full border border-slate-200/80 bg-white/90 shadow-md dark:border-slate-700/60 dark:bg-slate-950/70 dark:shadow-lg",
+                      "flex h-12 w-12 items-center justify-center rounded-full border bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_92%,transparent)] shadow-[var(--ds-shadow-md)] border-[color:var(--ds-color-neutral-border-subtle)]",
                       nodeTone
                     )}
                   >

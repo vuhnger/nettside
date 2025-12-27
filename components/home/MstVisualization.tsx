@@ -305,7 +305,7 @@ const MstVisualization = () => {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 [--mst-grid:rgba(15,23,42,0.28)] [--mst-edge:rgba(15,23,42,0.6)] [--mst-node-fill:rgba(15,23,42,0.65)] [--mst-node-stroke:rgba(15,23,42,0.75)] [--mst-label:rgba(15,23,42,0.9)] [--mst-active:rgba(37,99,235,0.9)] [--mst-complete:rgba(16,185,129,0.95)] [--mst-current:rgba(37,99,235,0.65)] dark:[--mst-grid:rgba(148,163,184,0.18)] dark:[--mst-edge:rgba(226,232,240,0.22)] dark:[--mst-node-fill:rgba(248,250,252,0.9)] dark:[--mst-node-stroke:rgba(15,23,42,0.65)] dark:[--mst-label:rgba(248,250,252,0.95)] dark:[--mst-active:rgba(56,189,248,0.95)] dark:[--mst-complete:rgba(34,197,94,0.95)] dark:[--mst-current:rgba(56,189,248,0.75)]"
+      className="pointer-events-none absolute inset-0 z-0 [--mst-grid:var(--ds-color-neutral-border-subtle)] [--mst-edge:var(--ds-color-neutral-border-default)] [--mst-node-fill:var(--ds-color-neutral-text-default)] [--mst-node-stroke:var(--ds-color-neutral-text-default)] [--mst-label:var(--ds-color-neutral-text-default)] [--mst-active:var(--ds-color-accent-base-default)] [--mst-complete:var(--ds-color-success-base-default)] [--mst-current:var(--ds-color-accent-base-hover)]"
     >
       <svg
         className="h-full w-full"

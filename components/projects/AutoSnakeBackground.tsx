@@ -401,10 +401,15 @@ const AutoSnakeBackground = () => {
     ctx.clearRect(0, 0, grid.width, grid.height);
 
     const styles = getComputedStyle(containerRef.current);
-    const gridColor = styles.getPropertyValue("--snake-grid").trim() || "rgba(15,23,42,0.05)";
-    const pathColor = styles.getPropertyValue("--snake-path").trim() || "rgba(37,99,235,0.12)";
-    const bodyColor = styles.getPropertyValue("--snake-body").trim() || "rgba(37,99,235,0.25)";
-    const foodColor = styles.getPropertyValue("--snake-food").trim() || "rgba(248,113,113,0.45)";
+    const rootStyles = getComputedStyle(document.documentElement);
+    const gridFallback = rootStyles.getPropertyValue("--ds-color-neutral-border-subtle").trim();
+    const pathFallback = rootStyles.getPropertyValue("--ds-color-accent-base-default").trim();
+    const bodyFallback = rootStyles.getPropertyValue("--ds-color-accent-base-default").trim();
+    const foodFallback = rootStyles.getPropertyValue("--ds-color-danger-base-default").trim();
+    const gridColor = styles.getPropertyValue("--snake-grid").trim() || gridFallback;
+    const pathColor = styles.getPropertyValue("--snake-path").trim() || pathFallback;
+    const bodyColor = styles.getPropertyValue("--snake-body").trim() || bodyFallback;
+    const foodColor = styles.getPropertyValue("--snake-food").trim() || foodFallback;
 
     const cellSize = settings.gridSize;
 
@@ -473,7 +478,7 @@ const AutoSnakeBackground = () => {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed inset-0 z-0 [--snake-grid:rgba(15,23,42,0.05)] [--snake-path:rgba(37,99,235,0.12)] [--snake-body:rgba(37,99,235,0.25)] [--snake-food:rgba(248,113,113,0.45)] dark:[--snake-grid:rgba(148,163,184,0.12)] dark:[--snake-path:rgba(56,189,248,0.18)] dark:[--snake-body:rgba(56,189,248,0.35)] dark:[--snake-food:rgba(248,113,113,0.6)]"
+      className="pointer-events-none fixed inset-0 z-0 [--snake-grid:color-mix(in_srgb,var(--ds-color-neutral-border-subtle)_15%,transparent)] [--snake-path:color-mix(in_srgb,var(--ds-color-accent-base-default)_18%,transparent)] [--snake-body:color-mix(in_srgb,var(--ds-color-accent-base-default)_32%,transparent)] [--snake-food:color-mix(in_srgb,var(--ds-color-danger-base-default)_45%,transparent)]"
       aria-hidden="true"
     >
       <canvas ref={canvasRef} className="h-full w-full" />

@@ -61,9 +61,9 @@ const buildPlaceholderImage = (title: string, accent: string, accentTwo: string)
       <rect width="720" height="480" rx="32" fill="url(#bg)" />
       <circle cx="580" cy="90" r="90" fill="url(#glow)" />
       <circle cx="120" cy="380" r="120" fill="url(#glow)" />
-      <rect x="60" y="80" width="260" height="36" rx="18" fill="rgba(255,255,255,0.35)" />
-      <rect x="60" y="140" width="340" height="20" rx="10" fill="rgba(255,255,255,0.2)" />
-      <rect x="60" y="175" width="300" height="20" rx="10" fill="rgba(255,255,255,0.15)" />
+      <rect x="60" y="80" width="260" height="36" rx="18" fill="white" fill-opacity="0.35" />
+      <rect x="60" y="140" width="340" height="20" rx="10" fill="white" fill-opacity="0.2" />
+      <rect x="60" y="175" width="300" height="20" rx="10" fill="white" fill-opacity="0.15" />
       <text x="60" y="110" fill="white" font-size="20" font-family="Arial, sans-serif" font-weight="600">
         ${title}
       </text>
@@ -351,7 +351,7 @@ const ProjectsPage = () => {
                   backgroundColor:
                     "color-mix(in srgb, var(--ds-color-neutral-background-default) 94%, transparent)",
                   border: "2px solid var(--ds-color-neutral-border-strong)",
-                  boxShadow: "0 12px 24px rgba(0, 0, 0, 0.06)",
+                  boxShadow: "var(--ds-shadow-md)",
                 }}
               >
                 <div
@@ -369,10 +369,10 @@ const ProjectsPage = () => {
                       onClick={() => setActiveProject(project)}
                       aria-haspopup="dialog"
                       aria-expanded={activeProject?.id === project.id}
-                      className="group flex w-full flex-col justify-between gap-4 rounded-2xl border border-slate-200/80 bg-white/80 p-4 text-left transition hover:-translate-y-0.5 hover:border-[var(--ds-color-accent-base-default)] hover:shadow-sm dark:border-slate-800/70 dark:bg-slate-900/60"
+                      className="group flex w-full flex-col justify-between gap-4 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-sm border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] hover:border-[color:var(--ds-color-accent-border-default)]"
                     >
                       <div className="flex flex-col gap-3">
-                        <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-300">
+                        <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
                           {project.tag}
                         </div>
                         <Heading data-size="sm" style={{ marginBottom: 0 }}>
@@ -392,7 +392,7 @@ const ProjectsPage = () => {
                   </div>
 
                   {imageSrc && (
-                    <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 dark:border-slate-800/70 dark:bg-slate-900/60 md:w-5/12">
+                    <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] md:w-5/12">
                       <Image
                         src={imageSrc}
                         alt={`Illustrasjon for ${project.title}`}
@@ -414,7 +414,7 @@ const ProjectsPage = () => {
         <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-8">
           <button
             type="button"
-            className="absolute inset-0 bg-slate-950/60"
+            className="absolute inset-0 bg-[color:color-mix(in_srgb,var(--ds-color-neutral-base-default)_70%,transparent)]"
             onClick={() => setActiveProject(null)}
             aria-label="Lukk prosjekt"
           />
@@ -423,7 +423,7 @@ const ProjectsPage = () => {
             aria-modal="true"
             aria-labelledby={`${activeProject.id}-title`}
             aria-describedby={`${activeProject.id}-details`}
-            className="relative z-10 w-full max-w-6xl rounded-3xl border border-slate-200/80 bg-white/95 shadow-2xl dark:border-slate-700/70 dark:bg-slate-950/95"
+            className="relative z-10 w-full max-w-6xl rounded-3xl border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_95%,transparent)] shadow-[var(--ds-shadow-xl)]"
           >
             <div className="p-6 md:p-8">
               <div className="flex items-start justify-between gap-4">
@@ -432,7 +432,7 @@ const ProjectsPage = () => {
                 </Heading>
                 <button
                   type="button"
-                  className="rounded-full border border-slate-200/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-[var(--ds-color-accent-base-default)] hover:text-[var(--ds-color-accent-base-default)] dark:border-slate-700/70 dark:text-slate-300"
+                  className="rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] transition border-[color:var(--ds-color-neutral-border-subtle)] text-[color:var(--ds-color-neutral-text-subtle)] hover:border-[color:var(--ds-color-accent-border-default)] hover:text-[color:var(--ds-color-accent-text-default)]"
                   onClick={() => setActiveProject(null)}
                 >
                   Lukk
@@ -447,8 +447,8 @@ const ProjectsPage = () => {
               </Paragraph>
 
               <div className="mt-6 grid gap-4 md:grid-cols-2">
-                <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 dark:border-slate-700/70 dark:bg-slate-900/60">
-                  <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-300">
+                <div className="rounded-2xl border p-4 border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_90%,transparent)]">
+                  <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
                     Teknologistakk
                   </div>
                   <div className="mt-3 flex flex-wrap gap-3">
@@ -458,7 +458,7 @@ const ProjectsPage = () => {
                         role="img"
                         aria-label={item.label}
                         title={item.label}
-                        className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200/80 bg-white/90 text-slate-700 shadow-sm dark:border-slate-700/70 dark:bg-slate-900/60 dark:text-slate-200"
+                        className="flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_95%,transparent)] text-[color:var(--ds-color-neutral-text-default)] shadow-[var(--ds-shadow-sm)]"
                       >
                         <item.icon className="text-xl" aria-hidden="true" />
                       </span>
@@ -477,11 +477,11 @@ const ProjectsPage = () => {
                     </a>
                   )}
                 </div>
-                <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 dark:border-slate-700/70 dark:bg-slate-900/60">
-                  <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-300">
+                <div className="rounded-2xl border p-4 border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_90%,transparent)]">
+                  <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
                     Læringsutbytte
                   </div>
-                  <ul className="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-200">
+                  <ul className="mt-3 space-y-2 text-sm text-[color:var(--ds-color-neutral-text-default)]">
                     {activeProject.learningOutcomes.map((item) => (
                       <li key={item} className="flex items-start gap-2">
                         <span
@@ -508,7 +508,7 @@ const ProjectsPage = () => {
                       }`}
                     >
                       {sectionImage && (
-                        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 dark:border-slate-800/70 dark:bg-slate-900/60 md:w-5/12">
+                        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] md:w-5/12">
                           <Image
                             src={sectionImage}
                             alt={section.title}

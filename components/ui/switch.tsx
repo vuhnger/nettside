@@ -28,14 +28,14 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         />
         <span
           className={cn(
-            "absolute inset-0 rounded-full border border-border/70 bg-muted/70 transition-colors",
-            "peer-checked:border-emerald-500/60 peer-checked:bg-emerald-500/70",
+            "absolute inset-0 rounded-full border transition-colors border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-tinted)_70%,transparent)]",
+            "peer-checked:border-[color:var(--ds-color-success-border-default)] peer-checked:bg-[color:color-mix(in_srgb,var(--ds-color-success-base-default)_65%,transparent)]",
             className
           )}
         />
         <span
           className={cn(
-            "absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-background shadow-sm transition-transform",
+            "absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-[color:var(--ds-color-neutral-background-default)] shadow-sm transition-transform",
             "peer-checked:translate-x-4"
           )}
         />

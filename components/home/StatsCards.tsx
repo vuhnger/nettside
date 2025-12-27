@@ -122,10 +122,10 @@ const StatsCards = () => {
     },
     {
       key: "strava",
-      icon: <FaRunning style={{ fontSize: '1.125rem', color: 'var(--ds-color-accent-second-default)' }} />,
+      icon: <FaRunning style={{ fontSize: '1.125rem', color: 'var(--ds-color-brand2-base-default)' }} />,
       value: runKm,
       label: `Strava km i ${currentYear}`,
-      color: "var(--ds-color-accent-second-default)",
+      color: "var(--ds-color-brand2-base-default)",
     },
   ];
 

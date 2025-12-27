@@ -57,7 +57,7 @@ const MasterCountdown = () => {
           height: '100%',
           transition: 'all 0.2s',
           border: '2px solid var(--ds-color-accent-base-default)',
-          boxShadow: '0 12px 20px rgba(37, 99, 235, 0.18)',
+          boxShadow: 'var(--accent-shadow)',
           cursor: 'pointer',
           position: 'relative'
         }}

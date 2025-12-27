@@ -8,7 +8,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="w-full py-6" style={{ backgroundColor: 'var(--ds-color-neutral-background-subtle)', borderTop: '1px solid var(--ds-color-neutral-border-subtle)' }}>
+    <footer className="w-full py-6" style={{ backgroundColor: 'var(--ds-color-neutral-background-tinted)', borderTop: '1px solid var(--ds-color-neutral-border-subtle)' }}>
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Copyright */}

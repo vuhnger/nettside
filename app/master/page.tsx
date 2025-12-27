@@ -40,9 +40,9 @@ const MasterPage = () => {
               backgroundColor:
                 "color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, transparent)",
               backgroundImage:
-                "linear-gradient(140deg, color-mix(in srgb, var(--ds-color-accent-second-subtle) 55%, transparent), transparent 60%)",
+                "linear-gradient(140deg, color-mix(in srgb, var(--ds-color-accent-background-tinted) 55%, transparent), transparent 60%)",
               border: "2px solid var(--ds-color-neutral-border-strong)",
-              boxShadow: "0 18px 30px rgba(0, 0, 0, 0.08)",
+              boxShadow: "var(--ds-shadow-lg)",
             }}
           >
             <div className="flex h-full flex-col justify-center gap-4">
@@ -85,9 +85,9 @@ const MasterPage = () => {
               backgroundColor:
                 "color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, transparent)",
               backgroundImage:
-                "linear-gradient(140deg, color-mix(in srgb, var(--ds-color-accent-base-subtle) 45%, transparent), transparent 60%)",
+                "linear-gradient(140deg, color-mix(in srgb, var(--ds-color-accent-surface-tinted) 45%, transparent), transparent 60%)",
               border: "2px solid var(--ds-color-neutral-border-strong)",
-              boxShadow: "0 18px 30px rgba(0, 0, 0, 0.08)",
+              boxShadow: "var(--ds-shadow-lg)",
             }}
           >
             <EdgeComputingVisualization />
@@ -102,7 +102,7 @@ const MasterPage = () => {
               backgroundColor:
                 "color-mix(in srgb, var(--ds-color-neutral-background-default) 94%, transparent)",
               border: "2px solid var(--ds-color-neutral-border-strong)",
-              boxShadow: "0 12px 24px rgba(0, 0, 0, 0.06)",
+              boxShadow: "var(--ds-shadow-md)",
             }}
           >
             <Heading data-size="sm" style={{ marginBottom: "0.5rem" }}>
@@ -124,7 +124,7 @@ const MasterPage = () => {
               backgroundColor:
                 "color-mix(in srgb, var(--ds-color-neutral-background-default) 94%, transparent)",
               border: "2px solid var(--ds-color-neutral-border-strong)",
-              boxShadow: "0 12px 24px rgba(0, 0, 0, 0.06)",
+              boxShadow: "var(--ds-shadow-md)",
             }}
           >
             <div className="flex items-center justify-between gap-3">

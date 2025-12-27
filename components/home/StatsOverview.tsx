@@ -9,25 +9,25 @@ const StatsOverview = () => {
       icon: <FaCode className="text-2xl" />,
       value: "Loading...",
       label: "Timer kodet",
-      color: "var(--color-purple)",
+      color: "var(--ds-color-accent-base-default)",
     },
     {
       icon: <FaRunning className="text-2xl" />,
       value: "Loading...",
       label: "Km løpt i år",
-      color: "var(--color-ocean)",
+      color: "var(--ds-color-brand2-base-default)",
     },
     {
       icon: <FaBeer className="text-2xl" />,
       value: "2025",
       label: "Unike øl",
-      color: "var(--color-accent-green-dark)",
+      color: "var(--ds-color-success-base-default)",
     },
     {
       icon: <FaMusic className="text-2xl" />,
       value: "Loading...",
       label: "Timer musikk",
-      color: "var(--color-purple-light)",
+      color: "var(--ds-color-brand1-base-default)",
     },
   ];
 
@@ -46,7 +46,7 @@ const StatsOverview = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1 + idx * 0.1 }}
-            className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border hover:border-[var(--color-purple)]/30 transition-all duration-200"
+            className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border hover:border-[color:var(--ds-color-accent-border-subtle)] transition-all duration-200"
           >
             <div className="flex flex-col items-center gap-2 text-center">
               <div style={{ color: stat.color }}>{stat.icon}</div>

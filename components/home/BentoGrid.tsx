@@ -11,7 +11,7 @@ import StatsCards from "./StatsCards";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
-  const clickableShadow = '0 12px 20px rgba(37, 99, 235, 0.18)';
+  const clickableShadow = 'var(--accent-shadow)';
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -78,7 +78,7 @@ const BentoGrid = () => {
               style={{
                 borderRadius: '0.5rem',
                 border: '1px dashed var(--ds-color-neutral-border-subtle)',
-                background: 'linear-gradient(135deg, var(--ds-color-accent-base-subtle), var(--ds-color-accent-second-subtle))',
+                background: 'linear-gradient(135deg, var(--ds-color-accent-surface-tinted), var(--ds-color-accent-background-tinted))',
                 aspectRatio: '3 / 4',
                 overflow: 'hidden'
               }}
