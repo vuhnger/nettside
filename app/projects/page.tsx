@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
 import type { IconType } from "react-icons";
 import {
@@ -21,6 +22,8 @@ import {
   SiTailwindcss,
   SiTypescript,
   SiVercel,
+  SiGraphql,
+  SiSpringboot,
 } from "react-icons/si";
 import AutoSnakeBackground from "@/components/projects/AutoSnakeBackground";
 
@@ -66,38 +69,50 @@ const buildPlaceholderImage = (title: string, accent: string, accentTwo: string)
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 };
 
+const isDataImage = (src: string) => src.startsWith("data:");
+
 const ProjectsPage = () => {
   const projects = useMemo<Project[]>(
     () => [
       {
         id: "kartverket-security",
         title: "Sikkerhetsmikrotjeneste for Kartverket",
-        tag: "Offentlig sikkerhet",
+        tag: "Sikkerhet i byggekjede, monitorering av webapplikasjoner",
         summary:
-          "Mikrotjeneste som håndterer sikkerhetskontroller, policy og revisjon i Kartverkets plattform.",
+          "Mikrotjeneste utfører dynamiske skanninger som et steg i byggekjeden til Kartverkets webapplikasjoner.",
         details:
           "Prosjektet samler tilgangskontroll, audit logging og risikobasert overvåkning i én tjeneste med klare API-er og eventstrømmer.",
-        image: buildPlaceholderImage("Kartverket", "#2563eb", "#38bdf8"),
+        image: "/images/projects/kartverket-preview.png",
         stack: [
-          { label: "Kubernetes", icon: SiKubernetes },
-          { label: "FastAPI", icon: SiFastapi },
-          { label: "PostgreSQL", icon: SiPostgresql },
           { label: "Docker", icon: SiDocker },
+          { label: "Kotlin", icon: SiKotlin },
+          { label: "PostgreSQL", icon: SiPostgresql },
+          { label: "React", icon: SiReact },
+          { label: "TypeScript", icon: SiTypescript },
+          { label: "GraphQL", icon: SiGraphql },
+          { label: "SpringBoot", icon: SiSpringboot },
         ],
         learningOutcomes: [
-          "Policy-as-code og revisjonsspor for kritiske tjenester",
-          "Tjenestegrenser med tydelig ansvar i sikkerhetsdomenet",
-          "Observability og drift for sensitiv infrastruktur",
+          "Angrepsvektorer i webapplikasjoner",
+          "Docker",
+          "Github Actions og byggekjede",
+          "Full-stack utvikling",
         ],
         sections: [
           {
-            title: "Mandat og risikobilde",
+            title: "Introduksjon",
             description:
-              "Definerer sikkerhetskravene som må verifiseres i plattformen, med fokus på tilgangskontroll og sporbarhet.",
-            image: buildPlaceholderImage("Risikobilde", "#1e3a8a", "#38bdf8"),
+              "Sommeren 2025 hadde jeg sommervikariat i Bekk, der jeg jobbet hos Kartverket! Bakgrunnen for prosjektet var en satsning på digital sikkerhet hos Kartverket. Jeg jobbet på et team bestående av to sikkerhetsutviklere og to fullstack utviklere. Vi jobbet med Governance, Risc and Complience (GRC) med fokus på dynamisk applikasjonsskanning (DAST). Dynamisk skanning av applikasjoner betyr å skanne applikasjonen mens den kjører. En slik skann kan innebære å crawle applikasjonens URL for åpne endepunkter, skjemaer, inputfelt og manglende headers. Vi bygget en mikrotjeneste som bruker et verktøy for slike skanninger (Tenable) til å skanne Kartverket sine tjenester som en ",
+            image: "/images/logos/kartverket-logo.svg",
           },
           {
-            title: "Kontrollplan og hendelser",
+            title: "Frontend",
+            description:
+              "Mikrotjenesten orkestrerer kontrollpunkter og publiserer hendelser til resten av systemet for audit og varsling.",
+            image: buildPlaceholderImage("Kontrollplan", "#0f172a", "#22d3ee"),
+          },
+          {
+            title: "Backend",
             description:
               "Mikrotjenesten orkestrerer kontrollpunkter og publiserer hendelser til resten av systemet for audit og varsling.",
             image: buildPlaceholderImage("Kontrollplan", "#0f172a", "#22d3ee"),
@@ -108,12 +123,12 @@ const ProjectsPage = () => {
         id: "terje-aiops",
         title:
           "TERJE - KI-drevet tjeneste for monitorering og gjenoppretting av serverinfrastruktur",
-        tag: "AIOps",
+        tag: "KI, Systemovervåking, Automatisering",
         summary:
           "AIOps-tjeneste som oppdager avvik, foreslår tiltak og automatiserer gjenoppretting.",
         details:
           "Kombinerer metrikker, logger og hendelser til et beslutningslag som prioriterer tiltak og reduserer nedetid i drift.",
-        image: buildPlaceholderImage("TERJE", "#0ea5e9", "#22d3ee"),
+        image: "/images/projects/terje-demo.png",
         stack: [
           { label: "Python", icon: SiPython },
           { label: "Prometheus", icon: SiPrometheus },
@@ -148,7 +163,7 @@ const ProjectsPage = () => {
           "Samler interne endepunkter for Strava, Wakatime og små automasjoner.",
         details:
           "Tjenestelaget eksponerer stabile API-er, caching og rate-limits som gir pålitelig data til dashboards og widgets.",
-        image: buildPlaceholderImage("api.vuhnger.dev", "#334155", "#64748b"),
+        image: "/images/projects/api-demo.png",
         stack: [
           { label: "FastAPI", icon: SiFastapi },
           { label: "PostgreSQL", icon: SiPostgresql },
@@ -315,10 +330,10 @@ const ProjectsPage = () => {
             Prosjekter
           </Heading>
           <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
-            Utvalgte prosjekter innen sikkerhet, AIOps, plattform og produktutvikling.
+            Her er noen av prosjektene jeg har jobbet med de siste årene. Hvert prosjekt inneholder en liten beskrivelse av innhold, hva jeg lærte og fremstillinger av resultater
           </Paragraph>
           <Paragraph data-size="xs" style={{ margin: "0.4rem 0 0", color: "var(--ds-color-neutral-text-subtle)" }}>
-            Klikk på et prosjekt for detaljer. BTW: Slangen som kjører i bakgrunnen bruker A*-pathfinding for å finne eplene sine.
+            Og BTW: Slangen som kjører i bakgrunnen bruker A* for å finne eplene sine :)
           </Paragraph>
         </div>
 
@@ -368,12 +383,14 @@ const ProjectsPage = () => {
                     </div>
                   </button>
 
-                  <div className="relative w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 dark:border-slate-800/70 dark:bg-slate-900/60 md:w-5/12">
-                    <img
+                  <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 dark:border-slate-800/70 dark:bg-slate-900/60 md:w-5/12">
+                    <Image
                       src={project.image}
                       alt={`Illustrasjon for ${project.title}`}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
+                      fill
+                      sizes="(min-width: 768px) 40vw, 100vw"
+                      className="object-cover"
+                      unoptimized={isDataImage(project.image)}
                     />
                   </div>
                 </div>
@@ -422,7 +439,7 @@ const ProjectsPage = () => {
               <div className="mt-6 grid gap-4 md:grid-cols-2">
                 <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 dark:border-slate-700/70 dark:bg-slate-900/60">
                   <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-300">
-                    Tech stack
+                    Teknologistakk
                   </div>
                   <div className="mt-3 flex flex-wrap gap-3">
                     {activeProject.stack.map((item) => (
@@ -466,12 +483,14 @@ const ProjectsPage = () => {
                         isReversed ? "md:flex-row-reverse" : "md:flex-row"
                       }`}
                     >
-                      <div className="relative w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 dark:border-slate-800/70 dark:bg-slate-900/60 md:w-5/12">
-                        <img
+                      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 dark:border-slate-800/70 dark:bg-slate-900/60 md:w-5/12">
+                        <Image
                           src={section.image}
                           alt={section.title}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
+                          fill
+                          sizes="(min-width: 768px) 40vw, 100vw"
+                          className="object-cover"
+                          unoptimized={isDataImage(section.image)}
                         />
                       </div>
                       <div className="flex w-full flex-col justify-center gap-3 md:w-7/12">

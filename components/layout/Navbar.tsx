@@ -1,18 +1,13 @@
 "use client";
 
 import NextLink from "next/link";
-import { useState, useEffect, useRef } from "react";
-import { Link } from "@digdir/designsystemet-react";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { IoMdClose } from "react-icons/io";
+import { useState, useEffect } from "react";
 import { FiSun, FiMoon, FiHome } from "react-icons/fi";
 
 const Navbar = () => {
-  const [expand, setExpand] = useState(false);
   const [navColour, setNavColour] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [apiStatus, setApiStatus] = useState<"unknown" | "up" | "down">("unknown");
-  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const scrollHandler = () => {
@@ -61,28 +56,11 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handlePointerDown = (event: PointerEvent) => {
-      if (!expand) return;
-      const target = event.target as Node | null;
-      if (menuRef.current && target && !menuRef.current.contains(target)) {
-        setExpand(false);
-      }
-    };
-
-    document.addEventListener("pointerdown", handlePointerDown);
-    return () => document.removeEventListener("pointerdown", handlePointerDown);
-  }, [expand]);
-
   const toggleTheme = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     document.documentElement.setAttribute('data-color-scheme', newDarkMode ? 'dark' : 'light');
   };
-
-  const navItems = [
-    { name: "Prosjekter", path: "/projects" },
-  ];
 
   return (
     <nav
@@ -155,7 +133,6 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* Right side: Theme toggle + Hamburger */}
         <div className="flex items-center gap-2">
           {/* Theme Toggle */}
           <button
@@ -177,67 +154,6 @@ const Navbar = () => {
           >
             {darkMode ? <FiSun style={{ fontSize: '1.125rem' }} /> : <FiMoon style={{ fontSize: '1.125rem' }} />}
           </button>
-
-          {/* Hamburger Menu */}
-          <div ref={menuRef} style={{ position: 'relative' }}>
-            <button
-              onClick={() => setExpand(!expand)}
-              aria-label={expand ? "Lukk meny" : "Åpne meny"}
-              style={{
-                width: '2rem',
-                height: '2rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid var(--ds-color-neutral-border-default)',
-                borderRadius: '0.375rem',
-                backgroundColor: 'transparent',
-                color: 'var(--ds-color-accent-base-default)',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-            >
-              {expand ? <IoMdClose style={{ fontSize: '1.125rem' }} /> : <GiHamburgerMenu style={{ fontSize: '1.125rem' }} />}
-            </button>
-
-            {/* Dropdown Menu */}
-            {expand && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '2.5rem',
-                  right: 0,
-                  minWidth: '10rem',
-                  backgroundColor: 'var(--ds-color-neutral-background-default)',
-                  border: '1px solid var(--ds-color-neutral-border-default)',
-                  borderRadius: '0.375rem',
-                  padding: '0.5rem',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }}
-              >
-                {navItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    href={item.path}
-                    asChild
-                  >
-                    <NextLink
-                      href={item.path}
-                      onClick={() => setExpand(false)}
-                      style={{
-                        display: 'block',
-                        padding: '0.5rem 0.75rem',
-                        borderRadius: '0.25rem',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      {item.name}
-                    </NextLink>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </nav>
