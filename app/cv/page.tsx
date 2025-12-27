@@ -105,20 +105,21 @@ const education = [
 const experience: Experience[] = [
   {
     id: "dr-dropin",
-    company: "Dr. Dropin BHT AS",
+    company: "Dr. Dropin Bedrift",
     location: "Oslo",
     role: "Administrativ koordinator",
     period: "2025 - ",
     summary: "Automatisering og integrasjonsarbeid for bedriftshelsetjenesten.",
     details: [
-      "Ansvar for teknologitiltak som forbedrer effektivitet på tvers av forretningsplattformer.",
-      "Automatisering og integrasjon for bedriftshelsetjenesten."
+      "Jobber med tiltak som forbedrer effektivitet på tvers av forretningsplattformer.",
+      "Automatisering og integrasjon for bedriftshelsetjenesten.",
+      "Samt forefallende administrativt arbeid. ",
     ],
     logo: "/images/logos/drdropin-logo.png"
   },
   {
     id: "bekk",
-    company: "Bekk Consulting AS",
+    company: "Bekk",
     location: "Oslo",
     role: "Utvikler (intern)",
     period: "2025 - 2025",
