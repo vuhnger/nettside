@@ -19,13 +19,13 @@ type Edge = {
 };
 
 const BASE_SETTINGS = {
-  nodeCount: 15,
+  nodeCount: 20,
   nodeRadius: 9,
   gridSize: 32,
-  startDelay: 200,
+  startDelay: 150,
   stepDelay: 40,
   skipDelay: 20,
-  resetDelay: 400,
+  resetDelay: 200,
 };
 
 const MOBILE_SETTINGS = {
@@ -89,7 +89,6 @@ class UnionFind {
 
 const MstVisualization = () => {
   const patternId = `mst-grid-${useId().replace(/:/g, "")}`;
-  const [mounted, setMounted] = useState(false);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
@@ -110,10 +109,6 @@ const MstVisualization = () => {
     }
     return BASE_SETTINGS;
   }, [isMobile, prefersReducedMotion]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const updateIsMobile = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
@@ -140,8 +135,6 @@ const MstVisualization = () => {
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
-
     const updateViewport = () => {
       setViewport({ width: window.innerWidth, height: window.innerHeight });
     };
@@ -159,7 +152,7 @@ const MstVisualization = () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", handleResize);
     };
-  }, [mounted]);
+  }, []);
 
   const generateNodes = useCallback((width: number, height: number): Node[] => {
     const centerX = width / 2;
@@ -223,7 +216,7 @@ const MstVisualization = () => {
   );
 
   useEffect(() => {
-    if (!mounted || viewport.width === 0 || viewport.height === 0) return;
+    if (viewport.width === 0 || viewport.height === 0) return;
 
     const newNodes = generateNodes(viewport.width, viewport.height);
     const newEdges = generateEdges(newNodes);
@@ -232,10 +225,10 @@ const MstVisualization = () => {
     setMstEdges([]);
     setCurrentEdge(null);
     setIsCompleted(false);
-  }, [mounted, viewport.width, viewport.height, generateNodes, generateEdges, settings]);
+  }, [viewport.width, viewport.height, generateNodes, generateEdges, settings]);
 
   useEffect(() => {
-    if (!mounted || nodes.length === 0 || edges.length === 0 || isPaused) return;
+    if (nodes.length === 0 || edges.length === 0 || isPaused) return;
 
     let cancelled = false;
     const runId = (runIdRef.current += 1);
@@ -290,7 +283,6 @@ const MstVisualization = () => {
       cancelled = true;
     };
   }, [
-    mounted,
     nodes,
     edges,
     viewport.width,
@@ -301,7 +293,7 @@ const MstVisualization = () => {
     settings,
   ]);
 
-  if (!mounted || viewport.width === 0 || viewport.height === 0) {
+  if (viewport.width === 0 || viewport.height === 0) {
     return (
       <div
         aria-hidden="true"
@@ -313,7 +305,7 @@ const MstVisualization = () => {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 [--mst-grid:rgba(15,23,42,0.12)] [--mst-edge:rgba(15,23,42,0.18)] [--mst-node-fill:rgba(15,23,42,0.28)] [--mst-node-stroke:rgba(248,250,252,0.7)] [--mst-label:rgba(248,250,252,0.85)] [--mst-active:rgba(37,99,235,0.9)] [--mst-complete:rgba(16,185,129,0.95)] [--mst-current:rgba(37,99,235,0.65)] dark:[--mst-grid:rgba(148,163,184,0.18)] dark:[--mst-edge:rgba(226,232,240,0.22)] dark:[--mst-node-fill:rgba(226,232,240,0.35)] dark:[--mst-node-stroke:rgba(15,23,42,0.65)] dark:[--mst-label:rgba(15,23,42,0.8)] dark:[--mst-active:rgba(56,189,248,0.95)] dark:[--mst-complete:rgba(34,197,94,0.95)] dark:[--mst-current:rgba(56,189,248,0.75)]"
+      className="pointer-events-none absolute inset-0 z-0 [--mst-grid:rgba(15,23,42,0.28)] [--mst-edge:rgba(15,23,42,0.6)] [--mst-node-fill:rgba(15,23,42,0.55)] [--mst-node-stroke:rgba(15,23,42,0.75)] [--mst-label:rgba(248,250,252,0.95)] [--mst-active:rgba(37,99,235,0.9)] [--mst-complete:rgba(16,185,129,0.95)] [--mst-current:rgba(37,99,235,0.65)] dark:[--mst-grid:rgba(148,163,184,0.18)] dark:[--mst-edge:rgba(226,232,240,0.22)] dark:[--mst-node-fill:rgba(226,232,240,0.35)] dark:[--mst-node-stroke:rgba(15,23,42,0.65)] dark:[--mst-label:rgba(15,23,42,0.8)] dark:[--mst-active:rgba(56,189,248,0.95)] dark:[--mst-complete:rgba(34,197,94,0.95)] dark:[--mst-current:rgba(56,189,248,0.75)]"
     >
       <svg
         className="h-full w-full"

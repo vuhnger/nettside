@@ -84,9 +84,10 @@ const Navbar = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid var(--ds-color-neutral-border-default)',
+              border: '2px solid var(--ds-color-accent-base-default)',
               borderRadius: '0.375rem',
               color: 'var(--ds-color-accent-base-default)',
+              boxShadow: '0 12px 20px rgba(37, 99, 235, 0.18)',
               transition: 'all 0.2s'
             }}
           >
@@ -104,7 +105,7 @@ const Navbar = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '0.375rem',
-              border: '1px solid var(--ds-color-neutral-border-default)',
+              border: '2px solid var(--ds-color-accent-base-default)',
               borderRadius: '0.5rem',
               backgroundColor: 'var(--ds-color-neutral-background-default)',
               color: 'var(--ds-color-neutral-text-default)',
@@ -112,6 +113,7 @@ const Navbar = () => {
               fontWeight: 600,
               letterSpacing: '0.02em',
               textTransform: 'uppercase',
+              boxShadow: '0 12px 20px rgba(37, 99, 235, 0.18)',
               transition: 'all 0.2s'
             }}
           >
@@ -144,11 +146,12 @@ const Navbar = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid var(--ds-color-neutral-border-default)',
+              border: '2px solid var(--ds-color-accent-base-default)',
               borderRadius: '0.375rem',
               backgroundColor: 'transparent',
               color: 'var(--ds-color-accent-base-default)',
               cursor: 'pointer',
+              boxShadow: '0 12px 20px rgba(37, 99, 235, 0.18)',
               transition: 'all 0.2s'
             }}
           >

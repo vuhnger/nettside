@@ -5,25 +5,43 @@ import NextLink from "next/link";
 import { Card, Paragraph } from "@digdir/designsystemet-react";
 import { MASTER_TIMELINE } from "@/lib/master";
 
+const calculateProgress = (startDate: number, targetDate: number) => {
+  const now = Date.now();
+  const total = targetDate - startDate;
+  const elapsed = Math.min(Math.max(now - startDate, 0), total);
+  return total > 0 ? Math.round((elapsed / total) * 100) : 100;
+};
+
 const MasterCountdown = () => {
   const startDate = Date.parse(MASTER_TIMELINE.start);
   const targetDate = Date.parse(MASTER_TIMELINE.end);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(() => calculateProgress(startDate, targetDate));
+  const [displayProgress, setDisplayProgress] = useState(0);
+  const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = new Date().getTime();
-      const total = targetDate - startDate;
-      const elapsed = Math.min(Math.max(now - startDate, 0), total);
-      const percent = total > 0 ? Math.round((elapsed / total) * 100) : 100;
-      setProgress(percent);
-    };
-
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
+    const update = () => setProgress(calculateProgress(startDate, targetDate));
+    update();
+    const timer = setInterval(update, 1000);
 
     return () => clearInterval(timer);
+  }, [startDate, targetDate]);
+
+  useEffect(() => {
+    const target = Math.min(20, progress);
+    setDisplayProgress(target);
+    const timeout = setTimeout(() => {
+      setIntroDone(true);
+      setDisplayProgress(progress);
+    }, 1600);
+
+    return () => clearTimeout(timeout);
   }, []);
+
+  useEffect(() => {
+    if (!introDone) return;
+    setDisplayProgress(progress);
+  }, [introDone, progress]);
 
   return (
     <NextLink
@@ -38,7 +56,8 @@ const MasterCountdown = () => {
           padding: '0.5rem',
           height: '100%',
           transition: 'all 0.2s',
-          border: '1px solid var(--ds-color-accent-base-default)',
+          border: '2px solid var(--ds-color-accent-base-default)',
+          boxShadow: '0 12px 20px rgba(37, 99, 235, 0.18)',
           cursor: 'pointer',
           position: 'relative'
         }}
@@ -83,18 +102,18 @@ const MasterCountdown = () => {
               overflow: 'hidden'
             }}
           >
-            <div
-              style={{
-                height: '100%',
-                width: `${progress}%`,
-                backgroundColor: 'var(--ds-color-accent-base-default)',
-                transition: 'width 0.3s ease'
-              }}
-            />
-          </div>
-          <Paragraph data-size="xs" style={{ margin: 0, color: 'var(--ds-color-neutral-text-default)', minWidth: '2.25rem', textAlign: 'right' }}>
-            {progress}%
-          </Paragraph>
+          <div
+            style={{
+              height: '100%',
+              width: `${displayProgress}%`,
+              backgroundColor: 'var(--ds-color-accent-base-default)',
+              transition: `width ${introDone ? '0.3s' : '1.6s'} ease`
+            }}
+          />
+        </div>
+        <Paragraph data-size="xs" style={{ margin: 0, color: 'var(--ds-color-neutral-text-default)', minWidth: '2.25rem', textAlign: 'right' }}>
+          {Math.round(displayProgress)}%
+        </Paragraph>
         </div>
       </Card>
     </NextLink>
