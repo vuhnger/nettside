@@ -313,7 +313,7 @@ const MstVisualization = () => {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0"
+      className="pointer-events-none absolute inset-0 z-0 [--mst-grid:rgba(15,23,42,0.12)] [--mst-edge:rgba(15,23,42,0.18)] [--mst-node-fill:rgba(15,23,42,0.28)] [--mst-node-stroke:rgba(248,250,252,0.7)] [--mst-label:rgba(248,250,252,0.85)] [--mst-active:rgba(37,99,235,0.9)] [--mst-complete:rgba(16,185,129,0.95)] [--mst-current:rgba(37,99,235,0.65)] dark:[--mst-grid:rgba(148,163,184,0.18)] dark:[--mst-edge:rgba(226,232,240,0.22)] dark:[--mst-node-fill:rgba(226,232,240,0.35)] dark:[--mst-node-stroke:rgba(15,23,42,0.65)] dark:[--mst-label:rgba(15,23,42,0.8)] dark:[--mst-active:rgba(56,189,248,0.95)] dark:[--mst-complete:rgba(34,197,94,0.95)] dark:[--mst-current:rgba(56,189,248,0.75)]"
     >
       <svg
         className="h-full w-full"
@@ -330,7 +330,7 @@ const MstVisualization = () => {
             <path
               d={`M ${settings.gridSize} 0 L 0 0 0 ${settings.gridSize}`}
               fill="none"
-              stroke="var(--ds-color-neutral-border-subtle)"
+              stroke="var(--mst-grid)"
               strokeOpacity="0.35"
               strokeWidth="1"
             />
@@ -346,7 +346,7 @@ const MstVisualization = () => {
             y1={edge.from.position.y}
             x2={edge.to.position.x}
             y2={edge.to.position.y}
-            stroke="var(--ds-color-neutral-text-default)"
+            stroke="var(--mst-edge)"
             strokeOpacity="0.12"
             strokeWidth="1"
           />
@@ -361,8 +361,8 @@ const MstVisualization = () => {
             y2={edge.to.position.y}
             stroke={
               isCompleted
-                ? "var(--ds-color-accent-second-default)"
-                : "var(--ds-color-accent-base-default)"
+                ? "var(--mst-complete)"
+                : "var(--mst-active)"
             }
             strokeOpacity={isCompleted ? "0.95" : "0.8"}
             strokeWidth={isCompleted ? "2.5" : "2"}
@@ -375,7 +375,7 @@ const MstVisualization = () => {
             y1={currentEdge.from.position.y}
             x2={currentEdge.to.position.x}
             y2={currentEdge.to.position.y}
-            stroke="var(--ds-color-accent-base-default)"
+            stroke="var(--mst-current)"
             strokeOpacity="0.7"
             strokeWidth="1.5"
           />
@@ -387,9 +387,9 @@ const MstVisualization = () => {
             cx={node.position.x}
             cy={node.position.y}
             r={settings.nodeRadius}
-            fill="var(--ds-color-neutral-text-default)"
+            fill="var(--mst-node-fill)"
             fillOpacity={isCompleted ? "0.65" : "0.25"}
-            stroke="var(--ds-color-neutral-background-default)"
+            stroke="var(--mst-node-stroke)"
             strokeOpacity={isCompleted ? "0.6" : "0.35"}
             strokeWidth="1.5"
           />
@@ -401,7 +401,7 @@ const MstVisualization = () => {
             x={node.position.x}
             y={node.position.y + 4}
             textAnchor="middle"
-            fill="var(--ds-color-neutral-background-default)"
+            fill="var(--mst-label)"
             fillOpacity={isCompleted ? "0.7" : "0.4"}
             fontSize="10"
             fontFamily="ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace"

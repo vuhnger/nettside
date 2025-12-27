@@ -2,15 +2,38 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
+import type { IconType } from "react-icons";
+import {
+  SiAndroid,
+  SiDocker,
+  SiFastapi,
+  SiGrafana,
+  SiGradle,
+  SiKotlin,
+  SiKubernetes,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiPostgresql,
+  SiPrometheus,
+  SiPython,
+  SiReact,
+  SiSqlite,
+  SiTailwindcss,
+  SiTypescript,
+  SiVercel,
+} from "react-icons/si";
 import AutoSnakeBackground from "@/components/projects/AutoSnakeBackground";
 
 type Project = {
   id: string;
   title: string;
+  tag: string;
   summary: string;
   details: string;
-  highlights: { label: string; value: string }[];
   image: string;
+  stack: { label: string; icon: IconType }[];
+  learningOutcomes: string[];
+  sections: { title: string; description: string; image: string }[];
 };
 
 const buildPlaceholderImage = (title: string, accent: string, accentTwo: string) => {
@@ -47,82 +70,216 @@ const ProjectsPage = () => {
   const projects = useMemo<Project[]>(
     () => [
       {
-        id: "project-01",
-        title: "Prosjekt 01",
-        summary: "Placeholder for et fremtidig prosjekt med fokus på distribuert edge-telemetri.",
+        id: "kartverket-security",
+        title: "Sikkerhetsmikrotjeneste for Kartverket",
+        tag: "Offentlig sikkerhet",
+        summary:
+          "Mikrotjeneste som håndterer sikkerhetskontroller, policy og revisjon i Kartverkets plattform.",
         details:
-          "Detaljert prosjektinfo kommer senere. Dette er en midlertidig plassholder som viser hvordan caset skal presenteres.",
-        highlights: [
-          { label: "Status", value: "Skisse" },
-          { label: "Tema", value: "Edge telemetri" },
-          { label: "Format", value: "Prototype" },
+          "Prosjektet samler tilgangskontroll, audit logging og risikobasert overvåkning i én tjeneste med klare API-er og eventstrømmer.",
+        image: buildPlaceholderImage("Kartverket", "#2563eb", "#38bdf8"),
+        stack: [
+          { label: "Kubernetes", icon: SiKubernetes },
+          { label: "FastAPI", icon: SiFastapi },
+          { label: "PostgreSQL", icon: SiPostgresql },
+          { label: "Docker", icon: SiDocker },
         ],
-        image: buildPlaceholderImage("Prosjekt 01", "#2563eb", "#38bdf8"),
+        learningOutcomes: [
+          "Policy-as-code og revisjonsspor for kritiske tjenester",
+          "Tjenestegrenser med tydelig ansvar i sikkerhetsdomenet",
+          "Observability og drift for sensitiv infrastruktur",
+        ],
+        sections: [
+          {
+            title: "Mandat og risikobilde",
+            description:
+              "Definerer sikkerhetskravene som må verifiseres i plattformen, med fokus på tilgangskontroll og sporbarhet.",
+            image: buildPlaceholderImage("Risikobilde", "#1e3a8a", "#38bdf8"),
+          },
+          {
+            title: "Kontrollplan og hendelser",
+            description:
+              "Mikrotjenesten orkestrerer kontrollpunkter og publiserer hendelser til resten av systemet for audit og varsling.",
+            image: buildPlaceholderImage("Kontrollplan", "#0f172a", "#22d3ee"),
+          },
+        ],
       },
       {
-        id: "project-02",
-        title: "Prosjekt 02",
-        summary: "Placeholder for et prosjekt som handler om pålitelig tjenesteoppdagelse.",
+        id: "terje-aiops",
+        title:
+          "TERJE - KI-drevet tjeneste for monitorering og gjenoppretting av serverinfrastruktur",
+        tag: "AIOps",
+        summary:
+          "AIOps-tjeneste som oppdager avvik, foreslår tiltak og automatiserer gjenoppretting.",
         details:
-          "Mer informasjon kommer. Denne plassen er reservert for bakgrunn, mål og resultater.",
-        highlights: [
-          { label: "Status", value: "Planlagt" },
-          { label: "Tema", value: "Service mesh" },
-          { label: "Format", value: "Feltstudie" },
+          "Kombinerer metrikker, logger og hendelser til et beslutningslag som prioriterer tiltak og reduserer nedetid i drift.",
+        image: buildPlaceholderImage("TERJE", "#0ea5e9", "#22d3ee"),
+        stack: [
+          { label: "Python", icon: SiPython },
+          { label: "Prometheus", icon: SiPrometheus },
+          { label: "Grafana", icon: SiGrafana },
+          { label: "Kubernetes", icon: SiKubernetes },
         ],
-        image: buildPlaceholderImage("Prosjekt 02", "#0ea5e9", "#22d3ee"),
+        learningOutcomes: [
+          "Korrelasjon av metrikker, logger og hendelser",
+          "Automatiserte runbooks og self-healing workflows",
+          "Evaluering av KI-forslag mot driftssikkerhet",
+        ],
+        sections: [
+          {
+            title: "Signalgrunnlag",
+            description:
+              "Samler tidsserier og loggdata til et samlet beslutningsgrunnlag for anbefalinger.",
+            image: buildPlaceholderImage("Signalgrunnlag", "#0ea5e9", "#38bdf8"),
+          },
+          {
+            title: "Gjenoppretting og tiltak",
+            description:
+              "Definerer gjenopprettingsplaner som kan trigges automatisk eller manuelt når terskler brytes.",
+            image: buildPlaceholderImage("Gjenoppretting", "#0f766e", "#22d3ee"),
+          },
+        ],
       },
       {
-        id: "project-03",
-        title: "Prosjekt 03",
-        summary: "Placeholder for et case rundt robusthetstesting på ressurs-svake noder.",
+        id: "api-vuhnger",
+        title: "api.vuhnger.dev - Personlig API for mikrotjenestene mine",
+        tag: "Plattform",
+        summary:
+          "Samler interne endepunkter for Strava, Wakatime og små automasjoner.",
         details:
-          "Her kommer detaljer om testoppsett, målinger og innsikt når prosjektet er klart.",
-        highlights: [
-          { label: "Status", value: "Konsept" },
-          { label: "Tema", value: "Robusthet" },
-          { label: "Format", value: "Benchmark" },
+          "Tjenestelaget eksponerer stabile API-er, caching og rate-limits som gir pålitelig data til dashboards og widgets.",
+        image: buildPlaceholderImage("api.vuhnger.dev", "#334155", "#64748b"),
+        stack: [
+          { label: "FastAPI", icon: SiFastapi },
+          { label: "PostgreSQL", icon: SiPostgresql },
+          { label: "Docker", icon: SiDocker },
+          { label: "Kubernetes", icon: SiKubernetes },
         ],
-        image: buildPlaceholderImage("Prosjekt 03", "#8b5cf6", "#ec4899"),
+        learningOutcomes: [
+          "Stabil API-design med versjonering og caching",
+          "Sikker eksponering av persondata og private endepunkter",
+          "Observability og rask feilsøking i små tjenester",
+        ],
+        sections: [
+          {
+            title: "API-oversikt",
+            description:
+              "Konsoliderer flere mikrotjenester bak et ryddig API-lag som er enkelt å videreutvikle.",
+            image: buildPlaceholderImage("API-oversikt", "#1e293b", "#0ea5e9"),
+          },
+          {
+            title: "Drift og vedlikehold",
+            description:
+              "Fokus på enkel utrulling, overvåkning og trygg eksponering av interne data.",
+            image: buildPlaceholderImage("Drift", "#475569", "#94a3b8"),
+          },
+        ],
       },
       {
-        id: "project-04",
-        title: "Prosjekt 04",
-        summary: "Placeholder for visualisering av kontrollplan vs edge-behavior under feil.",
+        id: "vuhnger-dev",
+        title: "vuhnger.dev - Personlig nettside",
+        tag: "Produkt",
+        summary:
+          "Portfolio og labs bygget i Next.js med App Router og Designsystemet som designbase.",
         details:
-          "Innholdet vil beskrive scenarioer, metoder og læring fra eksperimentene.",
-        highlights: [
-          { label: "Status", value: "Idé" },
-          { label: "Tema", value: "Kontrollplan" },
-          { label: "Format", value: "Visualisering" },
+          "Nettsiden samler prosjekter, CV og eksperimenter med fokus på typografi, responsivitet og rask iterasjon.",
+        image: buildPlaceholderImage("vuhnger.dev", "#14b8a6", "#22c55e"),
+        stack: [
+          { label: "Next.js", icon: SiNextdotjs },
+          { label: "TypeScript", icon: SiTypescript },
+          { label: "Tailwind CSS", icon: SiTailwindcss },
+          { label: "Vercel", icon: SiVercel },
         ],
-        image: buildPlaceholderImage("Prosjekt 04", "#14b8a6", "#22c55e"),
+        learningOutcomes: [
+          "Komponentbasert design og typografisk hierarki",
+          "Tilgjengelighet, kontrast og responsivitet",
+          "Effektiv release-flyt og observasjon i prod",
+        ],
+        sections: [
+          {
+            title: "Visuell identitet",
+            description:
+              "Kombinerer design-tokens med håndlagde layoutvalg for å bygge en tydelig visuell profil.",
+            image: buildPlaceholderImage("Visuell identitet", "#0f766e", "#34d399"),
+          },
+          {
+            title: "Interaksjoner og historiefortelling",
+            description:
+              "Mikrointeraksjoner, animasjoner og tekstflyt gjør innholdet lettere å navigere.",
+            image: buildPlaceholderImage("Interaksjoner", "#15803d", "#4ade80"),
+          },
+        ],
       },
       {
-        id: "project-05",
-        title: "Prosjekt 05",
-        summary: "Placeholder for prosjekt om edge-sikkerhet og gjenoppretting etter brudd.",
+        id: "universet",
+        title:
+          "Universet - Læringsplattform og monitorering av studenter på Universitetet i Oslo",
+        tag: "Utdanning",
+        summary:
+          "Læringsplattform for oppfølging, innsikt og progresjon i kurs og undervisning.",
         details:
-          "Detaljer kommer senere, inkludert verktøy, trusselforståelse og resultatmålinger.",
-        highlights: [
-          { label: "Status", value: "Skisse" },
-          { label: "Tema", value: "Sikkerhet" },
-          { label: "Format", value: "Case" },
+          "Kombinerer innleveringsdata, aktivitet og varsling for veiledere som trenger rask oversikt.",
+        image: buildPlaceholderImage("Universet", "#8b5cf6", "#ec4899"),
+        stack: [
+          { label: "React", icon: SiReact },
+          { label: "Node.js", icon: SiNodedotjs },
+          { label: "PostgreSQL", icon: SiPostgresql },
+          { label: "Docker", icon: SiDocker },
         ],
-        image: buildPlaceholderImage("Prosjekt 05", "#f97316", "#facc15"),
+        learningOutcomes: [
+          "Datamodell for progresjon og aktivitet i læring",
+          "Personvern, roller og tilgangskontroll i utdanning",
+          "Dashboarding for veiledere og emneansvarlige",
+        ],
+        sections: [
+          {
+            title: "Læringsflyt",
+            description:
+              "Støtter innleveringer, tilbakemeldinger og progresjon med en tydelig studentreise.",
+            image: buildPlaceholderImage("Læringsflyt", "#7c3aed", "#ec4899"),
+          },
+          {
+            title: "Monitorering og innsikt",
+            description:
+              "Bygger oversikt over aktivitet, risiko og tiltak for å følge opp studentene.",
+            image: buildPlaceholderImage("Innsikt", "#6d28d9", "#a855f7"),
+          },
+        ],
       },
       {
-        id: "project-06",
-        title: "Prosjekt 06",
-        summary: "Placeholder for et prosjekt om overvåkning og resiliente ruterstrategier.",
+        id: "vannplan",
+        title: "Vannplan - Kotlin-app for planlegging av vannforbruk",
+        tag: "Mobil",
+        summary:
+          "Mobilapp for planlegging av vanningsrutiner og oppfølging av forbruk over tid.",
         details:
-          "Legges inn senere. Vil dekke måledata, dashboards og operative funn.",
-        highlights: [
-          { label: "Status", value: "Planlagt" },
-          { label: "Tema", value: "Observability" },
-          { label: "Format", value: "Dashboard" },
+          "Fokuserer på enkel planlegging, offline-støtte og historikk som gir bedre oversikt.",
+        image: buildPlaceholderImage("Vannplan", "#f97316", "#facc15"),
+        stack: [
+          { label: "Kotlin", icon: SiKotlin },
+          { label: "Android", icon: SiAndroid },
+          { label: "SQLite", icon: SiSqlite },
+          { label: "Gradle", icon: SiGradle },
         ],
-        image: buildPlaceholderImage("Prosjekt 06", "#334155", "#64748b"),
+        learningOutcomes: [
+          "Offline-first arbeidsflyt og lokal lagring",
+          "State-håndtering og ytelse på mobil",
+          "Modularisering av Kotlin-baserte features",
+        ],
+        sections: [
+          {
+            title: "Planlegging og påminnelser",
+            description:
+              "Gjør det enkelt å sette opp planer og varsler for vanningsrutiner.",
+            image: buildPlaceholderImage("Planlegging", "#f97316", "#fdba74"),
+          },
+          {
+            title: "Data og historikk",
+            description:
+              "Lagrer historikk lokalt og gir innsikt i forbruk over tid.",
+            image: buildPlaceholderImage("Historikk", "#d97706", "#f59e0b"),
+          },
+        ],
       },
     ],
     []
@@ -158,10 +315,10 @@ const ProjectsPage = () => {
             Prosjekter
           </Heading>
           <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
-            Her kommer prosjektene mine. Foreløpig er dette seks placeholders som viser layouten.
+            Utvalgte prosjekter innen sikkerhet, AIOps, plattform og produktutvikling.
           </Paragraph>
           <Paragraph data-size="xs" style={{ margin: "0.4rem 0 0", color: "var(--ds-color-neutral-text-subtle)" }}>
-            BTW: Slangen som kjører i bakgrunnen bruker A*-pathfinding for å finne eplene sine.
+            Klikk på et prosjekt for detaljer. BTW: Slangen som kjører i bakgrunnen bruker A*-pathfinding for å finne eplene sine.
           </Paragraph>
         </div>
 
@@ -194,7 +351,7 @@ const ProjectsPage = () => {
                   >
                     <div className="flex flex-col gap-3">
                       <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-300">
-                        Placeholder prosjekt
+                        {project.tag}
                       </div>
                       <Heading data-size="sm" style={{ marginBottom: 0 }}>
                         {project.title}
@@ -227,7 +384,7 @@ const ProjectsPage = () => {
       </div>
 
       {activeProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-8">
           <button
             type="button"
             className="absolute inset-0 bg-slate-950/60"
@@ -239,39 +396,99 @@ const ProjectsPage = () => {
             aria-modal="true"
             aria-labelledby={`${activeProject.id}-title`}
             aria-describedby={`${activeProject.id}-details`}
-            className="relative z-10 w-full max-w-2xl rounded-2xl border border-slate-200/80 bg-white/95 p-6 shadow-2xl dark:border-slate-700/70 dark:bg-slate-950/95"
+            className="relative z-10 w-full max-w-6xl rounded-3xl border border-slate-200/80 bg-white/95 shadow-2xl dark:border-slate-700/70 dark:bg-slate-950/95"
           >
-            <div className="flex items-start justify-between gap-4">
-              <Heading data-size="md" id={`${activeProject.id}-title`} style={{ marginBottom: 0 }}>
-                {activeProject.title}
-              </Heading>
-              <button
-                type="button"
-                className="rounded-full border border-slate-200/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-[var(--ds-color-accent-base-default)] hover:text-[var(--ds-color-accent-base-default)] dark:border-slate-700/70 dark:text-slate-300"
-                onClick={() => setActiveProject(null)}
-              >
-                Lukk
-              </button>
-            </div>
-            <Paragraph
-              data-size="sm"
-              id={`${activeProject.id}-details`}
-              style={{ margin: "0.75rem 0 0", color: "var(--ds-color-neutral-text-default)" }}
-            >
-              {activeProject.details}
-            </Paragraph>
-            <div className="mt-4 grid gap-3 sm:grid-cols-3">
-              {activeProject.highlights.map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-xl border border-slate-200/80 bg-white/70 px-3 py-2 dark:border-slate-700/70 dark:bg-slate-900/60"
+            <div className="p-6 md:p-8">
+              <div className="flex items-start justify-between gap-4">
+                <Heading data-size="md" id={`${activeProject.id}-title`} style={{ marginBottom: 0 }}>
+                  {activeProject.title}
+                </Heading>
+                <button
+                  type="button"
+                  className="rounded-full border border-slate-200/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:border-[var(--ds-color-accent-base-default)] hover:text-[var(--ds-color-accent-base-default)] dark:border-slate-700/70 dark:text-slate-300"
+                  onClick={() => setActiveProject(null)}
                 >
+                  Lukk
+                </button>
+              </div>
+              <Paragraph
+                data-size="sm"
+                id={`${activeProject.id}-details`}
+                style={{ margin: "0.75rem 0 0", color: "var(--ds-color-neutral-text-default)" }}
+              >
+                {activeProject.details}
+              </Paragraph>
+
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 dark:border-slate-700/70 dark:bg-slate-900/60">
                   <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-300">
-                    {item.label}
+                    Tech stack
                   </div>
-                  <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">{item.value}</div>
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    {activeProject.stack.map((item) => (
+                      <span
+                        key={item.label}
+                        role="img"
+                        aria-label={item.label}
+                        title={item.label}
+                        className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200/80 bg-white/90 text-slate-700 shadow-sm dark:border-slate-700/70 dark:bg-slate-900/60 dark:text-slate-200"
+                      >
+                        <item.icon className="text-xl" aria-hidden="true" />
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              ))}
+                <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 dark:border-slate-700/70 dark:bg-slate-900/60">
+                  <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-300">
+                    Læringsutbytte
+                  </div>
+                  <ul className="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-200">
+                    {activeProject.learningOutcomes.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span
+                          aria-hidden="true"
+                          className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[var(--ds-color-accent-base-default)]"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-col gap-6">
+                {activeProject.sections.map((section, index) => {
+                  const isReversed = index % 2 === 1;
+                  return (
+                    <div
+                      key={`${activeProject.id}-${section.title}`}
+                      className={`flex flex-col gap-4 md:items-stretch ${
+                        isReversed ? "md:flex-row-reverse" : "md:flex-row"
+                      }`}
+                    >
+                      <div className="relative w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 dark:border-slate-800/70 dark:bg-slate-900/60 md:w-5/12">
+                        <img
+                          src={section.image}
+                          alt={section.title}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="flex w-full flex-col justify-center gap-3 md:w-7/12">
+                        <Heading data-size="sm" style={{ marginBottom: 0 }}>
+                          {section.title}
+                        </Heading>
+                        <Paragraph
+                          data-size="sm"
+                          style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}
+                        >
+                          {section.description}
+                        </Paragraph>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
