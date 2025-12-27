@@ -93,17 +93,9 @@ const AutoSnakeBackground = () => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setPrefersReducedMotion(mediaQuery.matches);
     update();
-    if ("addEventListener" in mediaQuery) {
-      mediaQuery.addEventListener("change", update);
-    } else {
-      mediaQuery.addListener(update);
-    }
+    mediaQuery.addEventListener("change", update);
     return () => {
-      if ("removeEventListener" in mediaQuery) {
-        mediaQuery.removeEventListener("change", update);
-      } else {
-        mediaQuery.removeListener(update);
-      }
+      mediaQuery.removeEventListener("change", update);
     };
   }, []);
 
@@ -444,9 +436,20 @@ const AutoSnakeBackground = () => {
       const x = segment.x * cellSize + 1;
       const y = segment.y * cellSize + 1;
       const size = cellSize - 2;
-      if ("roundRect" in ctx) {
+      const roundRect = (
+        ctx as CanvasRenderingContext2D & {
+          roundRect?: (
+            x: number,
+            y: number,
+            w: number,
+            h: number,
+            radii?: number | number[]
+          ) => void;
+        }
+      ).roundRect;
+      if (roundRect) {
         ctx.beginPath();
-        ctx.roundRect(x, y, size, size, 6);
+        roundRect.call(ctx, x, y, size, size, 6);
         ctx.fill();
       } else {
         ctx.fillRect(x, y, size, size);

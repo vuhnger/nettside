@@ -126,17 +126,9 @@ const MstVisualization = () => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setPrefersReducedMotion(mediaQuery.matches);
     update();
-    if ("addEventListener" in mediaQuery) {
-      mediaQuery.addEventListener("change", update);
-    } else {
-      mediaQuery.addListener(update);
-    }
+    mediaQuery.addEventListener("change", update);
     return () => {
-      if ("removeEventListener" in mediaQuery) {
-        mediaQuery.removeEventListener("change", update);
-      } else {
-        mediaQuery.removeListener(update);
-      }
+      mediaQuery.removeEventListener("change", update);
     };
   }, []);
 
