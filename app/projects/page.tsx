@@ -23,6 +23,11 @@ import {
   SiN8N,
   SiDiscord,
   SiJavascript,
+  SiGit,
+  SiGithub,
+  SiHtml5,
+  SiCss3,
+  SiDjango,
 } from "react-icons/si";
 import AutoSnakeBackground from "@/components/projects/AutoSnakeBackground";
 
@@ -93,6 +98,8 @@ const ProjectsPage = () => {
           { label: "TypeScript", icon: SiTypescript },
           { label: "GraphQL", icon: SiGraphql },
           { label: "SpringBoot", icon: SiSpringboot },
+          { label: "Git", icon: SiGit },
+          { label: "GitHub", icon: SiGithub },
         ],
         learningOutcomes: [
           "Angrepsvektorer i webapplikasjoner",
@@ -144,6 +151,8 @@ const ProjectsPage = () => {
           { label: "Docker", icon: SiDocker },
           { label: "Kubernetes", icon: SiKubernetes },
           { label: "Caddy", icon: SiCaddy },
+          { label: "Git", icon: SiGit },
+          { label: "GitHub", icon: SiGithub },
         ],
         learningOutcomes: [
           "Stabilt API-design",
@@ -223,11 +232,13 @@ const ProjectsPage = () => {
           { label: "TypeScript", icon: SiTypescript },
           { label: "Tailwind CSS", icon: SiTailwindcss },
           { label: "Vercel", icon: SiVercel },
+          { label: "Git", icon: SiGit },
+          { label: "GitHub", icon: SiGithub },
         ],
         learningOutcomes: [
-          "Komponentbasert design og typografisk hierarki",
+          "Komponentbasert design",
           "Tilgjengelighet, kontrast og responsivitet",
-          "Effektiv release-flyt og observasjon i prod",
+          "Webutvikling"
         ],
         sections: [
           {
@@ -239,7 +250,7 @@ const ProjectsPage = () => {
           {
             title: "Teknisk",
             description:
-              "Nettsiden er ikke så kompleks, den bruker Next.js og vanilje-react, men denne gangen har jeg utfordret meg selv til å legge en innsats i",
+              "Nettsiden er ikke så kompleks, den bruker Next.js og vanilje-react, men denne gangen har jeg utfordret meg selv til å legge en innsats i å lære brukervennlig design og tilstand i webapplikasjoner.",
           },
         ],
       },
@@ -251,32 +262,32 @@ const ProjectsPage = () => {
         summary:
           "Læringsplattform for oppfølging, innsikt og progresjon i kurs og undervisning.",
         details:
-          "Kombinerer innleveringsdata, aktivitet og varsling for veiledere som trenger rask oversikt.",
-        image: buildPlaceholderImage("Universet", "#8b5cf6", "#ec4899"),
-        link: "/projects#universet",
+          "Plattformen revolusjonerer høyere utdanning ved å tilby studenter en ny måte å lære dateknologi på. Plattformen tar studentene gjennom oppgaver i nettverk, sikkerhet og programmering. Oppgavene presenteres som puslespill, der man må knekke koder for å komme seg videre i spillet. Spillet er også gamifisert for å øke fullføringsraten hos studentene, og det har det gjort! Studentene som har gjennomført prosjektet har høyere beståttrate på eksamen (ja, dette er nok også til dels survivorship bias, men ta gjerne kontakt hvis du vil høre mer!).",
+        image: "/images/projects/universet-demo.png",
         stack: [
           { label: "React", icon: SiReact },
+          { label: "HTML", icon: SiHtml5 },
+          { label: "CSS", icon: SiCss3 },
           { label: "Node.js", icon: SiNodedotjs },
-          { label: "PostgreSQL", icon: SiPostgresql },
-          { label: "Docker", icon: SiDocker },
+          { label: "Git", icon: SiGit },
+          { label: "GitHub", icon: SiGithub },
+          { label: "Django", icon: SiDjango },
         ],
         learningOutcomes: [
-          "Datamodell for progresjon og aktivitet i læring",
-          "Personvern, roller og tilgangskontroll i utdanning",
+          "Full-stack utvikling",
           "Dashboarding for veiledere og emneansvarlige",
         ],
         sections: [
           {
-            title: "Læringsflyt",
+            title: "En introduksjon til front- og backendutvikling",
             description:
-              "Støtter innleveringer, tilbakemeldinger og progresjon med en tydelig studentreise.",
-            image: buildPlaceholderImage("Læringsflyt", "#7c3aed", "#ec4899"),
+              "Dette prosjektet var mitt første internship. Bildene viser hvordan prosjektet ser ut nå, etter fire år med iterasjon, men jeg utviklet på dette prosjektet sommeren 2023 og 2024!",
+            image: "/images/projects/universet-chat-demo.png",
           },
           {
-            title: "Monitorering og innsikt",
+            title: "Første møte med REST APIer",
             description:
-              "Bygger oversikt over aktivitet, risiko og tiltak for å følge opp studentene.",
-            image: buildPlaceholderImage("Innsikt", "#6d28d9", "#a855f7"),
+              "Da jeg jobbet på dette prosjektet i 2023 hadde jeg kun hatt tre emner innen programmering, derfor var læringskurven noe bratt da vi fikk beskjed om å bygge en plattform som kan håndtere oppgaveløsning, monitorering og gamifisering av studenter. Jeg lærte å sette opp databaser, endepunkter og webutvikling!",
           },
         ],
       },
