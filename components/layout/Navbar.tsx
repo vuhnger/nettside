@@ -24,6 +24,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // eslint-disable-next-line
     setDarkMode(isDark);
     document.documentElement.setAttribute('data-color-scheme', isDark ? 'dark' : 'light');
   }, []);

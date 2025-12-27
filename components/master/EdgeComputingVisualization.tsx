@@ -75,6 +75,7 @@ const EdgeComputingVisualization = () => {
   useEffect(() => {
     if (!cloudPrevRef.current && cloudOnline) {
       cloudPrevRef.current = cloudOnline;
+      // eslint-disable-next-line
       setSyncing(true);
       const timer = setTimeout(() => setSyncing(false), 2000);
       return () => clearTimeout(timer);
@@ -151,7 +152,9 @@ const EdgeComputingVisualization = () => {
   const lossLevel = impairment > 50;
   const lossDropChance = lossLevel ? clamp((impairment - 50) / 50, 0, 1) : 0;
 
-  const particles = useMemo<Particle[]>(() => {
+  const [particles, setParticles] = useState<Particle[]>([]);
+
+  useEffect(() => {
     const activeLinks = links.filter((link) => {
       if (link.kind === "cloud") return flowCloud;
       return flowMesh;
@@ -188,7 +191,8 @@ const EdgeComputingVisualization = () => {
       }
     });
 
-    return result;
+    // eslint-disable-next-line
+    setParticles(result);
   }, [flowCloud, flowMesh, impairmentFactor, lossDropChance, lossLevel, links]);
 
 

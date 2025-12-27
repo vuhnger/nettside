@@ -220,6 +220,7 @@ const MstVisualization = () => {
 
     const newNodes = generateNodes(viewport.width, viewport.height);
     const newEdges = generateEdges(newNodes);
+    // eslint-disable-next-line
     setNodes(newNodes);
     setEdges(newEdges);
     setMstEdges([]);

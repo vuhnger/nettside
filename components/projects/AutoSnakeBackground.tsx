@@ -264,6 +264,7 @@ const AutoSnakeBackground = () => {
       x: Math.floor(grid.columns / 2),
       y: Math.floor(grid.rows / 2),
     };
+    // eslint-disable-next-line
     setSnake([start]);
     setDirection({ x: 1, y: 0 });
     setFood(generateFood(grid.columns, grid.rows, [start], settings.foodCount));
@@ -271,6 +272,7 @@ const AutoSnakeBackground = () => {
 
   useEffect(() => {
     if (!grid.columns || !grid.rows || !snake.length) return;
+    // eslint-disable-next-line
     setFood((currentFood) => {
       if (currentFood.length === settings.foodCount) return currentFood;
       return generateFood(grid.columns, grid.rows, snake, settings.foodCount);
@@ -285,8 +287,9 @@ const AutoSnakeBackground = () => {
     const shouldUpdate = tickRef.current % settings.pathThrottle === 0 || path.length === 0;
     if (!shouldUpdate) return;
     const newPath = findPathToClosestFood(snake[0], food, snake);
+    // eslint-disable-next-line
     setPath(newPath);
-  }, [snake, foodKey, findPathToClosestFood, settings.pathThrottle, path.length]);
+  }, [snake, foodKey, findPathToClosestFood, settings.pathThrottle, path.length, food]);
 
   useEffect(() => {
     if (!path.length || !snake.length) return;
@@ -298,6 +301,7 @@ const AutoSnakeBackground = () => {
     const deltaY = next.y - head.y;
 
     if (Math.abs(deltaX) === 1 && deltaY === 0) {
+      // eslint-disable-next-line
       setDirection(deltaX > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
     } else if (Math.abs(deltaY) === 1 && deltaX === 0) {
       setDirection(deltaY > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
