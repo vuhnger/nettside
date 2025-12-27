@@ -39,10 +39,13 @@ const BentoGrid = () => {
                 Full-stack utvikler med erfaring fra Bekk.
               </Paragraph>
               <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Skriver masteroppgave om Edge Computing for Forsvarets Forskningsinstitutt.
+                Skriver masteroppgave om Edge Computing med UiO og Forsvarets Forskningsinstitutt.
               </Paragraph>
               <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Interessert i distribuerte systemert og nettverk. 
+                Jeg er interessert i distribuerte systemert og nettverk. 
+              </Paragraph>
+              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
+                Jeg søker ikke aktivt jobb nå, men ta gjerne kontakt hvis profilen min er interessant. :)
               </Paragraph>
               <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
                 Liker også automatisering og KI!
@@ -52,6 +55,9 @@ const BentoGrid = () => {
               <Paragraph></Paragraph>
               <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
                 Denne siden bruker <a href="https://github.com/digdir/designsystemet">Designsystemet</a> fra DigDir for universell utforming.
+              </Paragraph>
+              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
+                Ta en titt rundt og se på hva jeg holder på med!
               </Paragraph>
             </div>
           </Card>
