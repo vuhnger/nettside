@@ -1,17 +1,30 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
 import { MASTER_TIMELINE } from "@/lib/master";
 import EdgeComputingVisualization from "@/components/master/EdgeComputingVisualization";
 
 const MasterPage = () => {
-  const startDate = Date.parse(MASTER_TIMELINE.start);
-  const endDate = Date.parse(MASTER_TIMELINE.end);
-  const now = Date.now();
-  const rawProgress = ((now - startDate) / (endDate - startDate)) * 100;
-  const progress = Number.isFinite(rawProgress)
-    ? Math.min(100, Math.max(0, rawProgress))
-    : 0;
+  const startDate = useMemo(() => Date.parse(MASTER_TIMELINE.start), []);
+  const endDate = useMemo(() => Date.parse(MASTER_TIMELINE.end), []);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const updateProgress = () => {
+      const now = Date.now();
+      const rawProgress = ((now - startDate) / (endDate - startDate)) * 100;
+      const nextProgress = Number.isFinite(rawProgress)
+        ? Math.min(100, Math.max(0, rawProgress))
+        : 0;
+      setProgress(nextProgress);
+    };
+
+    updateProgress();
+    const interval = setInterval(updateProgress, 60000);
+
+    return () => clearInterval(interval);
+  }, [startDate, endDate]);
 
   return (
     <div
@@ -102,48 +115,6 @@ const MasterPage = () => {
               EdgeMesh og KubeEdge med EdgeMesh. Målingene ser på pakketap, latens, throughput,
               gjenopprettingstid og ressursbruk når forbindelsen er ustabil.
             </Paragraph>
-          </Card>
-
-          <Card
-            className="relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100"
-            style={{
-              padding: "1.5rem",
-              backgroundColor:
-                "color-mix(in srgb, var(--ds-color-neutral-background-default) 94%, transparent)",
-              border: "2px solid var(--ds-color-neutral-border-strong)",
-              boxShadow: "0 12px 24px rgba(0, 0, 0, 0.06)",
-            }}
-          >
-            <Heading data-size="sm" style={{ marginBottom: "0.75rem" }}>
-              Nøkkelinfo
-            </Heading>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { label: "Samarbeid", value: "FFI" },
-                { label: "Levering", value: MASTER_TIMELINE.end.split("T")[0] },
-                { label: "Metode", value: "Eksperimentell benchmarking" },
-                { label: "Testbed", value: "OpenWrt-rutere + MicroK8s" },
-                { label: "Oppsett", value: "K8s, KubeEdge, EdgeMesh" },
-                { label: "Fokus", value: "Robusthet og gjenoppretting" },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-md border px-3 py-2"
-                  style={{
-                    borderColor: "var(--ds-color-neutral-border-subtle)",
-                    backgroundColor:
-                      "color-mix(in srgb, var(--ds-color-neutral-background-default) 92%, transparent)",
-                  }}
-                >
-                  <Paragraph data-size="xs" style={{ margin: 0, fontWeight: 600 }}>
-                    {item.label}
-                  </Paragraph>
-                  <Paragraph data-size="xs" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
-                    {item.value}
-                  </Paragraph>
-                </div>
-              ))}
-            </div>
           </Card>
 
           <Card

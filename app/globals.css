@@ -64,7 +64,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.99 0 0);     /* Light gray background */
+  --background: oklch(0.965 0 0);     /* Light gray background */
   --foreground: oklch(0.2 0 0);      /* Dark gray text */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);

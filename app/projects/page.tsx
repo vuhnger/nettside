@@ -44,6 +44,7 @@ type Project = {
   sections: { title: string; description: string; image?: string }[];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const buildPlaceholderImage = (title: string, accent: string, accentTwo: string) => {
   const svg = `
     <svg width="720" height="480" viewBox="0 0 720 480" fill="none" xmlns="http://www.w3.org/2000/svg">
