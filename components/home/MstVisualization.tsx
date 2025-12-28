@@ -110,6 +110,12 @@ const MstVisualization = () => {
     return BASE_SETTINGS;
   }, [isMobile, prefersReducedMotion]);
 
+  const scaledNodeRadius = useMemo(() => {
+    const baseRadius = settings.nodeRadius;
+    const scaleFactor = Math.min(viewport.width, viewport.height) / 768;
+    return Math.max(baseRadius * Math.min(scaleFactor, 1), 5);
+  }, [settings.nodeRadius, viewport.width, viewport.height]);
+
   useEffect(() => {
     const updateIsMobile = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     updateIsMobile();
@@ -157,8 +163,10 @@ const MstVisualization = () => {
   const generateNodes = useCallback((width: number, height: number): Node[] => {
     const centerX = width / 2;
     const centerY = height / 2;
-    const rangeX = Math.min(width * 0.35, 420);
-    const rangeY = Math.min(height * 0.35, 320);
+    const rangeX = width * 0.35;
+    const rangeY = height * 0.35;
+    const scaleFactor = Math.min(width, height) / 768;
+    const scaledRadius = Math.max(settings.nodeRadius * Math.min(scaleFactor, 1), 5);
     const newNodes: Node[] = [];
 
     for (let i = 0; i < settings.nodeCount; i += 1) {
@@ -179,7 +187,7 @@ const MstVisualization = () => {
               node.position.x - position.x,
               node.position.y - position.y
             ) <
-            settings.nodeRadius * 4
+            scaledRadius * 4
         )
       );
 
@@ -379,7 +387,7 @@ const MstVisualization = () => {
             key={`node-${node.id}`}
             cx={node.position.x}
             cy={node.position.y}
-            r={settings.nodeRadius}
+            r={scaledNodeRadius}
             fill="var(--mst-node-fill)"
             fillOpacity={isCompleted ? "0.65" : "0.25"}
             stroke="var(--mst-node-stroke)"
