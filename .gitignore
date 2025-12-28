@@ -44,3 +44,6 @@ docs/*
 .claude-rules
 .playwright-mcp/
 .env*.local
+
+# Sentry Config File
+.env.sentry-build-plugin
