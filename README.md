@@ -26,6 +26,20 @@ vercel
 vercel --prod
 ```
 
+
+
+
+
+## Commitzen
+
+Dette prosjektet bruker commitzen for strukturerte commit-meldinger og sporbarhet.
+
+[Commitzen](https://commitizen-tools.github.io/commitizen/)
+
+`cz commit`
+`> følg instruks`
+
+
 ## Avhengigheter (kort)
 
 Runtime:
