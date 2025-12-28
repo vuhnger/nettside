@@ -26,7 +26,13 @@ vercel
 vercel --prod
 ```
 
-## Avhengigheter (kort)
+## Feilhåndtering
+
+Alle feil logges til Sentry, all trafikk på nettsiden overvåkes. 
+
+[Lenke til sentry prosjekt.](https://victor-r-uhnger.sentry.io/organizations/victor-r-uhnger/issues/?project=4510614411542608)
+
+## Avhengigheter
 
 Runtime:
 - `next`, `react`, `react-dom` – app og rendering
