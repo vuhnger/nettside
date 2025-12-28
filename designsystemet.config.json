@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/@digdir/designsystemet/dist/config.schema.json",
+  "outDir": "./design-tokens",
+  "clean": true,
+  "themes": {
+    "portfolio": {
+      "colors": {
+        "main": {
+          "accent": "#6366f1"
+        },
+        "support": {
+          "brand1": "#14b8a6",
+          "brand2": "#f97316"
+        },
+        "neutral": "#1e1b4b"
+      },
+      "borderRadius": 8,
+      "typography": {
+        "fontFamily": "Geist"
+      }
+    }
+  }
+}

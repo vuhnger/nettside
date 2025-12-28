@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    svg { color: #0f172a; }
+    @media (prefers-color-scheme: dark) {
+      svg { color: #f8fafc; }
+    }
+  </style>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9,8 17,16 9,24" />
+    <line x1="20" y1="24" x2="26" y2="24" />
+  </g>
+</svg>
