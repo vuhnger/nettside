@@ -87,7 +87,11 @@ class UnionFind {
   }
 }
 
-const MstVisualization = () => {
+type MstVisualizationProps = {
+  showGrid?: boolean;
+};
+
+const MstVisualization = ({ showGrid = true }: MstVisualizationProps) => {
   const patternId = `mst-grid-${useId().replace(/:/g, "")}`;
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -313,24 +317,28 @@ const MstVisualization = () => {
         viewBox={`0 0 ${viewport.width} ${viewport.height}`}
         preserveAspectRatio="xMidYMid slice"
       >
-        <defs>
-          <pattern
-            id={patternId}
-            width={settings.gridSize}
-            height={settings.gridSize}
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d={`M ${settings.gridSize} 0 L 0 0 0 ${settings.gridSize}`}
-              fill="none"
-              stroke="var(--mst-grid)"
-              strokeOpacity="0.35"
-              strokeWidth="1"
-            />
-          </pattern>
-        </defs>
+        {showGrid ? (
+          <>
+            <defs>
+              <pattern
+                id={patternId}
+                width={settings.gridSize}
+                height={settings.gridSize}
+                patternUnits="userSpaceOnUse"
+              >
+                <path
+                  d={`M ${settings.gridSize} 0 L 0 0 0 ${settings.gridSize}`}
+                  fill="none"
+                  stroke="var(--mst-grid)"
+                  strokeOpacity="0.35"
+                  strokeWidth="1"
+                />
+              </pattern>
+            </defs>
 
-        <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+            <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+          </>
+        ) : null}
 
         {edges.map((edge, index) => (
           <line

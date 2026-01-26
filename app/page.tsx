@@ -7,7 +7,7 @@ export default function Home() {
       className="relative isolate min-h-screen overflow-hidden pt-16 pb-6 px-4"
       style={{ backgroundColor: 'var(--ds-color-neutral-background-default)' }}
     >
-      <MstVisualization />
+      <MstVisualization showGrid={false} />
       <div className="relative z-10">
         <BentoGrid />
       </div>
