@@ -160,13 +160,11 @@ const MstVisualization = () => {
     };
   }, []);
 
-  const generateNodes = useCallback((width: number, height: number): Node[] => {
+  const generateNodes = useCallback((width: number, height: number, scaledRadius: number): Node[] => {
     const centerX = width / 2;
     const centerY = height / 2;
     const rangeX = width * 0.35;
     const rangeY = height * 0.35;
-    const scaleFactor = Math.min(width, height) / 768;
-    const scaledRadius = Math.max(settings.nodeRadius * Math.min(scaleFactor, 1), 5);
     const newNodes: Node[] = [];
 
     for (let i = 0; i < settings.nodeCount; i += 1) {
@@ -195,7 +193,7 @@ const MstVisualization = () => {
     }
 
     return newNodes;
-  }, [settings.nodeCount, settings.nodeRadius]);
+  }, [settings.nodeCount, scaledNodeRadius]);
 
   const calculateDistance = useCallback((node1: Node, node2: Node): number => {
     return Math.hypot(
@@ -226,7 +224,7 @@ const MstVisualization = () => {
   useEffect(() => {
     if (viewport.width === 0 || viewport.height === 0) return;
 
-    const newNodes = generateNodes(viewport.width, viewport.height);
+    const newNodes = generateNodes(viewport.width, viewport.height, scaledNodeRadius);
     const newEdges = generateEdges(newNodes);
     // eslint-disable-next-line
     setNodes(newNodes);
@@ -278,7 +276,7 @@ const MstVisualization = () => {
       await wait(settings.resetDelay);
       if (cancelled || runIdRef.current !== runId) return;
 
-      const newNodes = generateNodes(viewport.width, viewport.height);
+      const newNodes = generateNodes(viewport.width, viewport.height, scaledNodeRadius);
       const newEdges = generateEdges(newNodes);
       setNodes(newNodes);
       setEdges(newEdges);
