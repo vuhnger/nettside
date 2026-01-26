@@ -88,7 +88,6 @@ const Navbar = () => {
               border: '2px solid var(--ds-color-accent-base-default)',
               borderRadius: '0.375rem',
               color: 'var(--ds-color-accent-base-default)',
-              boxShadow: 'var(--accent-shadow)',
               transition: 'all 0.2s'
             }}
           >
@@ -114,7 +113,6 @@ const Navbar = () => {
               fontWeight: 600,
               letterSpacing: '0.02em',
               textTransform: 'uppercase',
-              boxShadow: 'var(--accent-shadow)',
               transition: 'all 0.2s'
             }}
           >
@@ -152,7 +150,6 @@ const Navbar = () => {
               backgroundColor: 'transparent',
               color: 'var(--ds-color-accent-base-default)',
               cursor: 'pointer',
-              boxShadow: 'var(--accent-shadow)',
               transition: 'all 0.2s'
             }}
           >

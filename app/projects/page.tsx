@@ -369,7 +369,7 @@ const ProjectsPage = () => {
                       onClick={() => setActiveProject(project)}
                       aria-haspopup="dialog"
                       aria-expanded={activeProject?.id === project.id}
-                      className="group flex w-full flex-col justify-between gap-4 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-sm border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] hover:border-[color:var(--ds-color-accent-border-default)]"
+                      className="group flex w-full flex-col justify-between gap-4 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] hover:border-[color:var(--ds-color-accent-border-default)]"
                     >
                       <div className="flex flex-col gap-3">
                         <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">

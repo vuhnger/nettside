@@ -11,7 +11,6 @@ import StatsCards from "./StatsCards";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
-  const clickableShadow = 'var(--accent-shadow)';
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -118,7 +117,6 @@ const BentoGrid = () => {
                   border: clickableOutline,
                   borderRadius: '0.375rem',
                   backgroundColor: 'var(--ds-color-neutral-background-default)',
-                  boxShadow: clickableShadow,
                   transition: 'all 0.2s'
                 }}
               >
@@ -139,7 +137,6 @@ const BentoGrid = () => {
                   border: clickableOutline,
                   borderRadius: '0.375rem',
                   backgroundColor: 'var(--ds-color-neutral-background-default)',
-                  boxShadow: clickableShadow,
                   transition: 'all 0.2s'
                 }}
               >
@@ -160,7 +157,6 @@ const BentoGrid = () => {
                   border: clickableOutline,
                   borderRadius: '0.375rem',
                   backgroundColor: 'var(--ds-color-neutral-background-default)',
-                  boxShadow: clickableShadow,
                   transition: 'all 0.2s'
                 }}
               >
@@ -171,26 +167,17 @@ const BentoGrid = () => {
         </div>
 
         <div className="md:col-span-1">
-          <NextLink href="/cv" aria-label="CV" className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2">
+          <NextLink href="/cv" aria-label="CV" className="block h-full focus-visible:outline-none">
             <Card
-              className="relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-sm motion-reduce:transform-none"
+              className="relative overflow-hidden transition hover:-translate-y-0.5 motion-reduce:transform-none"
               style={{
                 padding: '0.75rem',
                 height: '100%',
                 backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
                 border: clickableOutline,
-                boxShadow: clickableShadow,
                 cursor: 'pointer'
               }}
             >
-              <span
-                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse"
-                style={{
-                  borderColor: 'var(--ds-color-accent-base-default)',
-                  opacity: 0.35
-                }}
-                aria-hidden="true"
-              />
               <div className="flex h-full items-center justify-center gap-2">
                 <FiFileText style={{ fontSize: '2rem', color: 'var(--ds-color-accent-base-default)' }} />
                 <Paragraph data-size="xs" style={{ margin: 0, color: 'var(--ds-color-accent-base-default)', fontWeight: 600 }}>
@@ -204,27 +191,18 @@ const BentoGrid = () => {
           <NextLink
             href="/projects"
             aria-label="Prosjekter"
-            className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
+            className="block h-full focus-visible:outline-none"
           >
             <Card
-              className="relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-sm motion-reduce:transform-none"
+              className="relative overflow-hidden transition hover:-translate-y-0.5 motion-reduce:transform-none"
               style={{
                 padding: '0.75rem',
                 height: '100%',
                 backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
                 border: clickableOutline,
-                boxShadow: clickableShadow,
                 cursor: 'pointer'
               }}
             >
-              <span
-                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse"
-                style={{
-                  borderColor: 'var(--ds-color-accent-base-default)',
-                  opacity: 0.35
-                }}
-                aria-hidden="true"
-              />
               <div className="flex h-full items-center justify-center gap-2">
                 <FiGrid style={{ fontSize: '2rem', color: 'var(--ds-color-accent-base-default)' }} />
                 <Paragraph data-size="xs" style={{ margin: 0, color: 'var(--ds-color-accent-base-default)', fontWeight: 600 }}>

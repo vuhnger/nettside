@@ -348,7 +348,7 @@ export default function CVPage() {
                     <motion.div
                       key={`${item.school}-${item.program}`}
                       variants={cardItem}
-                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-brand1-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
+                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-brand1-border-default)] motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
                         <div>
@@ -403,18 +403,10 @@ export default function CVPage() {
                       type="button"
                       onClick={() => setActiveId(item.id)}
                       aria-haspopup="dialog"
-                      whileHover={{ y: -2, boxShadow: "var(--ds-shadow-md)" }}
+                      whileHover={{ y: -2 }}
                       whileTap={{ scale: 0.98 }}
                       className="group w-full rounded-md border p-3 text-left cursor-pointer relative hover:border-[color:var(--ds-color-danger-border-default)] border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
-                      {item.id === "bekk" && (
-                        <motion.span
-                          className="pointer-events-none absolute inset-0 rounded-md border-2 border-[color:var(--ds-color-danger-border-strong)]"
-                          aria-hidden="true"
-                          animate={{ opacity: [0.2, 0.5, 0.2] }}
-                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                      )}
                       <FiChevronRight
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-base opacity-0 translate-x-1 transition-all group-hover:opacity-70 group-hover:translate-x-0 text-[color:var(--ds-color-danger-base-default)]"
                       />
@@ -472,7 +464,7 @@ export default function CVPage() {
                 >
                   <motion.div
                     variants={cardItem}
-                    className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
+                    className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                   >
                     <Paragraph data-size="xs" style={{ marginBottom: "0.5rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                       Verktøy
@@ -492,7 +484,7 @@ export default function CVPage() {
                   </motion.div>
                   <motion.div
                     variants={cardItem}
-                    className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
+                    className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                   >
                     <Paragraph data-size="xs" style={{ marginBottom: "0.5rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                       Programmeringsspråk
@@ -514,7 +506,7 @@ export default function CVPage() {
                     <motion.div
                       key={skill.label}
                       variants={cardItem}
-                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
+                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
                       <Paragraph data-size="xs" style={{ marginBottom: "0.25rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                         {skill.label}
@@ -557,7 +549,7 @@ export default function CVPage() {
                   <NextLink href="/projects">
                     <motion.div
                       variants={cardItem}
-                      className="group rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-accent-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] cursor-pointer relative"
+                      className="group rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-accent-border-default)] motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] cursor-pointer relative"
                     >
                       <FiChevronRight
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-base opacity-0 translate-x-1 transition-all group-hover:opacity-70 group-hover:translate-x-0 text-[color:var(--ds-color-accent-base-default)]"
@@ -599,7 +591,7 @@ export default function CVPage() {
                     <motion.div
                       key={org.name}
                       variants={cardItem}
-                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-warning-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
+                      className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-warning-border-default)] motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
                       <Paragraph data-size="sm" style={{ marginBottom: "0.125rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
                         {org.name}

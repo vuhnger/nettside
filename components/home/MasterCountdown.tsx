@@ -48,48 +48,20 @@ const MasterCountdown = () => {
     <NextLink
       href="/master"
       aria-label="Masteroppgave"
-      className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
+      className="group block h-full focus-visible:outline-none"
     >
       <Card
-        className="relative overflow-hidden transition group-hover:-translate-y-0.5 group-hover:shadow-sm motion-reduce:transform-none"
+        className="relative overflow-hidden transition group-hover:-translate-y-0.5 motion-reduce:transform-none"
         style={{
           backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
           padding: '0.5rem',
           height: '100%',
           transition: 'all 0.2s',
           border: '2px solid var(--ds-color-accent-base-default)',
-          boxShadow: 'var(--accent-shadow)',
           cursor: 'pointer',
           position: 'relative'
         }}
       >
-        <span
-          className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse motion-reduce:animate-none"
-          style={{
-            borderColor: 'var(--ds-color-accent-base-default)',
-            opacity: 0.45
-          }}
-          aria-hidden="true"
-        />
-        <span
-          className="pointer-events-none absolute right-3 top-3 inline-flex h-2.5 w-2.5"
-          aria-hidden="true"
-        >
-          <span
-            className="absolute inline-flex h-full w-full rounded-full animate-ping motion-reduce:animate-none"
-            style={{
-              backgroundColor: 'var(--ds-color-accent-base-default)',
-              opacity: 0.5
-            }}
-          />
-          <span
-            className="relative inline-flex h-2.5 w-2.5 rounded-full"
-            style={{
-              backgroundColor: 'var(--ds-color-accent-base-default)',
-              opacity: 0.85
-            }}
-          />
-        </span>
         <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', marginBottom: '0.375rem' }}>
           🎓 Masteroppgaven min
         </Paragraph>
