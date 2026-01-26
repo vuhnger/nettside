@@ -167,7 +167,11 @@ const BentoGrid = () => {
         </div>
 
         <div className="md:col-span-1">
-          <NextLink href="/cv" aria-label="CV" className="block h-full focus-visible:outline-none">
+          <NextLink
+            href="/cv"
+            aria-label="CV"
+            className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
             <Card
               className="relative overflow-hidden transition hover:-translate-y-0.5 motion-reduce:transform-none"
               style={{
@@ -191,7 +195,7 @@ const BentoGrid = () => {
           <NextLink
             href="/projects"
             aria-label="Prosjekter"
-            className="block h-full focus-visible:outline-none"
+            className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <Card
               className="relative overflow-hidden transition hover:-translate-y-0.5 motion-reduce:transform-none"

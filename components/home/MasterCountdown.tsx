@@ -48,7 +48,7 @@ const MasterCountdown = () => {
     <NextLink
       href="/master"
       aria-label="Masteroppgave"
-      className="group block h-full focus-visible:outline-none"
+      className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <Card
         className="relative overflow-hidden transition group-hover:-translate-y-0.5 motion-reduce:transform-none"
