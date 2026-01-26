@@ -1,6 +1,6 @@
 # Nettside
 
-Personlig portfolio bygget med Next.js App Router, Designsystemet fra DigDir og Tailwind. Inneholder CV, prosjekter og små visualiseringer/eksperimenter.
+Nettside bygget med Next.js, Designsystemet fra DigDir og Tailwind. Inneholder CV, prosjekter og små visualiseringer/eksperimenter.
 
 ## Kjør lokalt
 
@@ -26,7 +26,7 @@ vercel
 vercel --prod
 ```
 
-## Avhengigheter (kort)
+## Avhengigheter
 
 Runtime:
 - `next`, `react`, `react-dom` – app og rendering
