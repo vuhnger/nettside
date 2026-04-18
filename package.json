@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@digdir/designsystemet-css": "^1.11.1",
+    "@digdir/designsystemet-css": "^1.13.2",
     "@digdir/designsystemet-react": "^1.13.1",
     "@digdir/designsystemet-theme": "^1.11.0",
     "@hookform/resolvers": "^5.2.2",
