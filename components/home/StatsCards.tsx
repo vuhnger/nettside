@@ -7,31 +7,77 @@ import { FaCode, FaRunning } from "react-icons/fa";
 const StatsCards = () => {
   const currentYear = new Date().getFullYear();
   const [runKm, setRunKm] = useState("...");
+  const [topRuns, setTopRuns] = useState<string[]>([]);
   const [codingHours, setCodingHours] = useState("...");
   const [codingLabel, setCodingLabel] = useState(`Koding i ${currentYear}`);
   const [codingLanguages, setCodingLanguages] = useState<string[]>([]);
 
+  const formatPace = (distanceMeters: number, movingTimeSeconds?: number) => {
+    if (typeof movingTimeSeconds !== "number" || distanceMeters <= 0) return null;
+
+    const km = distanceMeters / 1000;
+    const paceSeconds = Math.round(movingTimeSeconds / km);
+    const paceMinutes = Math.floor(paceSeconds / 60);
+    const paceRemainder = String(paceSeconds % 60).padStart(2, "0");
+
+    return `${paceMinutes}:${paceRemainder}/km`;
+  };
+
   useEffect(() => {
     let active = true;
 
-    const loadStravaKm = async () => {
+    const loadStravaStats = async () => {
       try {
-        const response = await fetch("https://api.vuhnger.dev/strava/stats/ytd", {
-          cache: "no-store"
-        });
+        const [ytdResponse, activitiesResponse] = await Promise.all([
+          fetch("https://api.vuhnger.dev/strava/stats/ytd", {
+            cache: "no-store"
+          }),
+          fetch(`https://api.vuhnger.dev/strava/activities?year=${currentYear}&activity_type=Run&limit=500`, {
+            cache: "no-store"
+          })
+        ]);
 
-        if (!response.ok) return;
-        const data = await response.json();
-        const distance = data?.data?.run?.distance;
+        if (ytdResponse.ok) {
+          const data = await ytdResponse.json();
+          const distance = data?.data?.run?.distance;
 
-        if (typeof distance === "number") {
-          const km = distance / 1000;
-          const formatted = new Intl.NumberFormat("no-NO", {
-            maximumFractionDigits: 0
-          }).format(km);
+          if (typeof distance === "number" && active) {
+            const km = distance / 1000;
+            const formatted = new Intl.NumberFormat("no-NO", {
+              maximumFractionDigits: 0
+            }).format(km);
 
-          if (active) {
             setRunKm(`${formatted} km`);
+          }
+        }
+
+        if (activitiesResponse.ok) {
+          const data = await activitiesResponse.json();
+          const activities = Array.isArray(data?.data) ? data.data : [];
+
+          if (active && activities.length > 0) {
+            const topThreeRuns = activities
+              .filter((activity: { distance?: number }) => typeof activity?.distance === "number")
+              .sort(
+                (
+                  a: { distance: number },
+                  b: { distance: number }
+                ) => b.distance - a.distance
+              )
+              .slice(0, 3)
+              .map((activity: { distance: number; moving_time?: number }, index: number) => {
+                const formattedDistance = new Intl.NumberFormat("no-NO", {
+                  minimumFractionDigits: 1,
+                  maximumFractionDigits: 1
+                }).format(activity.distance / 1000);
+                const pace = formatPace(activity.distance, activity.moving_time);
+
+                return pace
+                  ? `${index + 1}. ${formattedDistance} km · ${pace}`
+                  : `${index + 1}. ${formattedDistance} km`;
+              });
+
+            setTopRuns(topThreeRuns);
           }
         }
       } catch {
@@ -39,12 +85,12 @@ const StatsCards = () => {
       }
     };
 
-    loadStravaKm();
+    loadStravaStats();
 
     return () => {
       active = false;
     };
-  }, []);
+  }, [currentYear]);
 
   useEffect(() => {
     let active = true;
@@ -126,6 +172,25 @@ const StatsCards = () => {
       value: runKm,
       label: `Strava km i ${currentYear}`,
       color: "var(--ds-color-brand2-base-default)",
+      extra: topRuns.length > 0 ? (
+        <div style={{ marginTop: '0.25rem' }}>
+          {topRuns.map((run) => (
+            <Paragraph
+              key={run}
+              data-size="xs"
+              style={{
+                color: 'var(--ds-color-neutral-text-default)',
+                margin: 0,
+                fontSize: '0.8rem',
+                lineHeight: 1.25,
+                opacity: 0.78
+              }}
+            >
+              {run}
+            </Paragraph>
+          ))}
+        </div>
+      ) : null
     },
   ];
 
