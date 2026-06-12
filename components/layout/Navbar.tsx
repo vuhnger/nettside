@@ -1,4 +1,5 @@
 import NextLink from "next/link";
+import { House } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
@@ -29,10 +30,7 @@ const Navbar = () => {
               transition: 'all 0.2s'
             }}
           >
-            <svg aria-hidden="true" viewBox="0 0 24 24" style={{ width: '1.125rem', height: '1.125rem' }} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 10.5 12 3l9 7.5" />
-              <path d="M5 9.5V21h14V9.5" />
-            </svg>
+            <House aria-hidden="true" size={18} strokeWidth={2} />
           </NextLink>
 
           <a
