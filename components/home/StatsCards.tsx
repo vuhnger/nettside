@@ -146,7 +146,7 @@ const StatsCards = () => {
   const stats = [
     {
       key: "coding",
-      icon: <Code2 aria-hidden="true" size={18} strokeWidth={2} />,
+      icon: <Code2 aria-hidden="true" size={19} strokeWidth={2.25} absoluteStrokeWidth />,
       value: codingHours,
       label: codingLabel,
       color: "var(--ds-color-accent-base-default)",
@@ -168,7 +168,7 @@ const StatsCards = () => {
     },
     {
       key: "strava",
-      icon: <Activity aria-hidden="true" size={18} strokeWidth={2} />,
+      icon: <Activity aria-hidden="true" size={19} strokeWidth={2.25} absoluteStrokeWidth />,
       value: runKm,
       label: `Strava km i ${currentYear}`,
       color: "var(--ds-color-brand2-base-default)",

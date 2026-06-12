@@ -30,7 +30,7 @@ const Navbar = () => {
               transition: 'all 0.2s'
             }}
           >
-            <House aria-hidden="true" size={18} strokeWidth={2} />
+            <House aria-hidden="true" size={17} strokeWidth={2.25} absoluteStrokeWidth />
           </NextLink>
 
           <a

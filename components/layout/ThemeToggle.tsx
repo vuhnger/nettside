@@ -56,7 +56,11 @@ const ThemeToggle = () => {
         transition: 'all 0.2s'
       }}
     >
-      {scheme === "dark" ? <Sun aria-hidden="true" size={18} strokeWidth={2} /> : <Moon aria-hidden="true" size={18} strokeWidth={2} />}
+      {scheme === "dark" ? (
+        <Sun aria-hidden="true" size={17} strokeWidth={2.25} absoluteStrokeWidth />
+      ) : (
+        <Moon aria-hidden="true" size={17} strokeWidth={2.25} absoluteStrokeWidth />
+      )}
     </button>
   );
 };
