@@ -1,13 +1,11 @@
-"use client";
-
 import Image from "next/image";
 import NextLink from "next/link";
 import { Card, Heading, Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
 import { FiFileText, FiGrid } from "react-icons/fi";
-import MasterCountdown from "./MasterCountdown";
-import StatsCards from "./StatsCards";
+import LazyMasterCountdown from "./LazyMasterCountdown";
+import LazyStatsCards from "./LazyStatsCards";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
@@ -171,7 +169,7 @@ const BentoGrid = () => {
         </div>
 
         <div className="md:col-span-1">
-          <NextLink href="/cv" aria-label="CV" className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2">
+          <NextLink href="/cv" prefetch={false} aria-label="CV" className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2">
             <Card
               className="relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-sm motion-reduce:transform-none"
               style={{
@@ -203,6 +201,7 @@ const BentoGrid = () => {
         <div className="md:col-span-1">
           <NextLink
             href="/projects"
+            prefetch={false}
             aria-label="Prosjekter"
             className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
           >
@@ -235,9 +234,9 @@ const BentoGrid = () => {
           </NextLink>
         </div>
         <div className="md:col-span-2">
-          <MasterCountdown />
+          <LazyMasterCountdown />
         </div>
-        <StatsCards />
+        <LazyStatsCards />
       </div>
     </div>
   );

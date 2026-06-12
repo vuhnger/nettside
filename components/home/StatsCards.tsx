@@ -2,7 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
-import { FaCode, FaRunning } from "react-icons/fa";
+
+const CodeIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" style={{ width: '1.125rem', height: '1.125rem' }} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m8 16-4-4 4-4" />
+    <path d="m16 8 4 4-4 4" />
+    <path d="m14 4-4 16" />
+  </svg>
+);
+
+const RunningIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" style={{ width: '1.125rem', height: '1.125rem' }} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="17" cy="5" r="1.5" />
+    <path d="M14 8.5 11.5 12l-2.5 1" />
+    <path d="m7 22 2-6 2.5 2 1.5 4" />
+    <path d="m12 10 3 2 4 .5" />
+    <path d="M8.5 14.5 5 18" />
+  </svg>
+);
 
 const StatsCards = () => {
   const currentYear = new Date().getFullYear();
@@ -146,7 +163,7 @@ const StatsCards = () => {
   const stats = [
     {
       key: "coding",
-      icon: <FaCode style={{ fontSize: '1.125rem', color: 'var(--ds-color-accent-base-default)' }} />,
+      icon: <CodeIcon />,
       value: codingHours,
       label: codingLabel,
       color: "var(--ds-color-accent-base-default)",
@@ -168,7 +185,7 @@ const StatsCards = () => {
     },
     {
       key: "strava",
-      icon: <FaRunning style={{ fontSize: '1.125rem', color: 'var(--ds-color-brand2-base-default)' }} />,
+      icon: <RunningIcon />,
       value: runKm,
       label: `Strava km i ${currentYear}`,
       color: "var(--ds-color-brand2-base-default)",
@@ -210,7 +227,9 @@ const StatsCards = () => {
           }}
         >
           <div style={{ marginBottom: '0.375rem' }}>
-            {stat.icon}
+            <span style={{ display: 'inline-flex', color: stat.color }}>
+              {stat.icon}
+            </span>
           </div>
           <div>
             <Heading data-size="xs" style={{ color: stat.color, marginBottom: '0' }}>

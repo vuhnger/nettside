@@ -1,5 +1,3 @@
-"use client";
-
 import { Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";

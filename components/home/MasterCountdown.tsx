@@ -22,7 +22,7 @@ const MasterCountdown = () => {
   useEffect(() => {
     const update = () => setProgress(calculateProgress(startDate, targetDate));
     update();
-    const timer = setInterval(update, 1000);
+    const timer = setInterval(update, 60000);
 
     return () => clearInterval(timer);
   }, [startDate, targetDate]);
@@ -47,6 +47,7 @@ const MasterCountdown = () => {
   return (
     <NextLink
       href="/master"
+      prefetch={false}
       aria-label="Masteroppgave"
       className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
     >
