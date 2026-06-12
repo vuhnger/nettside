@@ -107,13 +107,13 @@ const experience: Experience[] = [
     id: "dr-dropin",
     company: "Dr. Dropin Bedrift",
     location: "Oslo",
-    role: "Administrativ koordinator",
+    role: "Utvikler",
     period: "2025 - ",
-    summary: "Automatisering og integrasjonsarbeid for bedriftshelsetjenesten.",
+    summary: "Utvikler på deltid ved siden av mastergraden.",
     details: [
       "Jobber med tiltak som forbedrer effektivitet på tvers av forretningsplattformer.",
       "Automatisering og integrasjon for bedriftshelsetjenesten.",
-      "Samt forefallende administrativt arbeid. ",
+      "Teknisk leder for ny sykefraværsplattform.",
     ],
     logo: "/images/logos/drdropin-logo.png"
   },
