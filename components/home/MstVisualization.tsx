@@ -46,7 +46,7 @@ const BASE_SETTINGS: Settings = {
   startDelay: 150,
   stepDelay: 40,
   skipDelay: 20,
-  cyclePause: 3500,
+  cyclePause: 200,
 };
 
 const MOBILE_SETTINGS: Settings = {
