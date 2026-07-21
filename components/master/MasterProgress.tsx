@@ -44,9 +44,6 @@ const MasterProgress = ({ start, end }: MasterProgressProps) => {
           style={{ width: `${progress}%`, backgroundColor: "var(--ds-color-accent-base-default)" }}
         />
       </div>
-      <Paragraph data-size="xs" style={{ margin: "0.5rem 0 0", color: "var(--ds-color-neutral-text-default)" }}>
-        Basert på tidslinjen fra {start.split("T")[0]} til {end.split("T")[0]}.
-      </Paragraph>
     </>
   );
 };
