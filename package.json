@@ -2,6 +2,7 @@
   "name": "nettside",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.15.1",
   "engines": {
     "node": ">=24 <25"
   },
@@ -11,7 +12,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --incremental false",
-    "check": "npm run lint && npm run typecheck"
+    "check": "pnpm run lint && pnpm run typecheck"
   },
   "dependencies": {
     "@digdir/designsystemet-css": "^1.13.2",
