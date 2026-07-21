@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@digdir/designsystemet-css": "^1.13.2",
-    "@digdir/designsystemet-react": "^1.13.1",
+    "@digdir/designsystemet-react": "^1.18.0",
     "@digdir/designsystemet-theme": "^1.11.0",
     "@hookform/resolvers": "^5.4.0",
     "@vercel/analytics": "^1.6.1",
