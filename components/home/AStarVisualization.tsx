@@ -413,7 +413,7 @@ const AStarVisualization = () => {
     <div
       ref={containerRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 [--astar-grid:color-mix(in_srgb,var(--ds-color-neutral-border-subtle)_15%,transparent)] [--astar-explored:color-mix(in_srgb,var(--ds-color-accent-base-default)_13%,transparent)] [--astar-wall:color-mix(in_srgb,var(--ds-color-neutral-border-default)_16%,transparent)] [--astar-path:color-mix(in_srgb,var(--ds-color-accent-base-default)_18%,transparent)] [--astar-path-strong:color-mix(in_srgb,var(--ds-color-accent-base-default)_32%,transparent)] [--astar-goal:color-mix(in_srgb,var(--ds-color-danger-base-default)_45%,transparent)]"
+      className="pointer-events-none absolute inset-x-0 top-14 bottom-0 z-0 [--astar-grid:color-mix(in_srgb,var(--ds-color-neutral-border-subtle)_15%,transparent)] [--astar-explored:color-mix(in_srgb,var(--ds-color-accent-base-default)_13%,transparent)] [--astar-wall:color-mix(in_srgb,var(--ds-color-neutral-border-default)_16%,transparent)] [--astar-path:color-mix(in_srgb,var(--ds-color-accent-base-default)_18%,transparent)] [--astar-path-strong:color-mix(in_srgb,var(--ds-color-accent-base-default)_32%,transparent)] [--astar-goal:color-mix(in_srgb,var(--ds-color-danger-base-default)_45%,transparent)]"
     >
       <canvas ref={canvasRef} className="h-full w-full" />
     </div>
