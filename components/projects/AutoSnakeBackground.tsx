@@ -287,7 +287,6 @@ const AutoSnakeBackground = () => {
     const shouldUpdate = tickRef.current % settings.pathThrottle === 0 || path.length === 0;
     if (!shouldUpdate) return;
     const newPath = findPathToClosestFood(snake[0], food, snake);
-    // eslint-disable-next-line
     setPath(newPath);
   }, [snake, foodKey, findPathToClosestFood, settings.pathThrottle, path.length, food]);
 
