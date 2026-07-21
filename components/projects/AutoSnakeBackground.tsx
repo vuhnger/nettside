@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Position = {
-  x: number;
-  y: number;
-};
+import {
+  findAStarPath,
+  getGridPositionKey,
+  type GridPosition as Position,
+} from "@/lib/astar";
 
 type Settings = {
   gridSize: number;
@@ -63,8 +64,6 @@ const REDUCED_SETTINGS: Settings = {
 const MOBILE_QUERY = "(max-width: 767px)";
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
-const getKey = (position: Position) => `${position.x},${position.y}`;
-
 const generateFood = (
   columns: number,
   rows: number,
@@ -72,7 +71,7 @@ const generateFood = (
   count: number
 ) => {
   const positions: Position[] = [];
-  const occupied = new Set(occupiedPositions.map(getKey));
+  const occupied = new Set(occupiedPositions.map(getGridPositionKey));
   let attempts = 0;
 
   while (positions.length < count && attempts < count * 40) {
@@ -80,7 +79,7 @@ const generateFood = (
       x: Math.floor(Math.random() * columns),
       y: Math.floor(Math.random() * rows),
     };
-    const key = getKey(candidate);
+    const key = getGridPositionKey(candidate);
     if (!occupied.has(key)) {
       positions.push(candidate);
       occupied.add(key);
@@ -124,77 +123,13 @@ const findPathToClosestFood = (game: GameState) => {
     }
   }
 
-  type PathNode = {
-    position: Position;
-    cost: number;
-    score: number;
-    parent: PathNode | null;
-  };
-
-  const openSet: PathNode[] = [
-    {
-      position: snakeHead,
-      cost: 0,
-      score: minDistance,
-      parent: null,
-    },
-  ];
-  const closedSet = new Set<string>();
-  const occupied = new Set(game.snake.slice(1).map(getKey));
-
-  while (openSet.length > 0) {
-    let currentIndex = 0;
-    for (let index = 1; index < openSet.length; index += 1) {
-      if (openSet[index].score < openSet[currentIndex].score) currentIndex = index;
-    }
-
-    const current = openSet.splice(currentIndex, 1)[0];
-    if (current.position.x === closestFood.x && current.position.y === closestFood.y) {
-      const path: Position[] = [];
-      let node: PathNode | null = current;
-      while (node?.parent) {
-        path.unshift(node.position);
-        node = node.parent;
-      }
-      return path;
-    }
-
-    closedSet.add(getKey(current.position));
-    const neighbors = [
-      { x: current.position.x + 1, y: current.position.y },
-      { x: current.position.x - 1, y: current.position.y },
-      { x: current.position.x, y: current.position.y + 1 },
-      { x: current.position.x, y: current.position.y - 1 },
-    ];
-
-    for (const position of neighbors) {
-      const key = getKey(position);
-      if (
-        position.x < 0 ||
-        position.x >= game.columns ||
-        position.y < 0 ||
-        position.y >= game.rows ||
-        occupied.has(key) ||
-        closedSet.has(key)
-      ) {
-        continue;
-      }
-
-      const cost = current.cost + 1;
-      const existing = openSet.find((node) => getKey(node.position) === key);
-      if (!existing) {
-        const distance =
-          Math.abs(position.x - closestFood.x) + Math.abs(position.y - closestFood.y);
-        openSet.push({ position, cost, score: cost + distance, parent: current });
-      } else if (cost < existing.cost) {
-        existing.cost = cost;
-        existing.score = cost + Math.abs(position.x - closestFood.x) + Math.abs(position.y - closestFood.y);
-        existing.parent = current;
-      }
-    }
-  }
-
-  return [];
+  return findAStarPath({
+    columns: game.columns,
+    rows: game.rows,
+    start: snakeHead,
+    goal: closestFood,
+    blocked: new Set(game.snake.slice(1).map(getGridPositionKey)),
+  }).path;
 };
 
 const advanceGame = (game: GameState, settings: Settings): GameState => {
