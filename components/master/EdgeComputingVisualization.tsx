@@ -75,7 +75,6 @@ const EdgeComputingVisualization = () => {
   useEffect(() => {
     if (!cloudPrevRef.current && cloudOnline) {
       cloudPrevRef.current = cloudOnline;
-      // eslint-disable-next-line
       setSyncing(true);
       const timer = setTimeout(() => setSyncing(false), 2000);
       return () => clearTimeout(timer);

@@ -1,43 +1,104 @@
 # Nettside
 
-Personlig portfolio bygget med Next.js App Router, Designsystemet fra DigDir og Tailwind. Inneholder CV, prosjekter og små visualiseringer/eksperimenter.
+Personlig portfolio bygget med Next.js App Router, Designsystemet fra DigDir
+og Tailwind. Inneholder CV, prosjekter og små visualiseringer/eksperimenter.
 
 ## Kjør lokalt
 
+Krav: Node.js 24 og npm.
+
 ```bash
-npm install
+nvm use
+npm ci
 npm run dev
 ```
 
-Åpne http://localhost:3000
+Åpne http://localhost:3000.
 
-## Build og start
+## Kvalitetssjekker
 
 ```bash
+npm run lint
+npm run typecheck
+npm run check
 npm run build
-npm run start
 ```
 
-## Deploy (Vercel)
+`npm run check` kjører lint og TypeScript-sjekk. GitHub Actions kjører
+`npm ci`, `npm run check` og `npm run build` for pull requests og pushes mot
+`development` og `main`.
 
-- Push til repo og la Vercel bygge automatisk, eller:
+Prosjektet har foreløpig ingen automatiserte enhets- eller ende-til-ende-tester.
+
+## Brancher og pull requests
+
+- `development` er GitHubs default branch og integrasjonsmiljø.
+- Opprett feature- og fix-brancher fra oppdatert `development`.
+- Alle vanlige pull requests skal ha `development` som base.
+- `main` er produksjonsbranchen og mottar bare release-PR-er fra
+  `development`.
+- Release-PR-en til `main` merges av repository owner etter godkjenning og
+  beståtte checks.
+- Dependabot sender oppdateringer til `development`.
+
+Eksempel på vanlig utviklingsflyt:
+
 ```bash
-vercel
-vercel --prod
+git fetch origin
+git switch development
+git pull --ff-only origin development
+git switch -c feat/min-endring
+
+# Gjør endringer og kjør npm run check og npm run build.
+
+git push -u origin feat/min-endring
+gh pr create --base development --head feat/min-endring --fill
 ```
 
-## Avhengigheter (kort)
+En produksjonsrelease opprettes som `development -> main`. Agenter skal aldri
+merge release-PR-en. En eventuell hotfix direkte mot produksjonsløpet krever
+eksplisitt beslutning og må tilbakeføres til `development` etterpå.
+
+## Deploy med Vercel
+
+- Pull requests får en isolert Vercel Preview deployment.
+- Pushes til `development` gir et oppdatert preview av integrasjonsbranchen.
+- Bare `main` er Vercel Production Branch.
+- Produksjon deployes automatisk når en godkjent release-PR merges til `main`.
+
+Manuell lokal preview kan startes med `vercel`. `vercel --prod` skal ikke
+brukes som del av normal releaseflyt, fordi det omgår branchen som
+produksjonsgate.
+
+## Delt agentkonfigurasjon
+
+`AGENTS.md` er kanonisk instruksjonsfil for agenter. `CLAUDE.md` er en symlink
+til denne filen.
+
+Skills vedlikeholdes kun i `.opencode/skills`. `.claude/skills` er en symlink
+til samme mappe, slik at OpenCode og Claude Code bruker identiske skills.
+
+Den delte `start-work`-skillen standardiserer oppstart fra `development`,
+branch-navn og tidlig draft-PR. `development-workflow` beskriver PR-, release-,
+CI- og deployflyten. Etter endringer i OpenCode-konfigurasjon eller skills må
+OpenCode startes på nytt for å laste dem inn.
+
+## Viktige avhengigheter
 
 Runtime:
-- `next`, `react`, `react-dom` – app og rendering
-- `@digdir/designsystemet-*` – design tokens/komponenter
-- `tailwindcss` + `tw-animate-css` – styling/anim
-- `framer-motion` – animasjoner
-- `react-icons` – ikoner
-- `next-themes` – light/dark
-- `swr` – data fetching
-- `react-hook-form` + `zod` – skjema + validering
-- `@vercel/analytics` – analytics
+
+- `next`, `react`, `react-dom` - app og rendering
+- `@digdir/designsystemet-*` - design tokens og komponenter
+- `tailwindcss` og `tw-animate-css` - styling og animasjon
+- `framer-motion` - animasjoner
+- `react-icons` - ikoner
+- `next-themes` - light/dark theme
+- `swr` - data fetching
+- `react-hook-form` og `zod` - skjema og validering
+- `@vercel/analytics` - analytics
 
 Tooling:
-- `typescript`, `eslint`, `eslint-config-next`
+
+- `typescript`
+- `eslint`
+- `eslint-config-next`
