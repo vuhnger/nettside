@@ -278,9 +278,6 @@ const ProjectsPage = () => {
           <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
             Dett er ikke en uttømmende liste og inneholder ingen prosjekter relatert til skolearbeid, sistnevnte finner du på GitHub.
           </Paragraph>
-          <Paragraph data-size="xs" style={{ margin: "0.4rem 0 0", color: "var(--ds-color-neutral-text-subtle)" }}>
-            Og BTW: Slangen som kjører i bakgrunnen bruker A* for å finne eplene sine :)
-          </Paragraph>
         </div>
 
         <div className="flex flex-col gap-6">
