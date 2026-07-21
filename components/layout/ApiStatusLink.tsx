@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useApiStatus } from "./queries";
 
 type ApiStatus = "unknown" | "up" | "down";
 
@@ -11,33 +11,12 @@ const statusLabels: Record<ApiStatus, string> = {
 };
 
 const ApiStatusLink = () => {
-  const [status, setStatus] = useState<ApiStatus>("unknown");
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const checkStatus = async () => {
-      try {
-        const response = await fetch("https://api.vuhnger.dev/strava/health", {
-          cache: "no-store",
-          signal: controller.signal,
-        });
-        setStatus(response.ok ? "up" : "down");
-      } catch (error) {
-        if (!(error instanceof DOMException && error.name === "AbortError")) {
-          setStatus("down");
-        }
-      }
-    };
-
-    void checkStatus();
-    const interval = window.setInterval(checkStatus, 60000);
-
-    return () => {
-      controller.abort();
-      window.clearInterval(interval);
-    };
-  }, []);
+  const apiStatusQuery = useApiStatus();
+  const status: ApiStatus = apiStatusQuery.isPending
+    ? "unknown"
+    : apiStatusQuery.isError || !apiStatusQuery.data
+      ? "down"
+      : "up";
 
   return (
     <a
