@@ -46,7 +46,7 @@ const BASE_SETTINGS: Settings = {
   startDelay: 150,
   stepDelay: 40,
   skipDelay: 20,
-  cyclePause: 3500,
+  cyclePause: 200,
 };
 
 const MOBILE_SETTINGS: Settings = {
@@ -368,7 +368,7 @@ const MstVisualization = ({ showGrid = true }: MstVisualizationProps) => {
     <div
       ref={containerRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 [--mst-grid:var(--ds-color-neutral-border-subtle)] [--mst-edge:var(--ds-color-neutral-border-default)] [--mst-node-fill:var(--ds-color-neutral-text-default)] [--mst-node-stroke:var(--ds-color-neutral-text-default)] [--mst-label:var(--ds-color-neutral-text-default)] [--mst-active:var(--ds-color-accent-base-default)] [--mst-complete:var(--ds-color-success-base-default)] [--mst-current:var(--ds-color-accent-base-hover)]"
+      className="pointer-events-none absolute inset-0 z-0 [--mst-grid:var(--ds-color-neutral-border-subtle)] [--mst-edge:var(--ds-color-neutral-border-default)] [--mst-node-fill:var(--ds-color-neutral-text-default)] [--mst-node-stroke:var(--ds-color-neutral-text-default)] [--mst-label:var(--ds-color-neutral-text-default)] [--mst-active:var(--ds-color-accent-base-default)] [--mst-complete:light-dark(var(--ds-color-warning-border-subtle),var(--ds-color-warning-border-strong))] [--mst-current:var(--ds-color-accent-base-hover)]"
     >
       <svg
         className="h-full w-full"
