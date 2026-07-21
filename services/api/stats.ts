@@ -32,47 +32,35 @@ export type RunningActivity = {
   movingTime?: number;
 };
 
-export type RunningStats = {
-  distanceMeters?: number;
-  activities: RunningActivity[];
-  distanceError: boolean;
-  activitiesError: boolean;
-};
-
 export type CodingStats = {
   range?: string;
   totalSeconds?: number;
   languages: string[];
 };
 
-export async function fetchRunningStats(year: number): Promise<RunningStats> {
-  const [ytdResult, activitiesResult] = await Promise.allSettled([
-    fetchApi("/strava/stats/ytd", stravaYtdSchema),
-    fetchApi(
-      `/strava/activities?year=${year}&activity_type=Run&limit=500`,
-      stravaActivitiesSchema,
-    ),
-  ]);
-
-  const distance = ytdResult.status === "fulfilled" ? ytdResult.value.data.run?.distance : undefined;
-  const activities =
-    activitiesResult.status === "fulfilled"
-      ? activitiesResult.value.data.map((activity) => ({
-          distance: activity.distance,
-          movingTime: activity.moving_time,
-        }))
-      : [];
-
-  return {
-    distanceMeters: distance,
-    activities,
-    distanceError: ytdResult.status === "rejected",
-    activitiesError: activitiesResult.status === "rejected",
-  };
+export async function fetchRunningDistance(signal?: AbortSignal): Promise<number | undefined> {
+  const response = await fetchApi("/strava/stats/ytd", stravaYtdSchema, signal);
+  return response.data.run?.distance;
 }
 
-export async function fetchCodingStats(): Promise<CodingStats> {
-  const response = await fetchApi("/wakatime/stats/weekly", wakaTimeSchema);
+export async function fetchRunningActivities(
+  year: number,
+  signal?: AbortSignal,
+): Promise<RunningActivity[]> {
+  const response = await fetchApi(
+    `/strava/activities?year=${year}&activity_type=Run&limit=500`,
+    stravaActivitiesSchema,
+    signal,
+  );
+
+  return response.data.map((activity) => ({
+    distance: activity.distance,
+    movingTime: activity.moving_time,
+  }));
+}
+
+export async function fetchCodingStats(signal?: AbortSignal): Promise<CodingStats> {
+  const response = await fetchApi("/wakatime/stats/weekly", wakaTimeSchema, signal);
   const data = response.data;
   const codingCategory = data.categories?.find((category) => category.name === "Coding");
   const languages = data.languages?.map((language) => language.name) ?? [];

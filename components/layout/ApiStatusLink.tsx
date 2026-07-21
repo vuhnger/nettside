@@ -1,23 +1,18 @@
-import { z } from "zod";
-import { fetchApi } from "@/services/api/client";
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { apiStatusQueryOptions } from "./queries";
 
 type ApiStatus = "up" | "down";
-
-const apiHealthSchema = z.object({
-  status: z.literal("ok"),
-  service: z.string(),
-  database: z.string(),
-});
 
 const statusLabels: Record<ApiStatus, string> = {
   up: "API-et er tilgjengelig",
   down: "API-et er utilgjengelig",
 };
 
-const ApiStatusLink = async () => {
-  const status: ApiStatus = await fetchApi("/strava/health", apiHealthSchema)
-    .then(() => "up" as const)
-    .catch(() => "down" as const);
+const ApiStatusLink = () => {
+  const statusQuery = useQuery(apiStatusQueryOptions());
+  const status: ApiStatus = statusQuery.isError || !statusQuery.data ? "down" : "up";
 
   return (
     <a

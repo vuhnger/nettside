@@ -1,14 +1,22 @@
 import { z } from "zod";
 
 const API_BASE_URL = "https://api.vuhnger.dev";
-const API_REVALIDATE_SECONDS = 15 * 60;
+const API_REVALIDATE_SECONDS = 5 * 60;
+const API_TIMEOUT_MS = 5_000;
 
 export async function fetchApi<TSchema extends z.ZodType>(
   path: string,
   schema: TSchema,
+  signal?: AbortSignal,
 ): Promise<z.output<TSchema>> {
+  const options =
+    typeof window === "undefined"
+      ? { next: { revalidate: API_REVALIDATE_SECONDS } }
+      : undefined;
+  const timeoutSignal = AbortSignal.timeout(API_TIMEOUT_MS);
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    next: { revalidate: API_REVALIDATE_SECONDS },
+    ...options,
+    signal: signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal,
   });
 
   if (!response.ok) {
