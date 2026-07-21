@@ -1,23 +1,20 @@
-const API_BASE_URL = "https://api.vuhnger.dev";
+import { z } from "zod";
 
-export async function fetchApi<T>(path: string, signal?: AbortSignal): Promise<T> {
+const API_BASE_URL = "https://api.vuhnger.dev";
+const API_REVALIDATE_SECONDS = 15 * 60;
+
+export async function fetchApi<TSchema extends z.ZodType>(
+  path: string,
+  schema: TSchema,
+): Promise<z.output<TSchema>> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    cache: "no-store",
-    signal,
+    next: { revalidate: API_REVALIDATE_SECONDS },
   });
 
   if (!response.ok) {
     throw new Error(`API-kallet feilet med status ${response.status}.`);
   }
 
-  return response.json() as Promise<T>;
-}
-
-export async function fetchApiStatus(signal?: AbortSignal): Promise<boolean> {
-  const response = await fetch(`${API_BASE_URL}/strava/health`, {
-    cache: "no-store",
-    signal,
-  });
-
-  return response.ok;
+  const body: unknown = await response.json();
+  return schema.parse(body);
 }

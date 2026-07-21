@@ -93,9 +93,7 @@ Runtime:
 - `tailwindcss` og `tw-animate-css` - styling og animasjon
 - `framer-motion` - animasjoner
 - `react-icons` - ikoner
-- `next-themes` - light/dark theme
-- `swr` - data fetching
-- `react-hook-form` og `zod` - skjema og validering
+- `react-hook-form` og `zod` - skjema og runtime-validering av API-data
 - `@vercel/analytics` - analytics
 
 Tooling:

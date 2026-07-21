@@ -1,25 +1,31 @@
+import { z } from "zod";
 import { fetchApi } from "./client";
 
-type StravaYtdResponse = {
-  data?: {
-    run?: {
-      distance?: unknown;
-    };
-  };
-};
+const stravaYtdSchema = z.object({
+  data: z.object({
+    run: z.object({ distance: z.number().nonnegative() }).optional(),
+  }),
+});
 
-type StravaActivitiesResponse = {
-  data?: unknown;
-};
+const stravaActivitiesSchema = z.object({
+  data: z.array(
+    z.object({
+      distance: z.number().nonnegative(),
+      moving_time: z.number().nonnegative().optional(),
+    }),
+  ),
+});
 
-type WakaTimeResponse = {
-  data?: {
-    range?: unknown;
-    categories?: unknown;
-    total_seconds?: unknown;
-    languages?: unknown;
-  };
-};
+const wakaTimeSchema = z.object({
+  data: z.object({
+    range: z.string().optional(),
+    categories: z
+      .array(z.object({ name: z.string(), total_seconds: z.number().nonnegative().optional() }))
+      .optional(),
+    total_seconds: z.number().nonnegative().optional(),
+    languages: z.array(z.object({ name: z.string() })).optional(),
+  }),
+});
 
 export type RunningActivity = {
   distance: number;
@@ -29,6 +35,8 @@ export type RunningActivity = {
 export type RunningStats = {
   distanceMeters?: number;
   activities: RunningActivity[];
+  distanceError: boolean;
+  activitiesError: boolean;
 };
 
 export type CodingStats = {
@@ -37,80 +45,41 @@ export type CodingStats = {
   languages: string[];
 };
 
-export async function fetchRunningStats(year: number, signal?: AbortSignal): Promise<RunningStats> {
-  const [ytd, activitiesResponse] = await Promise.all([
-    fetchApi<StravaYtdResponse>("/strava/stats/ytd", signal),
-    fetchApi<StravaActivitiesResponse>(
+export async function fetchRunningStats(year: number): Promise<RunningStats> {
+  const [ytdResult, activitiesResult] = await Promise.allSettled([
+    fetchApi("/strava/stats/ytd", stravaYtdSchema),
+    fetchApi(
       `/strava/activities?year=${year}&activity_type=Run&limit=500`,
-      signal,
+      stravaActivitiesSchema,
     ),
   ]);
 
-  const distance = ytd.data?.run?.distance;
-  const activities = Array.isArray(activitiesResponse.data)
-    ? activitiesResponse.data.flatMap((activity): RunningActivity[] => {
-        if (typeof activity !== "object" || activity === null || !("distance" in activity)) {
-          return [];
-        }
-
-        const activityDistance = activity.distance;
-        if (typeof activityDistance !== "number") return [];
-
-        const movingTime = "moving_time" in activity ? activity.moving_time : undefined;
-        return [
-          {
-            distance: activityDistance,
-            movingTime: typeof movingTime === "number" ? movingTime : undefined,
-          },
-        ];
-      })
-    : [];
+  const distance = ytdResult.status === "fulfilled" ? ytdResult.value.data.run?.distance : undefined;
+  const activities =
+    activitiesResult.status === "fulfilled"
+      ? activitiesResult.value.data.map((activity) => ({
+          distance: activity.distance,
+          movingTime: activity.moving_time,
+        }))
+      : [];
 
   return {
-    distanceMeters: typeof distance === "number" ? distance : undefined,
+    distanceMeters: distance,
     activities,
+    distanceError: ytdResult.status === "rejected",
+    activitiesError: activitiesResult.status === "rejected",
   };
 }
 
-export async function fetchCodingStats(signal?: AbortSignal): Promise<CodingStats> {
-  const response = await fetchApi<WakaTimeResponse>("/wakatime/stats/weekly", signal);
+export async function fetchCodingStats(): Promise<CodingStats> {
+  const response = await fetchApi("/wakatime/stats/weekly", wakaTimeSchema);
   const data = response.data;
-  const categories = Array.isArray(data?.categories) ? data.categories : [];
-  const codingCategory = categories.find(
-    (category) =>
-      typeof category === "object" &&
-      category !== null &&
-      "name" in category &&
-      category.name === "Coding",
-  );
-  const categorySeconds =
-    typeof codingCategory === "object" &&
-    codingCategory !== null &&
-    "total_seconds" in codingCategory
-      ? codingCategory.total_seconds
-      : undefined;
-  const languages = Array.isArray(data?.languages)
-    ? data.languages.flatMap((language): string[] => {
-        if (
-          typeof language === "object" &&
-          language !== null &&
-          "name" in language &&
-          typeof language.name === "string"
-        ) {
-          return [language.name];
-        }
-        return [];
-      })
-    : [];
-  const totalSeconds =
-    typeof categorySeconds === "number"
-      ? categorySeconds
-      : typeof data?.total_seconds === "number"
-        ? data.total_seconds
-        : undefined;
+  const codingCategory = data.categories?.find((category) => category.name === "Coding");
+  const languages = data.languages?.map((language) => language.name) ?? [];
+  const totalSeconds = codingCategory?.total_seconds ?? data.total_seconds;
 
   return {
-    range: typeof data?.range === "string" ? data.range : undefined,
+    range: data.range,
     totalSeconds,
     languages: languages.slice(0, 4),
   };

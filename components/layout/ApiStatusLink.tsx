@@ -1,22 +1,23 @@
-"use client";
+import { z } from "zod";
+import { fetchApi } from "@/services/api/client";
 
-import { useApiStatus } from "./queries";
+type ApiStatus = "up" | "down";
 
-type ApiStatus = "unknown" | "up" | "down";
+const apiHealthSchema = z.object({
+  status: z.literal("ok"),
+  service: z.string(),
+  database: z.string(),
+});
 
 const statusLabels: Record<ApiStatus, string> = {
-  unknown: "Sjekker API-status",
   up: "API-et er tilgjengelig",
   down: "API-et er utilgjengelig",
 };
 
-const ApiStatusLink = () => {
-  const apiStatusQuery = useApiStatus();
-  const status: ApiStatus = apiStatusQuery.isPending
-    ? "unknown"
-    : apiStatusQuery.isError || !apiStatusQuery.data
-      ? "down"
-      : "up";
+const ApiStatusLink = async () => {
+  const status: ApiStatus = await fetchApi("/strava/health", apiHealthSchema)
+    .then(() => "up" as const)
+    .catch(() => "down" as const);
 
   return (
     <a
@@ -50,12 +51,10 @@ const ApiStatusLink = () => {
           backgroundColor:
             status === "up"
               ? "var(--ds-color-success-base-default)"
-              : status === "down"
-                ? "var(--ds-color-danger-base-default)"
-                : "var(--ds-color-neutral-border-default)"
+              : "var(--ds-color-danger-base-default)"
         }}
       />
-      <span className="sr-only" aria-live="polite">
+      <span className="sr-only">
         {statusLabels[status]}
       </span>
     </a>
