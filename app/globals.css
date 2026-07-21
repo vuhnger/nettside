@@ -120,7 +120,7 @@
   --sidebar-ring: var(--ds-color-accent-border-default);
 }
 
-:root, [data-color-scheme="light"] {
+:root:not([data-color-scheme="dark"]), [data-color-scheme="light"] {
   --ds-color-neutral-background-default: #f5f0e8;
   --ds-color-neutral-background-tinted: #ede5d9;
   --ds-color-neutral-surface-default: #faf7f1;
