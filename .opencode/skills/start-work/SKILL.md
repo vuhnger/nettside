@@ -56,9 +56,18 @@ be finished:
 
 ```bash
 git push --set-upstream origin <type>/<short-kebab-description>
-gh pr create --draft --base development --head <type>/<short-kebab-description> --fill
+gh pr create --draft --base development --head <type>/<short-kebab-description> --title "<kort tittel>" --body "<kort forklaring>"
 ```
 
 Keep the pull request in draft while implementation or verification remains.
 Mark it ready only after all local checks pass and the requested work is
 complete. Never retarget the pull request to `main`.
+
+## Pull request description
+
+- Write only a short explanation of the changes.
+- Write in informal, natural Norwegian with a slightly Gen Z tone, without
+  overdoing slang or trying too hard.
+- Do not include a `Verification`, `Testing`, or similar section.
+- Do not add checklists, command output, or a list of checks that were run.
+- Avoid generic, polished wording that sounds AI-generated.
