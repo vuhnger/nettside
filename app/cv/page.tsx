@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
 import { Card, Heading, Link, Paragraph } from "@digdir/designsystemet-react";
@@ -16,63 +13,7 @@ import {
 } from "react-icons/si";
 import { FaJava, FaPython, FaReact, FaHtml5 } from "react-icons/fa";
 import { FiMail, FiChevronRight } from "react-icons/fi";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
-
-// Animation variants - gjenbrukbare animasjoner
-const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (delay: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      delay,
-      ease: [0.25, 0.46, 0.45, 0.94]
-    }
-  })
-};
-
-const staggerContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
-};
-
-const cardItem: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.3 }
-  }
-};
-
-const modalOverlay: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.2 } },
-  exit: { opacity: 0, transition: { duration: 0.15 } }
-};
-
-const modalContent: Variants = {
-  hidden: { opacity: 0, scale: 0.95, y: 10 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.2, ease: "easeOut" }
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.95,
-    y: 10,
-    transition: { duration: 0.15 }
-  }
-};
+import AccessibleDialog from "@/components/ui/accessible-dialog";
 
 type Experience = {
   id: string;
@@ -237,40 +178,13 @@ const skills = [
 ];
 
 export default function CVPage() {
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  const activeExperience = useMemo(
-    () => experience.find((item) => item.id === activeId) ?? null,
-    [activeId]
-  );
-
-  useEffect(() => {
-    if (!activeExperience) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setActiveId(null);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [activeExperience]);
-
   return (
     <div
       className="min-h-screen pt-20 pb-12 px-4"
       style={{ backgroundColor: "var(--ds-color-neutral-background-default)" }}
     >
       <div className="mx-auto max-w-3xl">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          custom={0}
-        >
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <Card
             className="relative overflow-hidden cv-card"
             style={{
@@ -322,13 +236,7 @@ export default function CVPage() {
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
               {/* Utdanning - første på mobil og desktop */}
-              <motion.section
-                className="min-w-0 md:col-start-1 md:row-start-1"
-                variants={fadeInUp}
-                initial="hidden"
-                animate="visible"
-                custom={0.1}
-              >
+              <section className="min-w-0 md:col-start-1 md:row-start-1 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <div className="flex items-center gap-2">
                   <span
                     className="h-2 w-2 rounded-full bg-[color:var(--ds-color-brand1-base-default)]"
@@ -338,16 +246,10 @@ export default function CVPage() {
                     Utdanning
                   </Heading>
                 </div>
-                <motion.div
-                  className="space-y-3"
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate="visible"
-                >
+                <div className="space-y-3">
                   {education.map((item) => (
-                    <motion.div
+                    <div
                       key={`${item.school}-${item.program}`}
-                      variants={cardItem}
                       className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-brand1-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
@@ -368,19 +270,13 @@ export default function CVPage() {
                           <li key={detail}>{detail}</li>
                         ))}
                       </ul>
-                    </motion.div>
+                    </div>
                   ))}
-                </motion.div>
-              </motion.section>
+                </div>
+              </section>
 
               {/* Erfaring - andre på mobil, høyre kolonne på desktop */}
-              <motion.section
-                className="min-w-0 md:col-start-2 md:row-start-1 md:row-span-2"
-                variants={fadeInUp}
-                initial="hidden"
-                animate="visible"
-                custom={0.2}
-              >
+              <section className="min-w-0 md:col-start-2 md:row-start-1 md:row-span-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <div className="flex items-center gap-2">
                   <span
                     className="h-2 w-2 rounded-full bg-[color:var(--ds-color-danger-base-default)]"
@@ -390,29 +286,21 @@ export default function CVPage() {
                     Erfaring
                   </Heading>
                 </div>
-                <motion.div
-                  className="mt-2 space-y-2"
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate="visible"
-                >
+                <div className="mt-2 space-y-2">
                   {experience.map((item) => (
-                    <motion.button
+                    <AccessibleDialog
                       key={item.id}
-                      variants={cardItem}
-                      type="button"
-                      onClick={() => setActiveId(item.id)}
-                      aria-haspopup="dialog"
-                      whileHover={{ y: -2, boxShadow: "var(--ds-shadow-md)" }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group w-full rounded-md border p-3 text-left cursor-pointer relative hover:border-[color:var(--ds-color-danger-border-default)] border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
-                    >
+                      labelId={`${item.id}-experience-title`}
+                      descriptionId={`${item.id}-experience-summary`}
+                      animatedTrigger
+                      triggerClassName="group w-full rounded-md border p-3 text-left cursor-pointer relative hover:border-[color:var(--ds-color-danger-border-default)] border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
+                      dialogClassName="max-w-xl rounded-lg border border-[color:var(--ds-color-neutral-border-strong)] bg-[var(--ds-color-neutral-background-default)]"
+                      trigger={
+                        <>
                       {item.id === "bekk" && (
-                        <motion.span
-                          className="pointer-events-none absolute inset-0 rounded-md border-2 border-[color:var(--ds-color-danger-border-strong)]"
+                        <span
+                          className="pointer-events-none absolute inset-0 animate-pulse rounded-md border-2 border-[color:var(--ds-color-danger-border-strong)] motion-reduce:animate-none"
                           aria-hidden="true"
-                          animate={{ opacity: [0.2, 0.5, 0.2] }}
-                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         />
                       )}
                       <FiChevronRight
@@ -442,19 +330,36 @@ export default function CVPage() {
                           </Paragraph>
                         </div>
                       </div>
-                    </motion.button>
+                        </>
+                      }
+                    >
+                      <div className="p-4 pr-24">
+                        <Heading id={`${item.id}-experience-title`} data-size="sm" style={{ marginBottom: "0.25rem" }}>
+                          {item.role}
+                        </Heading>
+                        <Paragraph
+                          id={`${item.id}-experience-summary`}
+                          data-size="xs"
+                          style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}
+                        >
+                          {item.company} · {item.location}
+                        </Paragraph>
+                        <Paragraph data-size="xs" style={{ marginTop: "0.5rem", color: "var(--ds-color-neutral-text-default)" }}>
+                          {item.period}
+                        </Paragraph>
+                        <ul className="mt-3 list-disc pl-4 text-sm" style={{ color: "var(--ds-color-neutral-text-default)" }}>
+                          {item.details.map((detail) => (
+                            <li key={detail}>{detail}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </AccessibleDialog>
                   ))}
-                </motion.div>
-              </motion.section>
+                </div>
+              </section>
 
               {/* Ferdigheter - tredje på mobil, under Utdanning på desktop */}
-              <motion.section
-                className="min-w-0 md:col-start-1 md:row-start-2"
-                variants={fadeInUp}
-                initial="hidden"
-                animate="visible"
-                custom={0.3}
-              >
+              <section className="min-w-0 md:col-start-1 md:row-start-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <div className="flex items-center gap-2">
                   <span
                     className="h-2 w-2 rounded-full bg-[color:var(--ds-color-success-base-default)]"
@@ -464,14 +369,8 @@ export default function CVPage() {
                     Ferdigheter
                   </Heading>
                 </div>
-                <motion.div
-                  className="space-y-2"
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <motion.div
-                    variants={cardItem}
+                <div className="space-y-2">
+                  <div
                     className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                   >
                     <Paragraph data-size="xs" style={{ marginBottom: "0.5rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
@@ -489,9 +388,8 @@ export default function CVPage() {
                         </div>
                       ))}
                     </div>
-                  </motion.div>
-                  <motion.div
-                    variants={cardItem}
+                  </div>
+                  <div
                     className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                   >
                     <Paragraph data-size="xs" style={{ marginBottom: "0.5rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
@@ -509,11 +407,10 @@ export default function CVPage() {
                         </div>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                   {skills.map((skill) => (
-                    <motion.div
+                    <div
                       key={skill.label}
-                      variants={cardItem}
                       className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-success-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
                       <Paragraph data-size="xs" style={{ marginBottom: "0.25rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
@@ -522,23 +419,18 @@ export default function CVPage() {
                       <Paragraph data-size="xs" style={{ margin: 0 }} className="text-[color:var(--ds-color-neutral-text-subtle)]">
                         {skill.value}
                       </Paragraph>
-                    </motion.div>
+                    </div>
                   ))}
-                </motion.div>
+                </div>
                 <Paragraph data-size="xs" style={{ marginTop: "0.75rem", textAlign: "center", opacity: 0.7 }}>
                   Referanser oppgis på forespørsel.
                 </Paragraph>
-              </motion.section>
+              </section>
             </div>
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Prosjekter */}
-              <motion.section
-                variants={fadeInUp}
-                initial="hidden"
-                animate="visible"
-                custom={0.4}
-              >
+              <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <div className="flex items-center gap-2">
                   <span
                     className="h-2 w-2 rounded-full bg-[color:var(--ds-color-accent-base-default)]"
@@ -548,15 +440,9 @@ export default function CVPage() {
                     Prosjekter
                   </Heading>
                 </div>
-                <motion.div
-                  className="space-y-3"
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate="visible"
-                >
+                <div className="space-y-3">
                   <NextLink href="/projects">
-                    <motion.div
-                      variants={cardItem}
+                    <div
                       className="group rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-accent-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] cursor-pointer relative"
                     >
                       <FiChevronRight
@@ -568,18 +454,13 @@ export default function CVPage() {
                       <Paragraph data-size="xs" style={{ margin: 0 }} className="text-[color:var(--ds-color-neutral-text-subtle)] pr-5">
                         Se mine prosjekter og hva jeg har jobbet med
                       </Paragraph>
-                    </motion.div>
+                    </div>
                   </NextLink>
-                </motion.div>
-              </motion.section>
+                </div>
+              </section>
 
               {/* Frivillig arbeid */}
-              <motion.section
-                variants={fadeInUp}
-                initial="hidden"
-                animate="visible"
-                custom={0.5}
-              >
+              <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
                 <div className="flex items-center gap-2">
                   <span
                     className="h-2 w-2 rounded-full bg-[color:var(--ds-color-warning-base-default)]"
@@ -589,16 +470,10 @@ export default function CVPage() {
                     Frivillig arbeid
                   </Heading>
                 </div>
-                <motion.div
-                  className="space-y-2"
-                  variants={staggerContainer}
-                  initial="hidden"
-                  animate="visible"
-                >
+                <div className="space-y-2">
                   {organizations.map((org) => (
-                    <motion.div
+                    <div
                       key={org.name}
-                      variants={cardItem}
                       className="rounded-md border p-3 transition hover:-translate-y-0.5 hover:border-[color:var(--ds-color-warning-border-default)] hover:shadow-sm motion-reduce:transform-none border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)]"
                     >
                       <Paragraph data-size="sm" style={{ marginBottom: "0.125rem", fontWeight: 600 }} className="text-[color:var(--ds-color-neutral-text-default)]">
@@ -607,10 +482,10 @@ export default function CVPage() {
                       <Paragraph data-size="xs" style={{ margin: 0 }} className="text-[color:var(--ds-color-neutral-text-subtle)]">
                         {org.role}
                       </Paragraph>
-                    </motion.div>
+                    </div>
                   ))}
-                </motion.div>
-              </motion.section>
+                </div>
+              </section>
             </div>
 
             <div className="mt-6 text-center">
@@ -625,66 +500,8 @@ export default function CVPage() {
               </Link>
             </div>
           </Card>
-        </motion.div>
+        </div>
       </div>
-
-      <AnimatePresence>
-        {activeExperience && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[color:color-mix(in_srgb,var(--ds-color-neutral-base-default)_70%,transparent)] px-4 py-6 backdrop-blur-sm"
-            variants={modalOverlay}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            onClick={() => setActiveId(null)}
-            role="dialog"
-            aria-modal="true"
-          >
-            <motion.div
-              className="w-full max-w-xl rounded-lg border p-4"
-              variants={modalContent}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              style={{
-                backgroundColor: "var(--ds-color-neutral-background-default)",
-                borderColor: "var(--ds-color-neutral-border-strong)"
-              }}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <Heading data-size="sm" style={{ marginBottom: "0.25rem" }}>
-                    {activeExperience.role}
-                  </Heading>
-                  <Paragraph data-size="xs" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
-                    {activeExperience.company} · {activeExperience.location}
-                  </Paragraph>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setActiveId(null)}
-                  className="rounded-md border px-2 py-1 text-xs transition hover:bg-[var(--ds-color-neutral-background-tinted)]"
-                  style={{
-                    borderColor: "var(--ds-color-neutral-border-default)",
-                    color: "var(--ds-color-neutral-text-default)"
-                  }}
-                >
-                  Lukk
-                </button>
-              </div>
-              <Paragraph data-size="xs" style={{ marginTop: "0.5rem", color: "var(--ds-color-neutral-text-default)" }}>
-                {activeExperience.period}
-              </Paragraph>
-              <ul className="mt-3 list-disc pl-4 text-sm" style={{ color: "var(--ds-color-neutral-text-default)" }}>
-                {activeExperience.details.map((detail) => (
-                  <li key={detail}>{detail}</li>
-                ))}
-              </ul>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

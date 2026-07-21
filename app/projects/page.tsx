@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
 import type { IconType } from "react-icons";
@@ -30,6 +27,7 @@ import {
   SiDjango,
 } from "react-icons/si";
 import AutoSnakeBackground from "@/components/projects/AutoSnakeBackground";
+import AccessibleDialog from "@/components/ui/accessible-dialog";
 
 type Project = {
   id: string;
@@ -44,43 +42,10 @@ type Project = {
   sections: { title: string; description: string; image?: string }[];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const buildPlaceholderImage = (title: string, accent: string, accentTwo: string) => {
-  const svg = `
-    <svg width="720" height="480" viewBox="0 0 720 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="${accent}" />
-          <stop offset="100%" stop-color="${accentTwo}" />
-        </linearGradient>
-        <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="white" stop-opacity="0.1" />
-          <stop offset="100%" stop-color="white" stop-opacity="0.35" />
-        </linearGradient>
-      </defs>
-      <rect width="720" height="480" rx="32" fill="url(#bg)" />
-      <circle cx="580" cy="90" r="90" fill="url(#glow)" />
-      <circle cx="120" cy="380" r="120" fill="url(#glow)" />
-      <rect x="60" y="80" width="260" height="36" rx="18" fill="white" fill-opacity="0.35" />
-      <rect x="60" y="140" width="340" height="20" rx="10" fill="white" fill-opacity="0.2" />
-      <rect x="60" y="175" width="300" height="20" rx="10" fill="white" fill-opacity="0.15" />
-      <text x="60" y="110" fill="white" font-size="20" font-family="Arial, sans-serif" font-weight="600">
-        ${title}
-      </text>
-      <text x="60" y="220" fill="white" font-size="14" font-family="Arial, sans-serif" opacity="0.8">
-        Placeholder visual
-      </text>
-    </svg>
-  `;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-};
-
 const isDataImage = (src?: string) => Boolean(src && src.startsWith("data:"));
 const isExternalLink = (href?: string) => (href ? /^https?:\/\//.test(href) : false);
 
-const ProjectsPage = () => {
-  const projects = useMemo<Project[]>(
-    () => [
+const projects: Project[] = [
       {
         id: "kartverket-security",
         title: "Sikkerhetsmikrotjeneste for Kartverket",
@@ -292,27 +257,9 @@ const ProjectsPage = () => {
           },
         ],
       },
-    ],
-    []
-  );
+];
 
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
-
-  useEffect(() => {
-    if (!activeProject) return undefined;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setActiveProject(null);
-      }
-    };
-    document.addEventListener("keydown", onKeyDown);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [activeProject]);
+const ProjectsPage = () => {
 
   return (
     <div
@@ -364,13 +311,13 @@ const ProjectsPage = () => {
                       hasImage ? "md:w-7/12" : "md:w-full"
                     }`}
                   >
-                    <button
-                      type="button"
-                      onClick={() => setActiveProject(project)}
-                      aria-haspopup="dialog"
-                      aria-expanded={activeProject?.id === project.id}
-                      className="group flex w-full flex-col justify-between gap-4 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-sm border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] hover:border-[color:var(--ds-color-accent-border-default)]"
-                    >
+                    <AccessibleDialog
+                      labelId={`${project.id}-title`}
+                      descriptionId={`${project.id}-details`}
+                      triggerClassName="group flex w-full flex-col justify-between gap-4 rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-sm border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] hover:border-[color:var(--ds-color-accent-border-default)]"
+                      dialogClassName="max-w-6xl rounded-3xl border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_95%,transparent)] shadow-[var(--ds-shadow-xl)]"
+                      trigger={
+                        <>
                       <div className="flex flex-col gap-3">
                         <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
                           {project.tag}
@@ -388,7 +335,105 @@ const ProjectsPage = () => {
                           →
                         </span>
                       </div>
-                    </button>
+                        </>
+                      }
+                    >
+                      <div className="p-6 pr-24 md:p-8 md:pr-28">
+                        <Heading data-size="md" id={`${project.id}-title`} style={{ marginBottom: 0 }}>
+                          {project.title}
+                        </Heading>
+                        <Paragraph
+                          data-size="sm"
+                          id={`${project.id}-details`}
+                          style={{ margin: "0.75rem 0 0", color: "var(--ds-color-neutral-text-default)" }}
+                        >
+                          {project.details}
+                        </Paragraph>
+
+                        <div className="mt-6 grid gap-4 md:grid-cols-2">
+                          <div className="rounded-2xl border p-4 border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_90%,transparent)]">
+                            <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
+                              Teknologistakk
+                            </div>
+                            <div className="mt-3 flex flex-wrap gap-3">
+                              {project.stack.map((item) => (
+                                <span
+                                  key={item.label}
+                                  role="img"
+                                  aria-label={item.label}
+                                  title={item.label}
+                                  className="flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_95%,transparent)] text-[color:var(--ds-color-neutral-text-default)] shadow-[var(--ds-shadow-sm)]"
+                                >
+                                  <item.icon className="text-xl" aria-hidden="true" />
+                                </span>
+                              ))}
+                            </div>
+                            {project.link && (
+                              <a
+                                href={project.link}
+                                target={isExternalLink(project.link) ? "_blank" : undefined}
+                                rel={isExternalLink(project.link) ? "noopener noreferrer" : undefined}
+                                aria-label={`Prosjektside for ${project.title}`}
+                                className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[var(--ds-color-accent-base-default)] hover:underline"
+                              >
+                                Prosjektside
+                                <span aria-hidden="true">↗</span>
+                              </a>
+                            )}
+                          </div>
+                          <div className="rounded-2xl border p-4 border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_90%,transparent)]">
+                            <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
+                              Læringsutbytte
+                            </div>
+                            <ul className="mt-3 space-y-2 text-sm text-[color:var(--ds-color-neutral-text-default)]">
+                              {project.learningOutcomes.map((item) => (
+                                <li key={item} className="flex items-start gap-2">
+                                  <span aria-hidden="true" className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[var(--ds-color-accent-base-default)]" />
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div className="mt-8 flex flex-col gap-6">
+                          {project.sections.map((section, sectionIndex) => {
+                            const sectionReversed = sectionIndex % 2 === 1;
+                            const sectionImage = section.image;
+                            const sectionHasImage = Boolean(sectionImage);
+                            return (
+                              <div
+                                key={`${project.id}-${section.title}`}
+                                className={`flex flex-col gap-4 md:items-stretch ${
+                                  sectionHasImage ? (sectionReversed ? "md:flex-row-reverse" : "md:flex-row") : ""
+                                }`}
+                              >
+                                {sectionImage && (
+                                  <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] md:w-5/12">
+                                    <Image
+                                      src={sectionImage}
+                                      alt={section.title}
+                                      fill
+                                      sizes="(min-width: 768px) 40vw, 100vw"
+                                      className="object-cover"
+                                      unoptimized={isDataImage(sectionImage)}
+                                    />
+                                  </div>
+                                )}
+                                <div className={`flex w-full flex-col justify-center gap-3 ${sectionHasImage ? "md:w-7/12" : "md:w-full"}`}>
+                                  <Heading data-size="sm" style={{ marginBottom: 0 }}>
+                                    {section.title}
+                                  </Heading>
+                                  <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
+                                    {section.description}
+                                  </Paragraph>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </AccessibleDialog>
                   </div>
 
                   {imageSrc && (
@@ -410,138 +455,6 @@ const ProjectsPage = () => {
         </div>
       </div>
 
-      {activeProject && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-8">
-          <button
-            type="button"
-            className="absolute inset-0 bg-[color:color-mix(in_srgb,var(--ds-color-neutral-base-default)_70%,transparent)]"
-            onClick={() => setActiveProject(null)}
-            aria-label="Lukk prosjekt"
-          />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={`${activeProject.id}-title`}
-            aria-describedby={`${activeProject.id}-details`}
-            className="relative z-10 w-full max-w-6xl rounded-3xl border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_95%,transparent)] shadow-[var(--ds-shadow-xl)]"
-          >
-            <div className="p-6 md:p-8">
-              <div className="flex items-start justify-between gap-4">
-                <Heading data-size="md" id={`${activeProject.id}-title`} style={{ marginBottom: 0 }}>
-                  {activeProject.title}
-                </Heading>
-                <button
-                  type="button"
-                  className="rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] transition border-[color:var(--ds-color-neutral-border-subtle)] text-[color:var(--ds-color-neutral-text-subtle)] hover:border-[color:var(--ds-color-accent-border-default)] hover:text-[color:var(--ds-color-accent-text-default)]"
-                  onClick={() => setActiveProject(null)}
-                >
-                  Lukk
-                </button>
-              </div>
-              <Paragraph
-                data-size="sm"
-                id={`${activeProject.id}-details`}
-                style={{ margin: "0.75rem 0 0", color: "var(--ds-color-neutral-text-default)" }}
-              >
-                {activeProject.details}
-              </Paragraph>
-
-              <div className="mt-6 grid gap-4 md:grid-cols-2">
-                <div className="rounded-2xl border p-4 border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_90%,transparent)]">
-                  <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
-                    Teknologistakk
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-3">
-                    {activeProject.stack.map((item) => (
-                      <span
-                        key={item.label}
-                        role="img"
-                        aria-label={item.label}
-                        title={item.label}
-                        className="flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_95%,transparent)] text-[color:var(--ds-color-neutral-text-default)] shadow-[var(--ds-shadow-sm)]"
-                      >
-                        <item.icon className="text-xl" aria-hidden="true" />
-                      </span>
-                    ))}
-                  </div>
-                  {activeProject.link && (
-                    <a
-                      href={activeProject.link}
-                      target={isExternalLink(activeProject.link) ? "_blank" : undefined}
-                      rel={isExternalLink(activeProject.link) ? "noopener noreferrer" : undefined}
-                      aria-label={`Prosjektside for ${activeProject.title}`}
-                      className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[var(--ds-color-accent-base-default)] hover:underline"
-                    >
-                      Prosjektside
-                      <span aria-hidden="true">↗</span>
-                    </a>
-                  )}
-                </div>
-                <div className="rounded-2xl border p-4 border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_90%,transparent)]">
-                  <div className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
-                    Læringsutbytte
-                  </div>
-                  <ul className="mt-3 space-y-2 text-sm text-[color:var(--ds-color-neutral-text-default)]">
-                    {activeProject.learningOutcomes.map((item) => (
-                      <li key={item} className="flex items-start gap-2">
-                        <span
-                          aria-hidden="true"
-                          className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[var(--ds-color-accent-base-default)]"
-                        />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="mt-8 flex flex-col gap-6">
-                {activeProject.sections.map((section, index) => {
-                  const isReversed = index % 2 === 1;
-                  const sectionImage = section.image;
-                  const hasImage = Boolean(sectionImage);
-                  return (
-                    <div
-                      key={`${activeProject.id}-${section.title}`}
-                      className={`flex flex-col gap-4 md:items-stretch ${
-                        hasImage ? (isReversed ? "md:flex-row-reverse" : "md:flex-row") : ""
-                      }`}
-                    >
-                      {sectionImage && (
-                        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl border border-[color:var(--ds-color-neutral-border-subtle)] bg-[color:color-mix(in_srgb,var(--ds-color-neutral-surface-default)_85%,transparent)] md:w-5/12">
-                          <Image
-                            src={sectionImage}
-                            alt={section.title}
-                            fill
-                            sizes="(min-width: 768px) 40vw, 100vw"
-                            className="object-cover"
-                            unoptimized={isDataImage(sectionImage)}
-                          />
-                        </div>
-                      )}
-                      <div
-                        className={`flex w-full flex-col justify-center gap-3 ${
-                          hasImage ? "md:w-7/12" : "md:w-full"
-                        }`}
-                      >
-                        <Heading data-size="sm" style={{ marginBottom: 0 }}>
-                          {section.title}
-                        </Heading>
-                        <Paragraph
-                          data-size="sm"
-                          style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}
-                        >
-                          {section.description}
-                        </Paragraph>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

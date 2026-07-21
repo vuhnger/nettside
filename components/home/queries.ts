@@ -1,26 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchCodingStats, fetchRunningStats } from "@/services/api/stats";
+import { queryOptions } from "@tanstack/react-query";
+import {
+  fetchCodingStats,
+  fetchRunningActivities,
+  fetchRunningDistance,
+} from "@/services/api/stats";
 
-const statsKeys = {
-  all: ["stats"] as const,
-  running: (year: number) => [...statsKeys.all, "running", year] as const,
-  coding: () => [...statsKeys.all, "coding"] as const,
-};
+export const STATS_STALE_TIME = 10 * 60 * 1000;
 
-const STATS_STALE_TIME = 15 * 60 * 1000;
-
-export function useRunningStats(year: number) {
-  return useQuery({
-    queryKey: statsKeys.running(year),
-    queryFn: ({ signal }) => fetchRunningStats(year, signal),
+export const runningDistanceQueryOptions = () =>
+  queryOptions({
+    queryKey: ["stats", "running", "distance"] as const,
+    queryFn: ({ signal }) => fetchRunningDistance(signal),
     staleTime: STATS_STALE_TIME,
   });
-}
 
-export function useCodingStats() {
-  return useQuery({
-    queryKey: statsKeys.coding(),
+export const runningActivitiesQueryOptions = (year: number) =>
+  queryOptions({
+    queryKey: ["stats", "running", "activities", year] as const,
+    queryFn: ({ signal }) => fetchRunningActivities(year, signal),
+    staleTime: STATS_STALE_TIME,
+  });
+
+export const codingStatsQueryOptions = () =>
+  queryOptions({
+    queryKey: ["stats", "coding"] as const,
     queryFn: ({ signal }) => fetchCodingStats(signal),
     staleTime: STATS_STALE_TIME,
   });
-}

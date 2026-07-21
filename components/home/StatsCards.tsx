@@ -1,8 +1,13 @@
 "use client";
 
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
+import { useQuery } from "@tanstack/react-query";
 import { Activity, Code2 } from "lucide-react";
-import { useCodingStats, useRunningStats } from "./queries";
+import {
+  codingStatsQueryOptions,
+  runningActivitiesQueryOptions,
+  runningDistanceQueryOptions,
+} from "./queries";
 
 const formatPace = (distanceMeters: number, movingTimeSeconds?: number) => {
   if (typeof movingTimeSeconds !== "number" || distanceMeters <= 0) return null;
@@ -15,17 +20,40 @@ const formatPace = (distanceMeters: number, movingTimeSeconds?: number) => {
   return `${paceMinutes}:${paceRemainder}/km`;
 };
 
-const StatsCards = () => {
-  const currentYear = new Date().getFullYear();
-  const runningStatsQuery = useRunningStats(currentYear);
-  const codingStatsQuery = useCodingStats();
-  const runDistance = runningStatsQuery.data?.distanceMeters;
-  const runKm = runningStatsQuery.isError
+const cardStyle = {
+  padding: "0.625rem",
+  display: "flex",
+  flexDirection: "column" as const,
+  justifyContent: "space-between",
+  backgroundColor: "color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)",
+  transition: "all 0.2s",
+  border: "2px solid var(--ds-color-neutral-border-strong)",
+};
+
+export const StatsCardsLoading = () => (
+  <>
+    {["coding", "strava"].map((key) => (
+      <Card key={key} aria-busy="true" style={cardStyle}>
+        <Paragraph data-size="xs" style={{ margin: 0 }}>
+          Laster statistikk...
+        </Paragraph>
+      </Card>
+    ))}
+  </>
+);
+
+const StatsCards = ({ currentYear }: { currentYear: number }) => {
+  const distanceQuery = useQuery(runningDistanceQueryOptions());
+  const activitiesQuery = useQuery(runningActivitiesQueryOptions(currentYear));
+  const codingQuery = useQuery(codingStatsQueryOptions());
+  const codingStats = codingQuery.data;
+  const runDistance = distanceQuery.data;
+  const runKm = distanceQuery.isError
     ? "Utilgjengelig"
     : typeof runDistance === "number"
       ? `${new Intl.NumberFormat("no-NO", { maximumFractionDigits: 0 }).format(runDistance / 1000)} km`
       : "...";
-  const topRuns = (runningStatsQuery.data?.activities ?? [])
+  const topRuns = (activitiesQuery.data ?? [])
     .toSorted((a, b) => b.distance - a.distance)
     .slice(0, 3)
     .map((activity, index) => {
@@ -39,8 +67,8 @@ const StatsCards = () => {
         ? `${index + 1}. ${formattedDistance} km · ${pace}`
         : `${index + 1}. ${formattedDistance} km`;
     });
-  const codingSeconds = codingStatsQuery.data?.totalSeconds;
-  const codingHours = codingStatsQuery.isError
+  const codingSeconds = codingStats?.totalSeconds;
+  const codingHours = codingQuery.isError
     ? "Utilgjengelig"
     : typeof codingSeconds === "number"
       ? `${new Intl.NumberFormat("no-NO", {
@@ -48,12 +76,12 @@ const StatsCards = () => {
         }).format(codingSeconds / 3600)} t`
       : "...";
   const codingLabel =
-    codingStatsQuery.data?.range === "last_7_days"
+    codingStats?.range === "last_7_days"
       ? "Koding (7d)"
-      : codingStatsQuery.data?.range === "all_time"
+      : codingStats?.range === "all_time"
         ? "Koding (all time)"
         : `Koding i ${currentYear}`;
-  const codingLanguages = codingStatsQuery.data?.languages ?? [];
+  const codingLanguages = codingStats?.languages ?? [];
 
   const stats = [
     {
@@ -84,7 +112,11 @@ const StatsCards = () => {
       value: runKm,
       label: `Strava km i ${currentYear}`,
       color: "var(--ds-color-brand2-base-default)",
-      extra: topRuns.length > 0 ? (
+      extra: activitiesQuery.isError ? (
+        <Paragraph data-size="xs" style={{ margin: 0, opacity: 0.78 }}>
+          Aktiviteter utilgjengelig
+        </Paragraph>
+      ) : topRuns.length > 0 ? (
         <div style={{ marginTop: '0.25rem' }}>
           {topRuns.map((run) => (
             <Paragraph
@@ -111,15 +143,7 @@ const StatsCards = () => {
       {stats.map((stat) => (
         <Card
           key={stat.key}
-          style={{
-            padding: '0.625rem',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
-            transition: 'all 0.2s',
-            border: '2px solid var(--ds-color-neutral-border-strong)'
-          }}
+          style={cardStyle}
         >
           <div style={{ marginBottom: '0.375rem' }}>
             <span style={{ display: 'inline-flex', color: stat.color }}>

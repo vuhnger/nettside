@@ -1,17 +1,16 @@
 import { Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
+import CurrentYear from "./CurrentYear";
 
 const Footer = () => {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="w-full py-6" style={{ backgroundColor: 'var(--ds-color-neutral-background-tinted)', borderTop: '1px solid var(--ds-color-neutral-border-subtle)' }}>
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Copyright */}
           <Paragraph data-size="sm" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>
-            © {year} Victor Uhnger
+            © <CurrentYear /> Victor Uhnger
           </Paragraph>
 
           {/* Social Links */}

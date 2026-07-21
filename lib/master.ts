@@ -3,6 +3,26 @@ export const MASTER_TIMELINE = {
   end: "2027-06-15T00:00:00+02:00",
 };
 
+export function calculateMasterProgress(
+  startDate: number,
+  endDate: number,
+  now: number,
+) {
+  const duration = endDate - startDate;
+
+  if (
+    !Number.isFinite(startDate) ||
+    !Number.isFinite(endDate) ||
+    !Number.isFinite(now) ||
+    duration <= 0
+  ) {
+    return 100;
+  }
+
+  const elapsed = Math.min(Math.max(now - startDate, 0), duration);
+  return Math.round((elapsed / duration) * 100);
+}
+
 export const MASTER_INFO = {
   title: "Masteroppgave",
   subtitle: "Programmering og systemarkitektur",

@@ -1,31 +1,9 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
 import { MASTER_TIMELINE } from "@/lib/master";
 import EdgeComputingVisualization from "@/components/master/EdgeComputingVisualization";
+import MasterProgress from "@/components/master/MasterProgress";
 
 const MasterPage = () => {
-  const startDate = useMemo(() => Date.parse(MASTER_TIMELINE.start), []);
-  const endDate = useMemo(() => Date.parse(MASTER_TIMELINE.end), []);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const updateProgress = () => {
-      const now = Date.now();
-      const rawProgress = ((now - startDate) / (endDate - startDate)) * 100;
-      const nextProgress = Number.isFinite(rawProgress)
-        ? Math.min(100, Math.max(0, rawProgress))
-        : 0;
-      setProgress(nextProgress);
-    };
-
-    updateProgress();
-    const interval = setInterval(updateProgress, 60000);
-
-    return () => clearInterval(interval);
-  }, [startDate, endDate]);
-
   return (
     <div
       className="min-h-screen pt-20 pb-12 px-4"
@@ -127,31 +105,7 @@ const MasterPage = () => {
               boxShadow: "var(--ds-shadow-md)",
             }}
           >
-            <div className="flex items-center justify-between gap-3">
-              <Heading data-size="sm" style={{ marginBottom: 0 }}>
-                Fremdrift
-              </Heading>
-              <span className="text-xs font-semibold" style={{ color: "var(--ds-color-neutral-text-default)" }}>
-                {Math.round(progress)}%
-              </span>
-            </div>
-            <div
-              className="mt-2 h-2 w-full rounded-full"
-              style={{ backgroundColor: "var(--ds-color-neutral-border-subtle)" }}
-              aria-hidden="true"
-            >
-              <div
-                className="h-full rounded-full transition-all"
-                style={{
-                  width: `${progress}%`,
-                  backgroundColor: "var(--ds-color-accent-base-default)",
-                }}
-              />
-            </div>
-            <Paragraph data-size="xs" style={{ margin: "0.5rem 0 0", color: "var(--ds-color-neutral-text-default)" }}>
-              Basert på tidslinjen fra {MASTER_TIMELINE.start.split("T")[0]} til{" "}
-              {MASTER_TIMELINE.end.split("T")[0]}.
-            </Paragraph>
+            <MasterProgress start={MASTER_TIMELINE.start} end={MASTER_TIMELINE.end} />
           </Card>
         </div>
       </div>

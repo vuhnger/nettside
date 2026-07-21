@@ -1,41 +1,54 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
-const getPreferredScheme = () =>
-  window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+type Scheme = "light" | "dark";
+
+const THEME_STORAGE_KEY = "color-scheme";
+const THEME_CHANGE_EVENT = "color-scheme-change";
+
+const getScheme = (): Scheme =>
+  document.documentElement.dataset.colorScheme === "dark" ? "dark" : "light";
+
+const applyScheme = (scheme: Scheme) => {
+  document.documentElement.dataset.colorScheme = scheme;
+  document.documentElement.style.colorScheme = scheme;
+};
+
+const subscribe = (onStoreChange: () => void) => {
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const handleSystemChange = () => {
+    let storedScheme: string | null = null;
+    try {
+      storedScheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+    } catch {}
+
+    if (storedScheme === "light" || storedScheme === "dark") return;
+
+    applyScheme(mediaQuery.matches ? "dark" : "light");
+    onStoreChange();
+  };
+
+  mediaQuery.addEventListener("change", handleSystemChange);
+  window.addEventListener(THEME_CHANGE_EVENT, onStoreChange);
+
+  return () => {
+    mediaQuery.removeEventListener("change", handleSystemChange);
+    window.removeEventListener(THEME_CHANGE_EVENT, onStoreChange);
+  };
+};
 
 const ThemeToggle = () => {
-  const [scheme, setScheme] = useState<"light" | "dark">("light");
-  const [userOverride, setUserOverride] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const update = () => {
-      if (userOverride) return;
-
-      const preferredScheme = getPreferredScheme();
-      setScheme(preferredScheme);
-      document.documentElement.setAttribute("data-color-scheme", preferredScheme);
-      document.documentElement.style.colorScheme = preferredScheme;
-    };
-
-    if (!userOverride) {
-      update();
-    }
-
-    mediaQuery.addEventListener("change", update);
-
-    return () => mediaQuery.removeEventListener("change", update);
-  }, [userOverride]);
+  const scheme = useSyncExternalStore(subscribe, getScheme, () => "light");
 
   const toggleTheme = () => {
     const nextScheme = scheme === "dark" ? "light" : "dark";
-    setScheme(nextScheme);
-    setUserOverride(true);
-    document.documentElement.setAttribute("data-color-scheme", nextScheme);
-    document.documentElement.style.colorScheme = nextScheme;
+    try {
+      window.localStorage.setItem(THEME_STORAGE_KEY, nextScheme);
+    } catch {}
+    applyScheme(nextScheme);
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   };
 
   return (

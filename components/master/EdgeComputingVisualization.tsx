@@ -52,6 +52,8 @@ const EdgeComputingVisualization = () => {
   const [impairment, setImpairment] = useState(20);
   const [syncing, setSyncing] = useState(false);
   const glowId = useId().replace(/:/g, "");
+  const cloudSwitchId = useId();
+  const impairmentSliderId = useId();
 
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [mapSize, setMapSize] = useState({ width: 0, height: 0 });
@@ -232,6 +234,7 @@ const EdgeComputingVisualization = () => {
                   <TabsTrigger
                     key={item.value}
                     value={item.value}
+                    aria-controls="edge-network-panel"
                     className="w-full cursor-pointer rounded-xl px-3 py-2 text-center text-[0.65rem] font-semibold uppercase tracking-[0.16em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ds-color-accent-border-default)] data-[state=active]:shadow-[var(--ds-shadow-md)] data-[state=active]:ring-1 data-[state=active]:ring-[color:var(--ds-color-neutral-border-subtle)] bg-[color:var(--ds-color-neutral-surface-default)] text-[color:var(--ds-color-neutral-text-subtle)] hover:bg-[color:var(--ds-color-neutral-surface-hover)] hover:text-[color:var(--ds-color-neutral-text-default)] data-[state=active]:bg-[color:var(--ds-color-neutral-surface-hover)] data-[state=active]:text-[color:var(--ds-color-neutral-text-default)] sm:flex-1 sm:min-w-0 sm:rounded-full sm:px-3 sm:py-2.5 sm:text-[0.55rem] sm:tracking-[0.12em] whitespace-normal leading-tight sm:whitespace-nowrap"
                   >
                     <span className="sm:hidden">{item.shortLabel}</span>
@@ -242,10 +245,15 @@ const EdgeComputingVisualization = () => {
             </Tabs>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div
+            id="edge-network-panel"
+            role="tabpanel"
+            aria-label="Nettverksvisualisering"
+            className="flex flex-wrap items-center gap-4"
+          >
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
-              <Switch checked={cloudOnline} onCheckedChange={setCloudOnline} />
-              Skykobling
+              <Switch id={cloudSwitchId} checked={cloudOnline} onCheckedChange={setCloudOnline} />
+              <label htmlFor={cloudSwitchId}>Skykobling</label>
               <Badge
                 variant={cloudOnline ? "outline" : "destructive"}
                 className="flex items-center gap-1.5"
@@ -284,11 +292,12 @@ const EdgeComputingVisualization = () => {
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <span className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
+          <label htmlFor={impairmentSliderId} className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-[color:var(--ds-color-neutral-text-subtle)]">
             Pakketap
-          </span>
+          </label>
           <div className="flex min-w-[160px] flex-1 items-center gap-3">
             <Slider
+              id={impairmentSliderId}
               value={impairment}
               onValueChange={setImpairment}
               min={0}

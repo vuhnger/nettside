@@ -1,22 +1,18 @@
 "use client";
 
-import { useApiStatus } from "./queries";
+import { useQuery } from "@tanstack/react-query";
+import { apiStatusQueryOptions } from "./queries";
 
-type ApiStatus = "unknown" | "up" | "down";
+type ApiStatus = "up" | "down";
 
 const statusLabels: Record<ApiStatus, string> = {
-  unknown: "Sjekker API-status",
   up: "API-et er tilgjengelig",
   down: "API-et er utilgjengelig",
 };
 
 const ApiStatusLink = () => {
-  const apiStatusQuery = useApiStatus();
-  const status: ApiStatus = apiStatusQuery.isPending
-    ? "unknown"
-    : apiStatusQuery.isError || !apiStatusQuery.data
-      ? "down"
-      : "up";
+  const statusQuery = useQuery(apiStatusQueryOptions());
+  const status: ApiStatus = statusQuery.isError || !statusQuery.data ? "down" : "up";
 
   return (
     <a
@@ -50,12 +46,10 @@ const ApiStatusLink = () => {
           backgroundColor:
             status === "up"
               ? "var(--ds-color-success-base-default)"
-              : status === "down"
-                ? "var(--ds-color-danger-base-default)"
-                : "var(--ds-color-neutral-border-default)"
+              : "var(--ds-color-danger-base-default)"
         }}
       />
-      <span className="sr-only" aria-live="polite">
+      <span className="sr-only">
         {statusLabels[status]}
       </span>
     </a>

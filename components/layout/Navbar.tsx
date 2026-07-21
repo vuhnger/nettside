@@ -1,6 +1,7 @@
 import NextLink from "next/link";
 import { House } from "lucide-react";
-import ApiStatusLink from "./ApiStatusLink";
+import { Suspense } from "react";
+import PrefetchedApiStatusLink from "./PrefetchedApiStatusLink";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
@@ -34,7 +35,9 @@ const Navbar = () => {
             <House aria-hidden="true" size={17} strokeWidth={2.25} absoluteStrokeWidth />
           </NextLink>
 
-          <ApiStatusLink />
+          <Suspense fallback={null}>
+            <PrefetchedApiStatusLink />
+          </Suspense>
         </div>
 
         <div className="flex items-center gap-2">
