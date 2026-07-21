@@ -1,0 +1,4 @@
+reviews:
+  commit_status: false
+  auto_review:
+    enabled: false
