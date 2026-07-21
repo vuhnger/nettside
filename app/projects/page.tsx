@@ -26,7 +26,7 @@ import {
   SiGit,
   SiGithub,
   SiHtml5,
-  SiCss3,
+  SiCss,
   SiDjango,
 } from "react-icons/si";
 import AutoSnakeBackground from "@/components/projects/AutoSnakeBackground";
@@ -268,7 +268,7 @@ const ProjectsPage = () => {
         stack: [
           { label: "React", icon: SiReact },
           { label: "HTML", icon: SiHtml5 },
-          { label: "CSS", icon: SiCss3 },
+          { label: "CSS", icon: SiCss },
           { label: "Node.js", icon: SiNodedotjs },
           { label: "Git", icon: SiGit },
           { label: "GitHub", icon: SiGithub },
