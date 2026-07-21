@@ -10,6 +10,15 @@ Load the `start-work` skill before starting new work. Load the
 `development-workflow` skill before doing pull request, release, CI, or
 deployment work.
 
+## Runtime and verification
+
+- Use the Node.js version in `.nvmrc` and pnpm from the `packageManager` field.
+  Do not use npm or yarn in this repository.
+- Use `pnpm install --frozen-lockfile` unless the task intentionally changes
+  dependencies. Commit `pnpm-lock.yaml` whenever dependencies change.
+- Run `pnpm run check` and `pnpm run build` after meaningful changes. Do not
+  mark a pull request ready while either command or a required CI check fails.
+
 ## Branch workflow
 
 - Start all regular work from an up-to-date `origin/development`.
@@ -45,3 +54,43 @@ as the base branch.
 - Configure polling and focus refetching only when the product needs that
   freshness. Prefer an explicit `staleTime` and Next.js fetch revalidation for
   slowly changing public data.
+
+## Next.js component boundaries
+
+- Use Server Components by default. Keep route `page.tsx` files server-side and
+  move interactive behavior into the smallest practical Client Component.
+- Do not call `fetch` directly from `app`, `components`, or `providers`. Keep
+  external I/O and Zod schemas in `services/api`, then expose server state
+  through feature-local TanStack Query options.
+- Avoid passing large static data structures through Client Component props.
+  Render static content on the server and serialize only data needed for
+  interaction.
+
+## Client state and dependencies
+
+- Use local React state for local UI behavior and TanStack Query for server
+  state. Add Context, Zustand, or another client-state library only when state
+  is genuinely shared across independent client subtrees and the existing
+  patterns cannot model it cleanly.
+- New runtime dependencies require a concrete product or maintenance benefit.
+  Prefer existing platform and repository primitives over overlapping tools.
+
+## Testing and accessibility
+
+- Add or update tests for bug fixes, parsing, time calculations, algorithms,
+  and other behavior with meaningful edge cases. Do not test implementation
+  details solely to increase coverage.
+- Use established accessible primitives and WAI-ARIA interaction patterns for
+  dialogs, tabs, and form controls. Preserve keyboard navigation, focus
+  management, accessible names, and focus restoration.
+- Stop non-essential continuous animation when `prefers-reduced-motion` is
+  enabled; slowing an infinite animation is not sufficient.
+
+## Compliance enforcement
+
+- `AGENTS.md` documents intent; required CI checks are the authoritative gate.
+  Keep enforceable architecture rules in ESLint or tests so they run through
+  `pnpm run check` locally and in CI.
+- Local Git hooks may provide faster feedback but are never a substitute for
+  CI because hooks can be skipped. Add Semgrep only when a security or
+  cross-file rule cannot be expressed reliably with the existing toolchain.
