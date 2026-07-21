@@ -7,7 +7,7 @@ const MstVisualization = dynamic(() => import("./MstVisualization"), {
   ssr: false,
 });
 
-const DESKTOP_MEDIA_QUERY = "(min-width: 768px) and (prefers-reduced-motion: no-preference)";
+const DESKTOP_MEDIA_QUERY = "(min-width: 768px)";
 
 const LazyMstVisualization = () => {
   const [shouldRender, setShouldRender] = useState(false);
