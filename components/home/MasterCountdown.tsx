@@ -12,9 +12,10 @@ const calculateProgress = (startDate: number, targetDate: number) => {
   return total > 0 ? Math.round((elapsed / total) * 100) : 100;
 };
 
+const startDate = Date.parse(MASTER_TIMELINE.start);
+const targetDate = Date.parse(MASTER_TIMELINE.end);
+
 const MasterCountdown = () => {
-  const startDate = Date.parse(MASTER_TIMELINE.start);
-  const targetDate = Date.parse(MASTER_TIMELINE.end);
   const [progress, setProgress] = useState(() => calculateProgress(startDate, targetDate));
   const [displayProgress, setDisplayProgress] = useState(0);
   const [introDone, setIntroDone] = useState(false);
