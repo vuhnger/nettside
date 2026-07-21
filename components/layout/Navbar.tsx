@@ -1,7 +1,7 @@
 import NextLink from "next/link";
 import { House } from "lucide-react";
 import { Suspense } from "react";
-import ApiStatusLink from "./ApiStatusLink";
+import PrefetchedApiStatusLink from "./PrefetchedApiStatusLink";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
@@ -36,7 +36,7 @@ const Navbar = () => {
           </NextLink>
 
           <Suspense fallback={null}>
-            <ApiStatusLink />
+            <PrefetchedApiStatusLink />
           </Suspense>
         </div>
 

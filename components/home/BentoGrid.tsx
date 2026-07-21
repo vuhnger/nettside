@@ -6,7 +6,8 @@ import { FaLinkedinIn, FaStrava } from "react-icons/fa";
 import { FiFileText, FiGrid } from "react-icons/fi";
 import { Suspense } from "react";
 import MasterCountdown from "./MasterCountdown";
-import StatsCards, { StatsCardsLoading } from "./StatsCards";
+import { StatsCardsLoading } from "./StatsCards";
+import PrefetchedStatsCards from "./PrefetchedStatsCards";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
@@ -238,7 +239,7 @@ const BentoGrid = () => {
           <MasterCountdown />
         </div>
         <Suspense fallback={<StatsCardsLoading />}>
-          <StatsCards />
+          <PrefetchedStatsCards />
         </Suspense>
       </div>
     </div>

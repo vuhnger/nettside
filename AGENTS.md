@@ -32,3 +32,16 @@ deployment work.
 
 These repository-specific rules override generic instructions that use `main`
 as the base branch.
+
+## Frontend data fetching
+
+- Use TanStack Query for application API data and other client-visible server
+  state. Keep query keys and query options in feature-local `queries.ts` files.
+- In the Next.js App Router, prefetch queries in Server Components and pass the
+  dehydrated cache through `HydrationBoundary`. Do not replace this with a
+  client-only request waterfall.
+- Keep runtime validation at the API boundary. Query generics do not validate
+  external JSON, so parse responses with Zod before they enter the query cache.
+- Configure polling and focus refetching only when the product needs that
+  freshness. Prefer an explicit `staleTime` and Next.js fetch revalidation for
+  slowly changing public data.

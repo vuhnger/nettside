@@ -1,6 +1,13 @@
+"use client";
+
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
+import { useQuery } from "@tanstack/react-query";
 import { Activity, Code2 } from "lucide-react";
-import { fetchCodingStats, fetchRunningStats } from "@/services/api/stats";
+import {
+  codingStatsQueryOptions,
+  runningActivitiesQueryOptions,
+  runningDistanceQueryOptions,
+} from "./queries";
 
 const formatPace = (distanceMeters: number, movingTimeSeconds?: number) => {
   if (typeof movingTimeSeconds !== "number" || distanceMeters <= 0) return null;
@@ -35,21 +42,18 @@ export const StatsCardsLoading = () => (
   </>
 );
 
-const StatsCards = async () => {
-  const currentYear = new Date().getFullYear();
-  const [runningResult, codingResult] = await Promise.allSettled([
-    fetchRunningStats(currentYear),
-    fetchCodingStats(),
-  ]);
-  const runningStats = runningResult.status === "fulfilled" ? runningResult.value : undefined;
-  const codingStats = codingResult.status === "fulfilled" ? codingResult.value : undefined;
-  const runDistance = runningStats?.distanceMeters;
-  const runKm = !runningStats || runningStats.distanceError
+const StatsCards = ({ currentYear }: { currentYear: number }) => {
+  const distanceQuery = useQuery(runningDistanceQueryOptions());
+  const activitiesQuery = useQuery(runningActivitiesQueryOptions(currentYear));
+  const codingQuery = useQuery(codingStatsQueryOptions());
+  const codingStats = codingQuery.data;
+  const runDistance = distanceQuery.data;
+  const runKm = distanceQuery.isError
     ? "Utilgjengelig"
     : typeof runDistance === "number"
       ? `${new Intl.NumberFormat("no-NO", { maximumFractionDigits: 0 }).format(runDistance / 1000)} km`
       : "...";
-  const topRuns = (runningStats?.activities ?? [])
+  const topRuns = (activitiesQuery.data ?? [])
     .toSorted((a, b) => b.distance - a.distance)
     .slice(0, 3)
     .map((activity, index) => {
@@ -64,7 +68,7 @@ const StatsCards = async () => {
         : `${index + 1}. ${formattedDistance} km`;
     });
   const codingSeconds = codingStats?.totalSeconds;
-  const codingHours = !codingStats
+  const codingHours = codingQuery.isError
     ? "Utilgjengelig"
     : typeof codingSeconds === "number"
       ? `${new Intl.NumberFormat("no-NO", {
@@ -108,7 +112,7 @@ const StatsCards = async () => {
       value: runKm,
       label: `Strava km i ${currentYear}`,
       color: "var(--ds-color-brand2-base-default)",
-      extra: runningStats?.activitiesError ? (
+      extra: activitiesQuery.isError ? (
         <Paragraph data-size="xs" style={{ margin: 0, opacity: 0.78 }}>
           Aktiviteter utilgjengelig
         </Paragraph>
