@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import MasterCountdown from "./MasterCountdown";
 import { StatsCardsLoading } from "./StatsCards";
 import PrefetchedStatsCards from "./PrefetchedStatsCards";
+import { Space } from "lucide-react";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
@@ -28,37 +29,12 @@ const BentoGrid = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <div>
                 <Heading data-size="lg" style={{ marginBottom: '0.125rem', color: 'var(--ds-color-accent-base-default)' }}>
-                  Victor Uhnger
+                <strong>Victor Uhnger</strong>
                 </Heading>
                 <Paragraph data-size="sm" style={{ color: 'var(--ds-color-neutral-text-default)', margin: 0 }}>
-                  Masterstudent i programmering og systemarkitektur · Universitetet i Oslo (4. år)
+                  Masterstudent i programmering og systemarkitektur - Universitetet i Oslo
                 </Paragraph>
               </div>
-
-              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                <b>Full-stack utvikler med erfaring fra Bekk.</b>
-              </Paragraph>
-              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Skriver masteroppgave om Edge Computing med UiO og Forsvarets Forskningsinstitutt.
-              </Paragraph>
-              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Jeg er interessert i distribuerte systemer og nettverk. 
-              </Paragraph>
-              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-              </Paragraph>
-              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Liker også automatisering og KI!
-              </Paragraph>
-              <Paragraph></Paragraph>
-              <Paragraph></Paragraph>
-              <Paragraph></Paragraph>
-              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Denne siden bruker <a href="https://github.com/digdir/designsystemet">Designsystemet</a> fra DigDir for universell utforming.
-              </Paragraph>
-              <Paragraph></Paragraph>
-              <Paragraph data-size="xs" style={{ color: 'var(--ds-color-neutral-text-default)', maxWidth: '36rem', margin: 0 }}>
-                Ta en titt rundt og se på hva jeg holder på med!
-              </Paragraph>
             </div>
           </Card>
         </div>
