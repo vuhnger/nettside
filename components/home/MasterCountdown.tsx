@@ -17,33 +17,34 @@ const targetDate = Date.parse(MASTER_TIMELINE.end);
 
 const MasterCountdown = () => {
   const [progress, setProgress] = useState(() => calculateProgress(startDate, targetDate));
+  const [initialProgress] = useState(progress);
   const [displayProgress, setDisplayProgress] = useState(0);
   const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
-    const update = () => setProgress(calculateProgress(startDate, targetDate));
-    update();
-    const timer = setInterval(update, 60000);
+    const timer = setInterval(
+      () => setProgress(calculateProgress(startDate, targetDate)),
+      60000,
+    );
 
     return () => clearInterval(timer);
-  }, [startDate, targetDate]);
-
-  useEffect(() => {
-    const target = Math.min(20, progress);
-    setDisplayProgress(target);
-    const timeout = setTimeout(() => {
-      setIntroDone(true);
-      setDisplayProgress(progress);
-    }, 1600);
-
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!introDone) return;
-    setDisplayProgress(progress);
-  }, [introDone, progress]);
+    const startTimeout = setTimeout(() => {
+      setDisplayProgress(Math.min(20, initialProgress));
+    }, 0);
+    const finishTimeout = setTimeout(() => {
+      setIntroDone(true);
+    }, 1600);
+
+    return () => {
+      clearTimeout(startTimeout);
+      clearTimeout(finishTimeout);
+    };
+  }, [initialProgress]);
+
+  const visibleProgress = introDone ? progress : displayProgress;
 
   return (
     <NextLink
@@ -108,14 +109,14 @@ const MasterCountdown = () => {
           <div
             style={{
               height: '100%',
-              width: `${displayProgress}%`,
+              width: `${visibleProgress}%`,
               backgroundColor: 'var(--ds-color-accent-base-default)',
               transition: `width ${introDone ? '0.3s' : '1.6s'} ease`
             }}
           />
         </div>
         <Paragraph data-size="xs" style={{ margin: 0, color: 'var(--ds-color-neutral-text-default)', minWidth: '2.25rem', textAlign: 'right' }}>
-          {Math.round(displayProgress)}%
+          {Math.round(visibleProgress)}%
         </Paragraph>
         </div>
       </Card>
