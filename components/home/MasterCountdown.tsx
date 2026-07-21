@@ -12,9 +12,10 @@ const calculateProgress = (startDate: number, targetDate: number) => {
   return total > 0 ? Math.round((elapsed / total) * 100) : 100;
 };
 
+const startDate = Date.parse(MASTER_TIMELINE.start);
+const targetDate = Date.parse(MASTER_TIMELINE.end);
+
 const MasterCountdown = () => {
-  const startDate = Date.parse(MASTER_TIMELINE.start);
-  const targetDate = Date.parse(MASTER_TIMELINE.end);
   const [progress, setProgress] = useState(() => calculateProgress(startDate, targetDate));
   const [displayProgress, setDisplayProgress] = useState(0);
   const [introDone, setIntroDone] = useState(false);
@@ -22,7 +23,7 @@ const MasterCountdown = () => {
   useEffect(() => {
     const update = () => setProgress(calculateProgress(startDate, targetDate));
     update();
-    const timer = setInterval(update, 1000);
+    const timer = setInterval(update, 60000);
 
     return () => clearInterval(timer);
   }, [startDate, targetDate]);
@@ -47,6 +48,7 @@ const MasterCountdown = () => {
   return (
     <NextLink
       href="/master"
+      prefetch={false}
       aria-label="Masteroppgave"
       className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
     >

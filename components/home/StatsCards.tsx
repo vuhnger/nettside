@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
-import { FaCode, FaRunning } from "react-icons/fa";
+import { Activity, Code2 } from "lucide-react";
 
 const StatsCards = () => {
   const currentYear = new Date().getFullYear();
@@ -146,7 +146,7 @@ const StatsCards = () => {
   const stats = [
     {
       key: "coding",
-      icon: <FaCode style={{ fontSize: '1.125rem', color: 'var(--ds-color-accent-base-default)' }} />,
+      icon: <Code2 aria-hidden="true" size={19} strokeWidth={2.25} absoluteStrokeWidth />,
       value: codingHours,
       label: codingLabel,
       color: "var(--ds-color-accent-base-default)",
@@ -168,7 +168,7 @@ const StatsCards = () => {
     },
     {
       key: "strava",
-      icon: <FaRunning style={{ fontSize: '1.125rem', color: 'var(--ds-color-brand2-base-default)' }} />,
+      icon: <Activity aria-hidden="true" size={19} strokeWidth={2.25} absoluteStrokeWidth />,
       value: runKm,
       label: `Strava km i ${currentYear}`,
       color: "var(--ds-color-brand2-base-default)",
@@ -210,7 +210,9 @@ const StatsCards = () => {
           }}
         >
           <div style={{ marginBottom: '0.375rem' }}>
-            {stat.icon}
+            <span style={{ display: 'inline-flex', color: stat.color }}>
+              {stat.icon}
+            </span>
           </div>
           <div>
             <Heading data-size="xs" style={{ color: stat.color, marginBottom: '0' }}>

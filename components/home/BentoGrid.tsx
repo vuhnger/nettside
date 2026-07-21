@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import NextLink from "next/link";
 import { Card, Heading, Paragraph, Link } from "@digdir/designsystemet-react";
@@ -86,6 +84,7 @@ const BentoGrid = () => {
                 src="/images/portrait.jpg"
                 alt="Bilde av meg"
                 fill
+                loading="eager"
                 sizes="(min-width: 768px) 220px, 180px"
                 className="object-cover"
               />
@@ -171,7 +170,7 @@ const BentoGrid = () => {
         </div>
 
         <div className="md:col-span-1">
-          <NextLink href="/cv" aria-label="CV" className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2">
+          <NextLink href="/cv" prefetch={false} aria-label="CV" className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2">
             <Card
               className="relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-sm motion-reduce:transform-none"
               style={{
@@ -203,6 +202,7 @@ const BentoGrid = () => {
         <div className="md:col-span-1">
           <NextLink
             href="/projects"
+            prefetch={false}
             aria-label="Prosjekter"
             className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
           >

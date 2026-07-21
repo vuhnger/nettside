@@ -1,5 +1,5 @@
 import BentoGrid from "@/components/home/BentoGrid";
-import MstVisualization from "@/components/home/MstVisualization";
+import LazyMstVisualization from "@/components/home/LazyMstVisualization";
 
 export default function Home() {
   return (
@@ -7,7 +7,7 @@ export default function Home() {
       className="relative isolate min-h-screen overflow-hidden pt-16 pb-6 px-4"
       style={{ backgroundColor: 'var(--ds-color-neutral-background-default)' }}
     >
-      <MstVisualization showGrid={false} />
+      <LazyMstVisualization />
       <div className="relative z-10">
         <BentoGrid />
       </div>
