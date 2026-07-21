@@ -3,53 +3,42 @@
 import { useState, useEffect } from "react";
 import NextLink from "next/link";
 import { Card, Paragraph } from "@digdir/designsystemet-react";
-import { MASTER_TIMELINE } from "@/lib/master";
-
-const calculateProgress = (startDate: number, targetDate: number) => {
-  const now = Date.now();
-  const total = targetDate - startDate;
-  const elapsed = Math.min(Math.max(now - startDate, 0), total);
-  return total > 0 ? Math.round((elapsed / total) * 100) : 100;
-};
+import { calculateMasterProgress, MASTER_TIMELINE } from "@/lib/master";
 
 const startDate = Date.parse(MASTER_TIMELINE.start);
 const targetDate = Date.parse(MASTER_TIMELINE.end);
 
 const MasterCountdown = () => {
-  const [progress, setProgress] = useState(() => calculateProgress(startDate, targetDate));
-  const [initialProgress] = useState(progress);
+  const [progress, setProgress] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
   const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(
-      () => setProgress(calculateProgress(startDate, targetDate)),
-      60000,
-    );
+    const initialProgress = calculateMasterProgress(startDate, targetDate, Date.now());
 
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
     const startTimeout = setTimeout(() => {
+      setProgress(initialProgress);
       setDisplayProgress(Math.min(20, initialProgress));
     }, 0);
     const finishTimeout = setTimeout(() => {
       setIntroDone(true);
     }, 1600);
+    const timer = setInterval(() => {
+      setProgress(calculateMasterProgress(startDate, targetDate, Date.now()));
+    }, 60000);
 
     return () => {
       clearTimeout(startTimeout);
       clearTimeout(finishTimeout);
+      clearInterval(timer);
     };
-  }, [initialProgress]);
+  }, []);
 
   const visibleProgress = introDone ? progress : displayProgress;
 
   return (
     <NextLink
       href="/master"
-      prefetch={false}
       aria-label="Masteroppgave"
       className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
     >
