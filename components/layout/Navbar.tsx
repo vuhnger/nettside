@@ -1,6 +1,7 @@
 import NextLink from "next/link";
 import { House } from "lucide-react";
 import { Suspense } from "react";
+import BackgroundVisualizationToggle from "./BackgroundVisualizationToggle";
 import PrefetchedApiStatusLink from "./PrefetchedApiStatusLink";
 import ThemeToggle from "./ThemeToggle";
 
@@ -41,6 +42,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <BackgroundVisualizationToggle />
           <ThemeToggle />
         </div>
       </div>
