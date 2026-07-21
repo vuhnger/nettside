@@ -5,7 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Analytics } from "@vercel/analytics/next";
 
-const themeScript = `document.documentElement.dataset.colorScheme=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'`;
+const themeScript = `(()=>{const s=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.colorScheme=s;document.documentElement.style.colorScheme=s})()`;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

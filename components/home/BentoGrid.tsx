@@ -4,8 +4,8 @@ import { Card, Heading, Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
 import { FiFileText, FiGrid } from "react-icons/fi";
-import LazyMasterCountdown from "./LazyMasterCountdown";
-import LazyStatsCards from "./LazyStatsCards";
+import MasterCountdown from "./MasterCountdown";
+import StatsCards from "./StatsCards";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
@@ -84,6 +84,7 @@ const BentoGrid = () => {
                 src="/images/portrait.jpg"
                 alt="Bilde av meg"
                 fill
+                loading="eager"
                 sizes="(min-width: 768px) 220px, 180px"
                 className="object-cover"
               />
@@ -234,9 +235,9 @@ const BentoGrid = () => {
           </NextLink>
         </div>
         <div className="md:col-span-2">
-          <LazyMasterCountdown />
+          <MasterCountdown />
         </div>
-        <LazyStatsCards />
+        <StatsCards />
       </div>
     </div>
   );

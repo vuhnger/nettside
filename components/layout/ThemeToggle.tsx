@@ -18,6 +18,7 @@ const ThemeToggle = () => {
       const preferredScheme = getPreferredScheme();
       setScheme(preferredScheme);
       document.documentElement.setAttribute("data-color-scheme", preferredScheme);
+      document.documentElement.style.colorScheme = preferredScheme;
     };
 
     if (!userOverride) {
@@ -34,6 +35,7 @@ const ThemeToggle = () => {
     setScheme(nextScheme);
     setUserOverride(true);
     document.documentElement.setAttribute("data-color-scheme", nextScheme);
+    document.documentElement.style.colorScheme = nextScheme;
   };
 
   return (
@@ -53,7 +55,7 @@ const ThemeToggle = () => {
         color: 'var(--ds-color-accent-base-default)',
         cursor: 'pointer',
         boxShadow: 'var(--accent-shadow)',
-        transition: 'all 0.2s'
+        transition: 'color 0.2s, background-color 0.2s, box-shadow 0.2s'
       }}
     >
       {scheme === "dark" ? (

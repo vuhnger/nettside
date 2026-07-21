@@ -1,5 +1,6 @@
 import NextLink from "next/link";
 import { House } from "lucide-react";
+import ApiStatusLink from "./ApiStatusLink";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
@@ -12,7 +13,7 @@ const Navbar = () => {
       }}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Home + API status */}
+        {/* Home + API link */}
         <div className="flex items-center gap-2">
           <NextLink
             href="/"
@@ -27,46 +28,13 @@ const Navbar = () => {
               borderRadius: '0.375rem',
               color: 'var(--ds-color-accent-base-default)',
               boxShadow: 'var(--accent-shadow)',
-              transition: 'all 0.2s'
+              transition: 'color 0.2s, background-color 0.2s, box-shadow 0.2s'
             }}
           >
             <House aria-hidden="true" size={17} strokeWidth={2.25} absoluteStrokeWidth />
           </NextLink>
 
-          <a
-            href="https://api.vuhnger.dev/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="API"
-            style={{
-              height: '2rem',
-              padding: '0 0.625rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.375rem',
-              border: '2px solid var(--ds-color-accent-base-default)',
-              borderRadius: '0.5rem',
-              backgroundColor: 'var(--ds-color-neutral-background-default)',
-              color: 'var(--ds-color-neutral-text-default)',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              letterSpacing: '0.02em',
-              textTransform: 'uppercase',
-              boxShadow: 'var(--accent-shadow)',
-              transition: 'all 0.2s'
-            }}
-          >
-            API
-            <span
-              aria-hidden="true"
-              style={{
-                width: '0.5rem',
-                height: '0.5rem',
-                borderRadius: '999px',
-                backgroundColor: 'var(--ds-color-accent-base-default)'
-              }}
-            />
-          </a>
+          <ApiStatusLink />
         </div>
 
         <div className="flex items-center gap-2">
