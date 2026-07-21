@@ -1,147 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
 import { Activity, Code2 } from "lucide-react";
+import { useCodingStats, useRunningStats } from "./queries";
+
+const formatPace = (distanceMeters: number, movingTimeSeconds?: number) => {
+  if (typeof movingTimeSeconds !== "number" || distanceMeters <= 0) return null;
+
+  const km = distanceMeters / 1000;
+  const paceSeconds = Math.round(movingTimeSeconds / km);
+  const paceMinutes = Math.floor(paceSeconds / 60);
+  const paceRemainder = String(paceSeconds % 60).padStart(2, "0");
+
+  return `${paceMinutes}:${paceRemainder}/km`;
+};
 
 const StatsCards = () => {
   const currentYear = new Date().getFullYear();
-  const [runKm, setRunKm] = useState("...");
-  const [topRuns, setTopRuns] = useState<string[]>([]);
-  const [codingHours, setCodingHours] = useState("...");
-  const [codingLabel, setCodingLabel] = useState(`Koding i ${currentYear}`);
-  const [codingLanguages, setCodingLanguages] = useState<string[]>([]);
+  const runningStatsQuery = useRunningStats(currentYear);
+  const codingStatsQuery = useCodingStats();
+  const runDistance = runningStatsQuery.data?.distanceMeters;
+  const runKm = runningStatsQuery.isError
+    ? "Utilgjengelig"
+    : typeof runDistance === "number"
+      ? `${new Intl.NumberFormat("no-NO", { maximumFractionDigits: 0 }).format(runDistance / 1000)} km`
+      : "...";
+  const topRuns = (runningStatsQuery.data?.activities ?? [])
+    .toSorted((a, b) => b.distance - a.distance)
+    .slice(0, 3)
+    .map((activity, index) => {
+      const formattedDistance = new Intl.NumberFormat("no-NO", {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      }).format(activity.distance / 1000);
+      const pace = formatPace(activity.distance, activity.movingTime);
 
-  const formatPace = (distanceMeters: number, movingTimeSeconds?: number) => {
-    if (typeof movingTimeSeconds !== "number" || distanceMeters <= 0) return null;
-
-    const km = distanceMeters / 1000;
-    const paceSeconds = Math.round(movingTimeSeconds / km);
-    const paceMinutes = Math.floor(paceSeconds / 60);
-    const paceRemainder = String(paceSeconds % 60).padStart(2, "0");
-
-    return `${paceMinutes}:${paceRemainder}/km`;
-  };
-
-  useEffect(() => {
-    let active = true;
-
-    const loadStravaStats = async () => {
-      try {
-        const [ytdResponse, activitiesResponse] = await Promise.all([
-          fetch("https://api.vuhnger.dev/strava/stats/ytd", {
-            cache: "no-store"
-          }),
-          fetch(`https://api.vuhnger.dev/strava/activities?year=${currentYear}&activity_type=Run&limit=500`, {
-            cache: "no-store"
-          })
-        ]);
-
-        if (ytdResponse.ok) {
-          const data = await ytdResponse.json();
-          const distance = data?.data?.run?.distance;
-
-          if (typeof distance === "number" && active) {
-            const km = distance / 1000;
-            const formatted = new Intl.NumberFormat("no-NO", {
-              maximumFractionDigits: 0
-            }).format(km);
-
-            setRunKm(`${formatted} km`);
-          }
-        }
-
-        if (activitiesResponse.ok) {
-          const data = await activitiesResponse.json();
-          const activities = Array.isArray(data?.data) ? data.data : [];
-
-          if (active && activities.length > 0) {
-            const topThreeRuns = activities
-              .filter((activity: { distance?: number }) => typeof activity?.distance === "number")
-              .sort(
-                (
-                  a: { distance: number },
-                  b: { distance: number }
-                ) => b.distance - a.distance
-              )
-              .slice(0, 3)
-              .map((activity: { distance: number; moving_time?: number }, index: number) => {
-                const formattedDistance = new Intl.NumberFormat("no-NO", {
-                  minimumFractionDigits: 1,
-                  maximumFractionDigits: 1
-                }).format(activity.distance / 1000);
-                const pace = formatPace(activity.distance, activity.moving_time);
-
-                return pace
-                  ? `${index + 1}. ${formattedDistance} km · ${pace}`
-                  : `${index + 1}. ${formattedDistance} km`;
-              });
-
-            setTopRuns(topThreeRuns);
-          }
-        }
-      } catch {
-        // Silent fail - keep placeholder
-      }
-    };
-
-    loadStravaStats();
-
-    return () => {
-      active = false;
-    };
-  }, [currentYear]);
-
-  useEffect(() => {
-    let active = true;
-
-    const loadWakatime = async () => {
-      try {
-        const response = await fetch("https://api.vuhnger.dev/wakatime/stats/weekly", {
-          cache: "no-store"
-        });
-
-        if (!response.ok) return;
-        const data = await response.json();
-
-        const range = data?.data?.range;
-        if (range === "last_7_days") {
-          setCodingLabel("Koding (7d)");
-        } else if (range === "all_time") {
-          setCodingLabel("Koding (all time)");
-        }
-
-        const codingCategory = data?.data?.categories?.find(
-          (category: { name?: string }) => category?.name === "Coding"
-        );
-        const totalSeconds = codingCategory?.total_seconds ?? data?.data?.total_seconds;
-
-        if (typeof totalSeconds === "number" && active) {
-          const hours = totalSeconds / 3600;
-          const formatted = new Intl.NumberFormat("no-NO", {
-            maximumFractionDigits: hours >= 10 ? 0 : 1
-          }).format(hours);
-          setCodingHours(`${formatted} t`);
-        }
-
-        const languages = Array.isArray(data?.data?.languages)
-          ? data.data.languages.slice(0, 4).map((lang: { name?: string }) => lang.name).filter(Boolean)
-          : [];
-
-        if (active && languages.length > 0) {
-          setCodingLanguages(languages as string[]);
-        }
-      } catch {
-        // Silent fail - keep placeholder
-      }
-    };
-
-    loadWakatime();
-
-    return () => {
-      active = false;
-    };
-  }, []);
+      return pace
+        ? `${index + 1}. ${formattedDistance} km · ${pace}`
+        : `${index + 1}. ${formattedDistance} km`;
+    });
+  const codingSeconds = codingStatsQuery.data?.totalSeconds;
+  const codingHours = codingStatsQuery.isError
+    ? "Utilgjengelig"
+    : typeof codingSeconds === "number"
+      ? `${new Intl.NumberFormat("no-NO", {
+          maximumFractionDigits: codingSeconds / 3600 >= 10 ? 0 : 1,
+        }).format(codingSeconds / 3600)} t`
+      : "...";
+  const codingLabel =
+    codingStatsQuery.data?.range === "last_7_days"
+      ? "Koding (7d)"
+      : codingStatsQuery.data?.range === "all_time"
+        ? "Koding (all time)"
+        : `Koding i ${currentYear}`;
+  const codingLanguages = codingStatsQuery.data?.languages ?? [];
 
   const stats = [
     {
