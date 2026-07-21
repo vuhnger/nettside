@@ -5,12 +5,13 @@ og Tailwind. Inneholder CV, prosjekter og små visualiseringer/eksperimenter.
 
 ## Kjør lokalt
 
-Krav: Node.js 24 og npm.
+Krav: Node.js 24 og pnpm 11.
 
 ```bash
 nvm use
-npm ci
-npm run dev
+corepack enable
+pnpm install --frozen-lockfile
+pnpm run dev
 ```
 
 Åpne http://localhost:3000.
@@ -18,14 +19,14 @@ npm run dev
 ## Kvalitetssjekker
 
 ```bash
-npm run lint
-npm run typecheck
-npm run check
-npm run build
+pnpm run lint
+pnpm run typecheck
+pnpm run check
+pnpm run build
 ```
 
-`npm run check` kjører lint og TypeScript-sjekk. GitHub Actions kjører
-`npm ci`, `npm run check` og `npm run build` for pull requests og pushes mot
+`pnpm run check` kjører lint og TypeScript-sjekk. GitHub Actions kjører
+`pnpm install --frozen-lockfile`, `pnpm run check` og `pnpm run build` for pull requests og pushes mot
 `development` og `main`.
 
 Prosjektet har foreløpig ingen automatiserte enhets- eller ende-til-ende-tester.
@@ -49,7 +50,7 @@ git switch development
 git pull --ff-only origin development
 git switch -c feat/min-endring
 
-# Gjør endringer og kjør npm run check og npm run build.
+# Gjør endringer og kjør pnpm run check og pnpm run build.
 
 git push -u origin feat/min-endring
 gh pr create --base development --head feat/min-endring --fill
