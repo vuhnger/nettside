@@ -4,9 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Analytics } from "@vercel/analytics/next";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
-const themeScript = `(()=>{const s=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.colorScheme=s;document.documentElement.style.colorScheme=s})()`;
+const themeScript = `(()=>{let s;try{s=localStorage.getItem('color-scheme')}catch{}if(s!=='light'&&s!=='dark')s=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.colorScheme=s;document.documentElement.style.colorScheme=s})()`;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,11 +39,9 @@ export default function RootLayout({
           color: 'var(--ds-color-neutral-text-default)'
         }}
       >
-        <ReactQueryProvider>
-          <Navbar />
-          {children}
-          <Footer />
-        </ReactQueryProvider>
+        <Navbar />
+        {children}
+        <Footer />
         <Analytics />
       </body>
     </html>

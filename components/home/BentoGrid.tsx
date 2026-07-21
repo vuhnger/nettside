@@ -4,8 +4,9 @@ import { Card, Heading, Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
 import { FiFileText, FiGrid } from "react-icons/fi";
+import { Suspense } from "react";
 import MasterCountdown from "./MasterCountdown";
-import StatsCards from "./StatsCards";
+import StatsCards, { StatsCardsLoading } from "./StatsCards";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
@@ -236,7 +237,9 @@ const BentoGrid = () => {
         <div className="md:col-span-2">
           <MasterCountdown />
         </div>
-        <StatsCards />
+        <Suspense fallback={<StatsCardsLoading />}>
+          <StatsCards />
+        </Suspense>
       </div>
     </div>
   );
