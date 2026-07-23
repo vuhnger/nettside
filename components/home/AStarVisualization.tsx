@@ -36,7 +36,7 @@ const BASE_SETTINGS: Settings = {
   gridSize: 28,
   obstacleDensity: 0.13,
   visitedStepMs: 18,
-  pathStepMs: 24,
+  pathStepMs: 24, // 1.3x visitedStepsMs er bra
   cyclePauseMs: 200,
 };
 
