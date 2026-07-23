@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
-const themeScript = `(()=>{let s;try{s=localStorage.getItem('color-scheme')}catch{}if(s!=='light'&&s!=='dark')s=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.colorScheme=s;document.documentElement.style.colorScheme=s})()`;
+const themeScript = `(()=>{let s;try{s=localStorage.getItem('color-scheme')}catch{}if(s!=='light'&&s!=='dark'){const h=new Date().getHours();s=(h>=8&&h<20)?'light':'dark'}document.documentElement.dataset.colorScheme=s;document.documentElement.style.colorScheme=s})()`;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
