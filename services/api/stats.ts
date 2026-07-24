@@ -8,6 +8,7 @@ const stravaYtdSchema = z.object({
 });
 
 const stravaActivitiesSchema = z.object({
+  total: z.number().nonnegative().optional(),
   data: z.array(
     z.object({
       distance: z.number().nonnegative(),
@@ -43,23 +44,36 @@ export async function fetchRunningDistance(signal?: AbortSignal): Promise<number
   return response.data.run?.distance;
 }
 
-// API-et avviser limit over 200 (HTTP 422). 200 dekker et helt års løpeturer.
-const ACTIVITIES_LIMIT = 200;
+// API-et avviser limit over 200 (HTTP 422), så vi henter én side av gangen.
+const ACTIVITIES_PAGE_SIZE = 200;
+// Sikkerhetsgrense mot uendelig løkke (opptil 4000 turer på ett år).
+const ACTIVITIES_MAX_PAGES = 20;
 
 export async function fetchRunningActivities(
   year: number,
   signal?: AbortSignal,
 ): Promise<RunningActivity[]> {
-  const response = await fetchApi(
-    `/strava/activities?year=${year}&activity_type=Run&limit=${ACTIVITIES_LIMIT}`,
-    stravaActivitiesSchema,
-    signal,
-  );
+  const activities: RunningActivity[] = [];
 
-  return response.data.map((activity) => ({
-    distance: activity.distance,
-    movingTime: activity.moving_time,
-  }));
+  for (let page = 0; page < ACTIVITIES_MAX_PAGES; page += 1) {
+    const offset = page * ACTIVITIES_PAGE_SIZE;
+    const response = await fetchApi(
+      `/strava/activities?year=${year}&activity_type=Run&limit=${ACTIVITIES_PAGE_SIZE}&offset=${offset}`,
+      stravaActivitiesSchema,
+      signal,
+    );
+
+    for (const activity of response.data) {
+      activities.push({ distance: activity.distance, movingTime: activity.moving_time });
+    }
+
+    // Kortere side enn sidestørrelsen (eller vi har nådd total) = siste side.
+    const reachedTotal =
+      response.total !== undefined && offset + response.data.length >= response.total;
+    if (response.data.length < ACTIVITIES_PAGE_SIZE || reachedTotal) break;
+  }
+
+  return activities;
 }
 
 export async function fetchCodingStats(signal?: AbortSignal): Promise<CodingStats> {

@@ -71,6 +71,35 @@ describe("fetchRunningActivities", () => {
     // API-et svarer 422 på limit over 200, så vi må holde oss innenfor.
     expect(Number(url.searchParams.get("limit"))).toBeLessThanOrEqual(200);
   });
+
+  it("paginates with offset and merges every page", async () => {
+    const fullPage = {
+      total: 250,
+      data: Array.from({ length: 200 }, () => ({ distance: 1000 })),
+    };
+    const lastPage = {
+      total: 250,
+      data: Array.from({ length: 50 }, () => ({ distance: 2000 })),
+    };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => fullPage })
+      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => lastPage });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchRunningActivities(2026);
+
+    expect(result).toHaveLength(250);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(String(fetchMock.mock.calls[0][0])).toContain("offset=0");
+    expect(String(fetchMock.mock.calls[1][0])).toContain("offset=200");
+  });
+
+  it("stops after a single page when the year has few activities", async () => {
+    const fetchMock = mockFetch({ total: 2, data: [{ distance: 1 }, { distance: 2 }] });
+    await fetchRunningActivities(2026);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("fetchCodingStats", () => {
