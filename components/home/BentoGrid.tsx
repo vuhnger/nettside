@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NextLink from "next/link";
+import { Link as NextLink } from "next-view-transitions";
 import { Card, Heading, Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
@@ -8,7 +8,6 @@ import { Suspense } from "react";
 import MasterCountdown from "./MasterCountdown";
 import { StatsCardsLoading } from "./StatsCards";
 import PrefetchedStatsCards from "./PrefetchedStatsCards";
-import { Space } from "lucide-react";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
@@ -161,7 +160,7 @@ const BentoGrid = () => {
               }}
             >
               <span
-                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse"
+                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse motion-reduce:animate-none"
                 style={{
                   borderColor: 'var(--ds-color-accent-base-default)',
                   opacity: 0.35
@@ -195,7 +194,7 @@ const BentoGrid = () => {
               }}
             >
               <span
-                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse"
+                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse motion-reduce:animate-none"
                 style={{
                   borderColor: 'var(--ds-color-accent-base-default)',
                   opacity: 0.35

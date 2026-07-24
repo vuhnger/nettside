@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import { Link as NextLink } from "next-view-transitions";
 import { House } from "lucide-react";
 import { Suspense } from "react";
 import BackgroundVisualizationToggle from "./BackgroundVisualizationToggle";

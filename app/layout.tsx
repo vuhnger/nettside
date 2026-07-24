@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import VisitTracker from "@/components/layout/VisitTracker";
 import { Analytics } from "@vercel/analytics/next";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
@@ -18,9 +21,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_DESCRIPTION =
+  "Masterstudent i Informatikk: programmering og nettverk ved Universitetet i Oslo. Utvikler, løper, og teknologientusiast.";
+
 export const metadata: Metadata = {
-  title: "Victor Uhnger - Portfolio",
-  description: "Masterstudent i Informatikk: programmering og nettverk ved Universitetet i Oslo. Utvikler, løper, og teknologientusiast.",
+  metadataBase: new URL("https://vuhnger.dev"),
+  title: {
+    default: "Victor Uhnger - Portfolio",
+    template: "%s · Victor Uhnger",
+  },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: "Victor Uhnger - Portfolio",
+    description: SITE_DESCRIPTION,
+    url: "/",
+    siteName: "Victor Uhnger",
+    locale: "no_NO",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Victor Uhnger - Portfolio",
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({
@@ -28,6 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ViewTransitions>
     <html lang="no" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
@@ -45,8 +69,15 @@ export default function RootLayout({
           {children}
           <Footer />
         </ReactQueryProvider>
+        <VisitTracker />
         <Analytics />
+        <Script
+          src="https://analytics.vuhnger.dev/script.js"
+          data-website-id="19a711d8-aa31-4169-b3bc-683b843cc219"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
+    </ViewTransitions>
   );
 }

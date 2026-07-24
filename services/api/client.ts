@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const API_BASE_URL = "https://api.vuhnger.dev";
+export const API_BASE_URL = "https://api.vuhnger.dev";
 const API_REVALIDATE_SECONDS = 5 * 60;
 const API_TIMEOUT_MS = 5_000;
 
