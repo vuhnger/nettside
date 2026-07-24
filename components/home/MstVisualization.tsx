@@ -2,6 +2,8 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
+import { UnionFind, kruskalMst } from "@/lib/mst";
+
 type Position = {
   x: number;
   y: number;
@@ -73,46 +75,8 @@ const MOBILE_QUERY = "(max-width: 767px)";
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
-class UnionFind {
-  private parent: number[];
-  private rank: number[];
-
-  constructor(size: number) {
-    this.parent = Array.from({ length: size }, (_, index) => index);
-    this.rank = Array(size).fill(0);
-  }
-
-  find(value: number): number {
-    if (this.parent[value] !== value) this.parent[value] = this.find(this.parent[value]);
-    return this.parent[value];
-  }
-
-  union(first: number, second: number): boolean {
-    const firstRoot = this.find(first);
-    const secondRoot = this.find(second);
-    if (firstRoot === secondRoot) return false;
-
-    if (this.rank[firstRoot] < this.rank[secondRoot]) {
-      this.parent[firstRoot] = secondRoot;
-    } else if (this.rank[firstRoot] > this.rank[secondRoot]) {
-      this.parent[secondRoot] = firstRoot;
-    } else {
-      this.parent[secondRoot] = firstRoot;
-      this.rank[firstRoot] += 1;
-    }
-    return true;
-  }
-}
-
-const createMst = (nodes: Node[], edges: Edge[]) => {
-  const unionFind = new UnionFind(nodes.length);
-  const mst: Edge[] = [];
-  for (const edge of edges) {
-    if (unionFind.union(edge.from.id, edge.to.id)) mst.push(edge);
-    if (mst.length === nodes.length - 1) break;
-  }
-  return mst;
-};
+const createMst = (nodes: Node[], edges: Edge[]) =>
+  kruskalMst(nodes.length, edges, (edge) => [edge.from.id, edge.to.id]);
 
 const createGraph = (
   width: number,
