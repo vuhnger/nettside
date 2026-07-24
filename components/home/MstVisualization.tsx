@@ -2,168 +2,21 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
-type Position = {
-  x: number;
-  y: number;
-};
+import { UnionFind } from "@/lib/mst";
 
-type Node = {
-  id: number;
-  position: Position;
-};
+import { useVisualizationEnvironment } from "./useVisualizationEnvironment";
+import { createGraph, type Edge, type Graph } from "./mst/scene";
+import {
+  BASE_SETTINGS,
+  MOBILE_SETTINGS,
+  REDUCED_SETTINGS,
+} from "./mst/settings";
 
-type Edge = {
-  from: Node;
-  to: Node;
-  weight: number;
-};
-
-type Settings = {
-  nodeCount: number;
-  nodeRadius: number;
-  gridSize: number;
-  startDelay: number;
-  stepDelay: number;
-  skipDelay: number;
-  cyclePause: number;
-};
-
-type Graph = {
-  nodes: Node[];
-  edges: Edge[];
-  completedEdges: Edge[];
-};
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
 type GraphState = {
   key: string;
   graph: Graph;
-};
-
-const BASE_SETTINGS: Settings = {
-  nodeCount: 20,
-  nodeRadius: 9,
-  gridSize: 32,
-  startDelay: 150,
-  stepDelay: 40,
-  skipDelay: 20,
-  cyclePause: 200,
-};
-
-const MOBILE_SETTINGS: Settings = {
-  nodeCount: 10,
-  nodeRadius: 8,
-  gridSize: 40,
-  startDelay: 260,
-  stepDelay: 70,
-  skipDelay: 35,
-  cyclePause: 4000,
-};
-
-const REDUCED_SETTINGS: Settings = {
-  nodeCount: 8,
-  nodeRadius: 7,
-  gridSize: 48,
-  startDelay: 0,
-  stepDelay: 0,
-  skipDelay: 0,
-  cyclePause: 0,
-};
-
-const MOBILE_QUERY = "(max-width: 767px)";
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
-
-class UnionFind {
-  private parent: number[];
-  private rank: number[];
-
-  constructor(size: number) {
-    this.parent = Array.from({ length: size }, (_, index) => index);
-    this.rank = Array(size).fill(0);
-  }
-
-  find(value: number): number {
-    if (this.parent[value] !== value) this.parent[value] = this.find(this.parent[value]);
-    return this.parent[value];
-  }
-
-  union(first: number, second: number): boolean {
-    const firstRoot = this.find(first);
-    const secondRoot = this.find(second);
-    if (firstRoot === secondRoot) return false;
-
-    if (this.rank[firstRoot] < this.rank[secondRoot]) {
-      this.parent[firstRoot] = secondRoot;
-    } else if (this.rank[firstRoot] > this.rank[secondRoot]) {
-      this.parent[secondRoot] = firstRoot;
-    } else {
-      this.parent[secondRoot] = firstRoot;
-      this.rank[firstRoot] += 1;
-    }
-    return true;
-  }
-}
-
-const createMst = (nodes: Node[], edges: Edge[]) => {
-  const unionFind = new UnionFind(nodes.length);
-  const mst: Edge[] = [];
-  for (const edge of edges) {
-    if (unionFind.union(edge.from.id, edge.to.id)) mst.push(edge);
-    if (mst.length === nodes.length - 1) break;
-  }
-  return mst;
-};
-
-const createGraph = (
-  width: number,
-  height: number,
-  settings: Settings,
-  completed: boolean
-): Graph => {
-  const centerX = width / 2;
-  const centerY = height / 2;
-  const rangeX = Math.min(width * 0.35, 420);
-  const rangeY = Math.min(height * 0.35, 320);
-  const nodes: Node[] = [];
-
-  for (let index = 0; index < settings.nodeCount; index += 1) {
-    let position: Position = { x: centerX, y: centerY };
-    let attempts = 0;
-    do {
-      position = {
-        x: centerX + (Math.random() - 0.5) * rangeX * 2,
-        y: centerY + (Math.random() - 0.5) * rangeY * 2,
-      };
-      attempts += 1;
-    } while (
-      attempts < 40 &&
-      nodes.some(
-        (node) =>
-          Math.hypot(node.position.x - position.x, node.position.y - position.y) <
-          settings.nodeRadius * 4
-      )
-    );
-    nodes.push({ id: index, position });
-  }
-
-  const edges: Edge[] = [];
-  for (let first = 0; first < nodes.length; first += 1) {
-    for (let second = first + 1; second < nodes.length; second += 1) {
-      const from = nodes[first];
-      const to = nodes[second];
-      edges.push({
-        from,
-        to,
-        weight: Math.hypot(
-          from.position.x - to.position.x,
-          from.position.y - to.position.y
-        ),
-      });
-    }
-  }
-  edges.sort((first, second) => first.weight - second.weight);
-
-  return { nodes, edges, completedEdges: completed ? createMst(nodes, edges) : [] };
 };
 
 const setLinePosition = (line: SVGLineElement, edge: Edge) => {
@@ -183,32 +36,12 @@ const MstVisualization = ({ showGrid = true }: MstVisualizationProps) => {
   const mstGroupRef = useRef<SVGGElement | null>(null);
   const currentEdgeRef = useRef<SVGLineElement | null>(null);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
-  const [environment, setEnvironment] = useState({ mobile: false, reducedMotion: false });
+  const environment = useVisualizationEnvironment();
   const [graphState, setGraphState] = useState<GraphState>({
     key: "",
     graph: { nodes: [], edges: [], completedEdges: [] },
   });
   const [isPaused, setIsPaused] = useState(false);
-
-  useEffect(() => {
-    const mobileQuery = window.matchMedia(MOBILE_QUERY);
-    const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
-    const update = () => {
-      const next = { mobile: mobileQuery.matches, reducedMotion: reducedMotionQuery.matches };
-      setEnvironment((current) =>
-        current.mobile === next.mobile && current.reducedMotion === next.reducedMotion
-          ? current
-          : next
-      );
-    };
-    update();
-    mobileQuery.addEventListener("change", update);
-    reducedMotionQuery.addEventListener("change", update);
-    return () => {
-      mobileQuery.removeEventListener("change", update);
-      reducedMotionQuery.removeEventListener("change", update);
-    };
-  }, []);
 
   useEffect(() => {
     let animationFrame = 0;

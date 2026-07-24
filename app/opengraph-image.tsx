@@ -1,11 +1,10 @@
 import { ImageResponse } from "next/og";
 
+import { minimumSpanningTree, type Point } from "@/lib/mst";
+
 export const alt = "Victor Uhnger - Portfolio";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-
-type Point = { x: number; y: number };
-type Edge = { from: Point; to: Point };
 
 // Deterministisk PRNG slik at OG-bildet blir likt for hver build.
 const mulberry32 = (seed: number) => () => {
@@ -16,8 +15,8 @@ const mulberry32 = (seed: number) => () => {
   return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 };
 
-// Kruskal + union-find på en komplett graf, samme algoritme som MST-bakgrunnen.
-const buildMst = (): { nodes: Point[]; edges: Edge[] } => {
+// Sprer et fast antall noder utover flaten med litt avstand mellom seg.
+const buildNodes = (): Point[] => {
   const random = mulberry32(20240724);
   const nodeCount = 16;
   const margin = 70;
@@ -40,42 +39,12 @@ const buildMst = (): { nodes: Point[]; edges: Edge[] } => {
     nodes.push(point);
   }
 
-  const candidates: { a: number; b: number; weight: number }[] = [];
-  for (let a = 0; a < nodes.length; a += 1) {
-    for (let b = a + 1; b < nodes.length; b += 1) {
-      candidates.push({
-        a,
-        b,
-        weight: Math.hypot(nodes[a].x - nodes[b].x, nodes[a].y - nodes[b].y),
-      });
-    }
-  }
-  candidates.sort((first, second) => first.weight - second.weight);
-
-  const parent = nodes.map((_, index) => index);
-  const find = (value: number): number => {
-    while (parent[value] !== value) {
-      parent[value] = parent[parent[value]];
-      value = parent[value];
-    }
-    return value;
-  };
-
-  const edges: Edge[] = [];
-  for (const candidate of candidates) {
-    const rootA = find(candidate.a);
-    const rootB = find(candidate.b);
-    if (rootA === rootB) continue;
-    parent[rootA] = rootB;
-    edges.push({ from: nodes[candidate.a], to: nodes[candidate.b] });
-    if (edges.length === nodes.length - 1) break;
-  }
-
-  return { nodes, edges };
+  return nodes;
 };
 
 export default function OpenGraphImage() {
-  const { nodes, edges } = buildMst();
+  const nodes = buildNodes();
+  const edges = minimumSpanningTree(nodes);
 
   return new ImageResponse(
     (
@@ -97,10 +66,10 @@ export default function OpenGraphImage() {
           {edges.map((edge, index) => (
             <line
               key={`edge-${index}`}
-              x1={edge.from.x}
-              y1={edge.from.y}
-              x2={edge.to.x}
-              y2={edge.to.y}
+              x1={nodes[edge.a].x}
+              y1={nodes[edge.a].y}
+              x2={nodes[edge.b].x}
+              y2={nodes[edge.b].y}
               stroke="#3b82f6"
               strokeOpacity={0.5}
               strokeWidth={2.5}
