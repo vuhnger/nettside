@@ -8,7 +8,6 @@ import { Suspense } from "react";
 import MasterCountdown from "./MasterCountdown";
 import { StatsCardsLoading } from "./StatsCards";
 import PrefetchedStatsCards from "./PrefetchedStatsCards";
-import { Space } from "lucide-react";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';

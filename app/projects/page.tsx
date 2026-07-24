@@ -26,8 +26,15 @@ import {
   SiCss,
   SiDjango,
 } from "react-icons/si";
+import type { Metadata } from "next";
 import AutoSnakeBackground from "@/components/projects/AutoSnakeBackground";
 import AccessibleDialog from "@/components/ui/accessible-dialog";
+
+export const metadata: Metadata = {
+  title: "Prosjekter",
+  description:
+    "Et utvalg prosjekter jeg har jobbet med de siste årene - sikkerhet, API-er, KI-drevet infrastruktur og webutvikling.",
+};
 
 type Project = {
   id: string;

@@ -13,7 +13,14 @@ import {
 } from "react-icons/si";
 import { FaJava, FaPython, FaReact, FaHtml5 } from "react-icons/fa";
 import { FiMail, FiChevronRight } from "react-icons/fi";
+import type { Metadata } from "next";
 import AccessibleDialog from "@/components/ui/accessible-dialog";
+
+export const metadata: Metadata = {
+  title: "CV",
+  description:
+    "Utdanning, arbeidserfaring og teknologistakk - CV-en til Victor Uhnger, utvikler og masterstudent i informatikk.",
+};
 
 type Experience = {
   id: string;

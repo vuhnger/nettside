@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Heading, Paragraph } from "@digdir/designsystemet-react";
+import { Heading } from "@digdir/designsystemet-react";
 
 type MasterProgressProps = {
   start: string;
