@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
@@ -68,6 +69,11 @@ export default function RootLayout({
         </ReactQueryProvider>
         <VisitTracker />
         <Analytics />
+        <Script
+          src="https://analytics.vuhnger.dev/script.js"
+          data-website-id="19a711d8-aa31-4169-b3bc-683b843cc219"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
