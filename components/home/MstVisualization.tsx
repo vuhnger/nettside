@@ -4,7 +4,7 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 
 import { UnionFind } from "@/lib/mst";
 
-import { useVisualizationEnvironment } from "./useVisualizationEnvironment";
+import { useVisualizationEnvironment } from "@/components/visualization/useVisualizationEnvironment";
 import { createGraph, type Edge, type Graph } from "./mst/scene";
 import {
   BASE_SETTINGS,

@@ -2,7 +2,12 @@
 
 import { useEffect, useRef } from "react";
 
-import { useVisualizationEnvironment } from "./useVisualizationEnvironment";
+import {
+  observeThemeChange,
+  syncCanvasResolution,
+} from "@/components/visualization/canvas";
+import { useVisualizationEnvironment } from "@/components/visualization/useVisualizationEnvironment";
+
 import { readColors } from "./astar/colors";
 import { drawScene } from "./astar/render";
 import { createScene, type Scene } from "./astar/scene";
@@ -36,7 +41,6 @@ const AStarVisualization = () => {
     let height = 0;
     let columns = 0;
     let rows = 0;
-    let devicePixelRatio = 0;
     let colors = readColors(container);
     let animationFrame = 0;
     let cycleTimeout = 0;
@@ -122,22 +126,11 @@ const AStarVisualization = () => {
     };
 
     const resize = () => {
-      const rect = container.getBoundingClientRect();
-      const nextWidth = rect.width;
-      const nextHeight = rect.height;
-      const nextDpr = window.devicePixelRatio || 1;
-      const pixelWidth = Math.round(nextWidth * nextDpr);
-      const pixelHeight = Math.round(nextHeight * nextDpr);
-
-      if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
-        canvas.width = pixelWidth;
-        canvas.height = pixelHeight;
-      }
-      canvas.style.width = `${nextWidth}px`;
-      canvas.style.height = `${nextHeight}px`;
-      if (devicePixelRatio !== nextDpr || width !== nextWidth || height !== nextHeight) {
-        context.setTransform(nextDpr, 0, 0, nextDpr, 0, 0);
-      }
+      const { width: nextWidth, height: nextHeight } = syncCanvasResolution(
+        canvas,
+        context,
+        container,
+      );
 
       const nextColumns = Math.max(6, Math.floor(nextWidth / settings.gridSize));
       const nextRows = Math.max(6, Math.floor(nextHeight / settings.gridSize));
@@ -153,7 +146,6 @@ const AStarVisualization = () => {
 
       width = nextWidth;
       height = nextHeight;
-      devicePixelRatio = nextDpr;
       const elapsed =
         sceneChanged || cycleStartedAt === 0 ? 0 : performance.now() - cycleStartedAt;
       draw(environment.reducedMotion ? Number.POSITIVE_INFINITY : elapsed);
@@ -177,13 +169,9 @@ const AStarVisualization = () => {
       if (intersecting) start();
       else stop();
     });
-    const themeObserver = new MutationObserver(refreshColors);
+    const disconnectThemeObserver = observeThemeChange(refreshColors);
     resizeObserver.observe(container);
     intersectionObserver.observe(container);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class", "data-color-scheme", "style"],
-    });
     document.addEventListener("visibilitychange", handleVisibility);
     resize();
 
@@ -191,7 +179,7 @@ const AStarVisualization = () => {
       stop();
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
-      themeObserver.disconnect();
+      disconnectThemeObserver();
       document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [environment.reducedMotion, settings]);
