@@ -1,239 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import {
-  findAStarPath,
-  getGridPositionKey,
-  type GridPosition as Position,
-} from "@/lib/astar";
+  observeThemeChange,
+  syncCanvasResolution,
+} from "@/components/visualization/canvas";
+import { useVisualizationEnvironment } from "@/components/visualization/useVisualizationEnvironment";
 
-type Settings = {
-  gridSize: number;
-  foodCount: number;
-  tickMs: number;
-  maxLength: number;
-  pathThrottle: number;
-  pathRenderLimit: number;
-};
-
-type GameState = {
-  columns: number;
-  rows: number;
-  snake: Position[];
-  food: Position[];
-  direction: Position;
-  path: Position[];
-  tick: number;
-};
-
-type Colors = {
-  grid: string;
-  path: string;
-  body: string;
-  food: string;
-};
-
-const BASE_SETTINGS: Settings = {
-  gridSize: 28,
-  foodCount: 6,
-  tickMs: 80,
-  maxLength: 26,
-  pathThrottle: 3,
-  pathRenderLimit: 48,
-};
-
-const MOBILE_SETTINGS: Settings = {
-  gridSize: 36,
-  foodCount: 4,
-  tickMs: 120,
-  maxLength: 18,
-  pathThrottle: 4,
-  pathRenderLimit: 28,
-};
-
-const REDUCED_SETTINGS: Settings = {
-  gridSize: 44,
-  foodCount: 3,
-  tickMs: 0,
-  maxLength: 12,
-  pathThrottle: 6,
-  pathRenderLimit: 18,
-};
-
-const MOBILE_QUERY = "(max-width: 767px)";
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-const generateFood = (
-  columns: number,
-  rows: number,
-  occupiedPositions: Position[],
-  count: number
-) => {
-  const positions: Position[] = [];
-  const occupied = new Set(occupiedPositions.map(getGridPositionKey));
-  let attempts = 0;
-
-  while (positions.length < count && attempts < count * 40) {
-    const candidate = {
-      x: Math.floor(Math.random() * columns),
-      y: Math.floor(Math.random() * rows),
-    };
-    const key = getGridPositionKey(candidate);
-    if (!occupied.has(key)) {
-      positions.push(candidate);
-      occupied.add(key);
-    }
-    attempts += 1;
-  }
-
-  return positions;
-};
-
-const createGame = (columns: number, rows: number, settings: Settings): GameState => {
-  const start = {
-    x: Math.floor(columns / 2),
-    y: Math.floor(rows / 2),
-  };
-
-  return {
-    columns,
-    rows,
-    snake: [start],
-    food: generateFood(columns, rows, [start], settings.foodCount),
-    direction: { x: 1, y: 0 },
-    path: [],
-    tick: 0,
-  };
-};
-
-const findPathToClosestFood = (game: GameState) => {
-  const snakeHead = game.snake[0];
-  if (!snakeHead || game.food.length === 0) return [];
-
-  let closestFood = game.food[0];
-  let minDistance =
-    Math.abs(snakeHead.x - closestFood.x) + Math.abs(snakeHead.y - closestFood.y);
-
-  for (const item of game.food) {
-    const distance = Math.abs(snakeHead.x - item.x) + Math.abs(snakeHead.y - item.y);
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestFood = item;
-    }
-  }
-
-  return findAStarPath({
-    columns: game.columns,
-    rows: game.rows,
-    start: snakeHead,
-    goal: closestFood,
-    blocked: new Set(game.snake.slice(1).map(getGridPositionKey)),
-  }).path;
-};
-
-const advanceGame = (game: GameState, settings: Settings): GameState => {
-  const tick = game.tick + 1;
-  const path = tick % settings.pathThrottle === 0 || game.path.length === 0
-    ? findPathToClosestFood(game)
-    : game.path;
-  const head = game.snake[0];
-  const headIndex = path.findIndex((step) => step.x === head.x && step.y === head.y);
-  const nextStep = headIndex === -1 ? path[0] : path[headIndex + 1];
-  let direction = game.direction;
-
-  if (nextStep) {
-    const deltaX = nextStep.x - head.x;
-    const deltaY = nextStep.y - head.y;
-    if (Math.abs(deltaX) === 1 && deltaY === 0) {
-      direction = { x: Math.sign(deltaX), y: 0 };
-    } else if (Math.abs(deltaY) === 1 && deltaX === 0) {
-      direction = { x: 0, y: Math.sign(deltaY) };
-    }
-  }
-
-  const nextHead = { x: head.x + direction.x, y: head.y + direction.y };
-  const outOfBounds =
-    nextHead.x < 0 ||
-    nextHead.x >= game.columns ||
-    nextHead.y < 0 ||
-    nextHead.y >= game.rows;
-  const hitSelf = game.snake.some(
-    (segment) => segment.x === nextHead.x && segment.y === nextHead.y
-  );
-
-  if (outOfBounds || hitSelf) return createGame(game.columns, game.rows, settings);
-
-  const snake = [nextHead, ...game.snake];
-  const eatenIndex = game.food.findIndex(
-    (item) => item.x === nextHead.x && item.y === nextHead.y
-  );
-  let food = game.food;
-
-  if (eatenIndex === -1) {
-    snake.pop();
-  } else {
-    const remainingFood = game.food.filter((_, index) => index !== eatenIndex);
-    const replacement = generateFood(
-      game.columns,
-      game.rows,
-      [...snake, ...remainingFood],
-      1
-    );
-    food = [...remainingFood, ...replacement];
-  }
-
-  if (snake.length > settings.maxLength) snake.pop();
-
-  return {
-    ...game,
-    snake,
-    food,
-    direction,
-    path: eatenIndex === -1 ? path : [],
-    tick,
-  };
-};
-
-const readColors = (container: HTMLDivElement): Colors => {
-  const styles = getComputedStyle(container);
-  const rootStyles = getComputedStyle(document.documentElement);
-  const read = (name: string, fallback: string) =>
-    styles.getPropertyValue(name).trim() || rootStyles.getPropertyValue(fallback).trim();
-
-  return {
-    grid: read("--snake-grid", "--ds-color-neutral-border-subtle"),
-    path: read("--snake-path", "--ds-color-accent-base-default"),
-    body: read("--snake-body", "--ds-color-accent-base-default"),
-    food: read("--snake-food", "--ds-color-danger-base-default"),
-  };
-};
+import { readColors } from "./snake/colors";
+import {
+  advanceGame,
+  createGame,
+  findPathToClosestFood,
+  type SnakeGame,
+} from "./snake/game";
+import {
+  BASE_SETTINGS,
+  MOBILE_SETTINGS,
+  REDUCED_SETTINGS,
+} from "./snake/settings";
 
 const AutoSnakeBackground = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [environment, setEnvironment] = useState({ mobile: false, reducedMotion: false });
-
-  useEffect(() => {
-    const mobileQuery = window.matchMedia(MOBILE_QUERY);
-    const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
-    const update = () => {
-      const next = { mobile: mobileQuery.matches, reducedMotion: reducedMotionQuery.matches };
-      setEnvironment((current) =>
-        current.mobile === next.mobile && current.reducedMotion === next.reducedMotion
-          ? current
-          : next
-      );
-    };
-
-    update();
-    mobileQuery.addEventListener("change", update);
-    reducedMotionQuery.addEventListener("change", update);
-    return () => {
-      mobileQuery.removeEventListener("change", update);
-      reducedMotionQuery.removeEventListener("change", update);
-    };
-  }, []);
+  const environment = useVisualizationEnvironment();
 
   const settings = environment.reducedMotion
     ? REDUCED_SETTINGS
@@ -249,10 +40,9 @@ const AutoSnakeBackground = () => {
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    let game: GameState | null = null;
+    let game: SnakeGame | null = null;
     let width = 0;
     let height = 0;
-    let devicePixelRatio = 0;
     let colors = readColors(container);
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
@@ -299,31 +89,18 @@ const AutoSnakeBackground = () => {
           item.y * cellSize + cellSize / 2,
           cellSize / 3.2,
           0,
-          Math.PI * 2
+          Math.PI * 2,
         );
         context.fill();
       });
     };
 
     const resize = () => {
-      const rect = container.getBoundingClientRect();
-      const nextWidth = rect.width;
-      const nextHeight = rect.height;
-      const nextDpr = window.devicePixelRatio || 1;
-      const pixelWidth = Math.round(nextWidth * nextDpr);
-      const pixelHeight = Math.round(nextHeight * nextDpr);
-
-      if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
-        canvas.width = pixelWidth;
-        canvas.height = pixelHeight;
-      }
-      if (width !== nextWidth || height !== nextHeight) {
-        canvas.style.width = `${nextWidth}px`;
-        canvas.style.height = `${nextHeight}px`;
-      }
-      if (devicePixelRatio !== nextDpr || width !== nextWidth || height !== nextHeight) {
-        context.setTransform(nextDpr, 0, 0, nextDpr, 0, 0);
-      }
+      const { width: nextWidth, height: nextHeight } = syncCanvasResolution(
+        canvas,
+        context,
+        container,
+      );
 
       const columns = Math.max(10, Math.floor(nextWidth / settings.gridSize));
       const rows = Math.max(10, Math.floor(nextHeight / settings.gridSize));
@@ -334,7 +111,6 @@ const AutoSnakeBackground = () => {
 
       width = nextWidth;
       height = nextHeight;
-      devicePixelRatio = nextDpr;
       draw();
     };
 
@@ -360,12 +136,8 @@ const AutoSnakeBackground = () => {
     };
 
     const resizeObserver = new ResizeObserver(resize);
-    const themeObserver = new MutationObserver(refreshColors);
+    const disconnectThemeObserver = observeThemeChange(refreshColors);
     resizeObserver.observe(container);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class", "data-color-scheme", "style"],
-    });
     window.addEventListener("resize", resize);
     document.addEventListener("visibilitychange", handleVisibility);
     resize();
@@ -374,7 +146,7 @@ const AutoSnakeBackground = () => {
     return () => {
       stop();
       resizeObserver.disconnect();
-      themeObserver.disconnect();
+      disconnectThemeObserver();
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
