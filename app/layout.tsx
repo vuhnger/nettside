@@ -18,9 +18,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_DESCRIPTION =
+  "Masterstudent i Informatikk: programmering og nettverk ved Universitetet i Oslo. Utvikler, løper, og teknologientusiast.";
+
 export const metadata: Metadata = {
-  title: "Victor Uhnger - Portfolio",
-  description: "Masterstudent i Informatikk: programmering og nettverk ved Universitetet i Oslo. Utvikler, løper, og teknologientusiast.",
+  metadataBase: new URL("https://vuhnger.dev"),
+  title: {
+    default: "Victor Uhnger - Portfolio",
+    template: "%s · Victor Uhnger",
+  },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: "Victor Uhnger - Portfolio",
+    description: SITE_DESCRIPTION,
+    url: "/",
+    siteName: "Victor Uhnger",
+    locale: "no_NO",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Victor Uhnger - Portfolio",
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
 import { MASTER_TIMELINE } from "@/lib/master";
 import EdgeComputingVisualization from "@/components/master/EdgeComputingVisualization";
 import MasterProgress from "@/components/master/MasterProgress";
+
+export const metadata: Metadata = {
+  title: "Master",
+  description:
+    "Om masteroppgaven min i programmering og systemarkitektur ved Universitetet i Oslo - tema, fremdrift og tidslinje.",
+};
 
 const MasterPage = () => {
   return (
