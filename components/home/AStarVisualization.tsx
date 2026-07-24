@@ -1,174 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
+import { useVisualizationEnvironment } from "./useVisualizationEnvironment";
+import { readColors } from "./astar/colors";
+import { drawScene } from "./astar/render";
+import { createScene, type Scene } from "./astar/scene";
 import {
-  findAStarPath,
-  getGridPositionKey,
-  type AStarResult,
-  type GridPosition,
-} from "@/lib/astar";
-
-type Settings = {
-  gridSize: number;
-  obstacleDensity: number;
-  visitedStepMs: number;
-  pathStepMs: number;
-  cyclePauseMs: number;
-};
-
-type Scene = AStarResult & {
-  start: GridPosition;
-  goal: GridPosition;
-  blocked: Set<string>;
-};
-
-type Colors = {
-  grid: string;
-  explored: string;
-  wall: string;
-  path: string;
-  pathStrong: string;
-  goal: string;
-};
-
-const BASE_SETTINGS: Settings = {
-  gridSize: 28,
-  obstacleDensity: 0.13,
-  visitedStepMs: 18,
-  pathStepMs: 24, // 1.3x visitedStepsMs er bra
-  cyclePauseMs: 200,
-};
-
-const MOBILE_SETTINGS: Settings = {
-  gridSize: 36,
-  obstacleDensity: 0.1,
-  visitedStepMs: 24,
-  pathStepMs: 30,
-  cyclePauseMs: 2200,
-};
-
-const REDUCED_SETTINGS: Settings = {
-  gridSize: 44,
-  obstacleDensity: 0.08,
-  visitedStepMs: 0,
-  pathStepMs: 0,
-  cyclePauseMs: 0,
-};
-
-const MOBILE_QUERY = "(max-width: 767px)";
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-const randomInteger = (minimum: number, maximum: number) =>
-  Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-
-const getCornerPosition = (
-  corner: number,
-  columns: number,
-  rows: number,
-  rangeX: number,
-  rangeY: number,
-): GridPosition => ({
-  x:
-    corner === 0 || corner === 3
-      ? randomInteger(0, rangeX)
-      : randomInteger(columns - rangeX - 1, columns - 1),
-  y:
-    corner === 0 || corner === 1
-      ? randomInteger(0, rangeY)
-      : randomInteger(rows - rangeY - 1, rows - 1),
-});
-
-const createScene = (columns: number, rows: number, settings: Settings): Scene => {
-  const rangeX = Math.max(1, Math.floor(columns * 0.14));
-  const rangeY = Math.max(1, Math.floor(rows * 0.14));
-  const startCorner = randomInteger(0, 3);
-  const goalCorner = (startCorner + 2) % 4;
-  const start = getCornerPosition(startCorner, columns, rows, rangeX, rangeY);
-  const goal = getCornerPosition(goalCorner, columns, rows, rangeX, rangeY);
-
-  for (let attempt = 0; attempt < 24; attempt += 1) {
-    const blocked = new Set<string>();
-    for (let y = 0; y < rows; y += 1) {
-      for (let x = 0; x < columns; x += 1) {
-        const position = { x, y };
-        if (
-          getGridPositionKey(position) !== getGridPositionKey(start) &&
-          getGridPositionKey(position) !== getGridPositionKey(goal) &&
-          Math.random() < settings.obstacleDensity
-        ) {
-          blocked.add(getGridPositionKey(position));
-        }
-      }
-    }
-
-    const result = findAStarPath({ columns, rows, start, goal, blocked });
-    if (result.path.length > 0) return { ...result, start, goal, blocked };
-  }
-
-  const result = findAStarPath({ columns, rows, start, goal });
-  return { ...result, start, goal, blocked: new Set() };
-};
-
-const readColors = (container: HTMLDivElement): Colors => {
-  const styles = getComputedStyle(container);
-  const rootStyles = getComputedStyle(document.documentElement);
-  const read = (name: string, fallback: string) =>
-    styles.getPropertyValue(name).trim() || rootStyles.getPropertyValue(fallback).trim();
-
-  return {
-    grid: read("--astar-grid", "--ds-color-neutral-border-subtle"),
-    explored: read("--astar-explored", "--ds-color-accent-base-default"),
-    wall: read("--astar-wall", "--ds-color-neutral-border-default"),
-    path: read("--astar-path", "--ds-color-accent-base-default"),
-    pathStrong: read("--astar-path-strong", "--ds-color-accent-base-default"),
-    goal: read("--astar-goal", "--ds-color-danger-base-default"),
-  };
-};
-
-const fillRoundedCell = (
-  context: CanvasRenderingContext2D,
-  position: GridPosition,
-  cellSize: number,
-  inset: number,
-) => {
-  const size = cellSize - inset * 2;
-  context.beginPath();
-  context.roundRect(
-    position.x * cellSize + inset,
-    position.y * cellSize + inset,
-    size,
-    size,
-    Math.min(6, size / 4),
-  );
-  context.fill();
-};
+  BASE_SETTINGS,
+  MOBILE_SETTINGS,
+  REDUCED_SETTINGS,
+} from "./astar/settings";
 
 const AStarVisualization = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [environment, setEnvironment] = useState({ mobile: false, reducedMotion: false });
-
-  useEffect(() => {
-    const mobileQuery = window.matchMedia(MOBILE_QUERY);
-    const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
-    const update = () => {
-      const next = { mobile: mobileQuery.matches, reducedMotion: reducedMotionQuery.matches };
-      setEnvironment((current) =>
-        current.mobile === next.mobile && current.reducedMotion === next.reducedMotion
-          ? current
-          : next,
-      );
-    };
-
-    update();
-    mobileQuery.addEventListener("change", update);
-    reducedMotionQuery.addEventListener("change", update);
-    return () => {
-      mobileQuery.removeEventListener("change", update);
-      reducedMotionQuery.removeEventListener("change", update);
-    };
-  }, []);
+  const environment = useVisualizationEnvironment();
 
   const settings = environment.reducedMotion
     ? REDUCED_SETTINGS
@@ -199,77 +46,17 @@ const AStarVisualization = () => {
     let visible = !document.hidden;
     let intersecting = true;
 
-    const drawMarker = (position: GridPosition, color: string) => {
-      context.fillStyle = color;
-      context.beginPath();
-      context.arc(
-        position.x * settings.gridSize + settings.gridSize / 2,
-        position.y * settings.gridSize + settings.gridSize / 2,
-        settings.gridSize / 3.4,
-        0,
-        Math.PI * 2,
-      );
-      context.fill();
-    };
-
     const draw = (elapsed: number) => {
       if (!scene || width === 0 || height === 0) return;
-      context.clearRect(0, 0, width, height);
-
-      context.strokeStyle = colors.grid;
-      context.lineWidth = 1;
-      context.beginPath();
-      for (let x = 0; x <= width; x += settings.gridSize) {
-        context.moveTo(x, 0);
-        context.lineTo(x, height);
-      }
-      for (let y = 0; y <= height; y += settings.gridSize) {
-        context.moveTo(0, y);
-        context.lineTo(width, y);
-      }
-      context.stroke();
-
-      context.fillStyle = colors.wall;
-      scene.blocked.forEach((key) => {
-        const [x, y] = key.split(",").map(Number);
-        fillRoundedCell(context, { x, y }, settings.gridSize, 5);
+      drawScene(context, {
+        scene,
+        width,
+        height,
+        settings,
+        colors,
+        reducedMotion: environment.reducedMotion,
+        elapsed,
       });
-
-      const searchDuration = scene.visited.length * settings.visitedStepMs;
-      const pathElapsed = Math.max(0, elapsed - searchDuration);
-      const visitedCount = environment.reducedMotion
-        ? scene.visited.length
-        : Math.min(scene.visited.length, Math.floor(elapsed / settings.visitedStepMs));
-
-      context.fillStyle = colors.explored;
-      scene.visited.slice(0, visitedCount).forEach((position, index) => {
-        const distanceFromWave = visitedCount - index;
-        context.globalAlpha = Math.max(0.22, 0.72 - distanceFromWave * 0.018);
-        fillRoundedCell(context, position, settings.gridSize, 3);
-      });
-      context.globalAlpha = 1;
-
-      const pathCount = environment.reducedMotion
-        ? scene.path.length
-        : Math.min(scene.path.length, Math.floor(pathElapsed / settings.pathStepMs));
-      const gradient = context.createLinearGradient(
-        scene.start.x * settings.gridSize,
-        scene.start.y * settings.gridSize,
-        scene.goal.x * settings.gridSize,
-        scene.goal.y * settings.gridSize,
-      );
-      gradient.addColorStop(0, colors.path);
-      gradient.addColorStop(0.5, colors.pathStrong);
-      gradient.addColorStop(1, colors.path);
-      context.fillStyle = gradient;
-      scene.path.slice(0, pathCount).forEach((position, index) => {
-        context.globalAlpha = Math.max(0.35, 1 - (pathCount - index) * 0.025);
-        fillRoundedCell(context, position, settings.gridSize, 2);
-      });
-      context.globalAlpha = 1;
-
-      drawMarker(scene.start, colors.pathStrong);
-      drawMarker(scene.goal, colors.goal);
     };
 
     const renderFrame = (timestamp: number) => {
