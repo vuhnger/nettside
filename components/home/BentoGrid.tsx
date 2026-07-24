@@ -160,7 +160,7 @@ const BentoGrid = () => {
               }}
             >
               <span
-                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse"
+                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse motion-reduce:animate-none"
                 style={{
                   borderColor: 'var(--ds-color-accent-base-default)',
                   opacity: 0.35
@@ -194,7 +194,7 @@ const BentoGrid = () => {
               }}
             >
               <span
-                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse"
+                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse motion-reduce:animate-none"
                 style={{
                   borderColor: 'var(--ds-color-accent-base-default)',
                   opacity: 0.35
