@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import { Link as NextLink } from "next-view-transitions";
 import Image from "next/image";
 import { Card, Heading, Link, Paragraph } from "@digdir/designsystemet-react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
