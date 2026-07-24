@@ -16,9 +16,15 @@ const applyScheme = (scheme: Scheme) => {
   document.documentElement.style.colorScheme = scheme;
 };
 
+const isDaytime = () => {
+  const hour = new Date().getHours();
+  return hour >= 8 && hour < 20;
+};
+
+const DEFAULT_SCHEME_CHECK_INTERVAL_MS = 60_000;
+
 const subscribe = (onStoreChange: () => void) => {
-  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-  const handleSystemChange = () => {
+  const applyDefaultScheme = () => {
     let storedScheme: string | null = null;
     try {
       storedScheme = window.localStorage.getItem(THEME_STORAGE_KEY);
@@ -26,15 +32,15 @@ const subscribe = (onStoreChange: () => void) => {
 
     if (storedScheme === "light" || storedScheme === "dark") return;
 
-    applyScheme(mediaQuery.matches ? "dark" : "light");
+    applyScheme(isDaytime() ? "light" : "dark");
     onStoreChange();
   };
 
-  mediaQuery.addEventListener("change", handleSystemChange);
+  const intervalId = window.setInterval(applyDefaultScheme, DEFAULT_SCHEME_CHECK_INTERVAL_MS);
   window.addEventListener(THEME_CHANGE_EVENT, onStoreChange);
 
   return () => {
-    mediaQuery.removeEventListener("change", handleSystemChange);
+    window.clearInterval(intervalId);
     window.removeEventListener(THEME_CHANGE_EVENT, onStoreChange);
   };
 };
