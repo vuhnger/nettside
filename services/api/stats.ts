@@ -43,12 +43,15 @@ export async function fetchRunningDistance(signal?: AbortSignal): Promise<number
   return response.data.run?.distance;
 }
 
+// API-et avviser limit over 200 (HTTP 422). 200 dekker et helt års løpeturer.
+const ACTIVITIES_LIMIT = 200;
+
 export async function fetchRunningActivities(
   year: number,
   signal?: AbortSignal,
 ): Promise<RunningActivity[]> {
   const response = await fetchApi(
-    `/strava/activities?year=${year}&activity_type=Run&limit=500`,
+    `/strava/activities?year=${year}&activity_type=Run&limit=${ACTIVITIES_LIMIT}`,
     stravaActivitiesSchema,
     signal,
   );

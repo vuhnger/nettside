@@ -61,6 +61,16 @@ describe("fetchRunningActivities", () => {
     mockFetch({ data: [{ distance: -1 }] });
     await expect(fetchRunningActivities(2026)).rejects.toThrow();
   });
+
+  it("requests the given year within the API's limit cap", async () => {
+    const fetchMock = mockFetch({ data: [] });
+    await fetchRunningActivities(2026);
+
+    const url = new URL(String(fetchMock.mock.calls[0][0]));
+    expect(url.searchParams.get("year")).toBe("2026");
+    // API-et svarer 422 på limit over 200, så vi må holde oss innenfor.
+    expect(Number(url.searchParams.get("limit"))).toBeLessThanOrEqual(200);
+  });
 });
 
 describe("fetchCodingStats", () => {
