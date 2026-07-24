@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NextLink from "next/link";
+import { Link as NextLink } from "next-view-transitions";
 import { Card, Heading, Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import NextLink from "next/link";
+import { Link as NextLink } from "next-view-transitions";
 import { Card, Paragraph } from "@digdir/designsystemet-react";
 import { calculateMasterProgress, MASTER_TIMELINE } from "@/lib/master";
 

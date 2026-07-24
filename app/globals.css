@@ -223,3 +223,19 @@
     var(--ds-shadow-xl),
     inset 0 0 80px color-mix(in srgb, var(--ds-color-neutral-background-default) 60%, transparent) !important;
 }
+
+/* Sideoverganger (View Transitions): en subtil cross-fade ... */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+  animation-timing-function: ease;
+}
+
+/* ... men stopp all overgangsanimasjon ved prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
