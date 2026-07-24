@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import VisitTracker from "@/components/layout/VisitTracker";
 import { Analytics } from "@vercel/analytics/next";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </ReactQueryProvider>
+        <VisitTracker />
         <Analytics />
       </body>
     </html>
