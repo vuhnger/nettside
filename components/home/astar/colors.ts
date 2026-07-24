@@ -1,3 +1,5 @@
+import { createCssVarReader } from "@/components/visualization/canvas";
+
 export type AStarColors = {
   grid: string;
   explored: string;
@@ -12,10 +14,7 @@ export type AStarColors = {
  * designsystem-tokens på :root), slik at temaet styrer canvas-tegningen.
  */
 export const readColors = (container: HTMLDivElement): AStarColors => {
-  const styles = getComputedStyle(container);
-  const rootStyles = getComputedStyle(document.documentElement);
-  const read = (name: string, fallback: string) =>
-    styles.getPropertyValue(name).trim() || rootStyles.getPropertyValue(fallback).trim();
+  const read = createCssVarReader(container);
 
   return {
     grid: read("--astar-grid", "--ds-color-neutral-border-subtle"),
