@@ -4,7 +4,8 @@
       "id": "app/architecture/page.tsx",
       "directive": null,
       "imports": [
-        "components/architecture/ArchitectureGraph.tsx"
+        "components/architecture/ArchitectureGraph.tsx",
+        "components/architecture/GraphLegend.tsx"
       ],
       "external": [
         "next"
@@ -176,9 +177,106 @@
       "id": "components/architecture/ArchitectureGraph.tsx",
       "directive": "use client",
       "imports": [
+        "components/architecture/graph/GraphEdges.tsx",
+        "components/architecture/graph/GraphLabels.tsx",
+        "components/architecture/graph/GraphNodes.tsx",
+        "components/architecture/graph/data.ts",
         "components/architecture/graph/settings.ts",
-        "components/visualization/useVisualizationEnvironment.ts",
+        "components/architecture/graph/summary.ts",
+        "components/architecture/graph/useActiveNode.ts",
+        "components/architecture/graph/useGraphLayout.ts",
+        "components/visualization/useVisualizationEnvironment.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/colors.ts",
+      "directive": null,
+      "imports": [
+        "lib/architecture.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/data.ts",
+      "directive": null,
+      "imports": [
         "data/architecture-graph.json",
+        "lib/architecture.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/GraphEdges.tsx",
+      "directive": null,
+      "imports": [
+        "components/architecture/graph/colors.ts",
+        "components/architecture/graph/useGraphLayout.ts",
+        "lib/architecture-layout.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/GraphLabels.tsx",
+      "directive": null,
+      "imports": [
+        "components/architecture/graph/colors.ts",
+        "components/architecture/graph/useGraphLayout.ts",
+        "lib/architecture-layout.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/GraphNodes.tsx",
+      "directive": null,
+      "imports": [
+        "components/architecture/graph/colors.ts",
+        "components/architecture/graph/summary.ts",
+        "components/architecture/graph/useGraphLayout.ts",
+        "lib/architecture-layout.ts",
+        "lib/architecture.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/labels.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/settings.ts",
+      "directive": null,
+      "imports": [
+        "lib/architecture-layout.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/summary.ts",
+      "directive": null,
+      "imports": [
+        "lib/architecture.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/architecture/graph/useActiveNode.ts",
+      "directive": "use client",
+      "imports": [
+        "lib/architecture-layout.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/architecture/graph/useGraphLayout.ts",
+      "directive": "use client",
+      "imports": [
+        "components/architecture/graph/labels.ts",
+        "components/architecture/graph/settings.ts",
+        "components/architecture/graph/summary.ts",
         "lib/architecture-layout.ts",
         "lib/architecture.ts"
       ],
@@ -187,10 +285,12 @@
       ]
     },
     {
-      "id": "components/architecture/graph/settings.ts",
+      "id": "components/architecture/GraphLegend.tsx",
       "directive": null,
       "imports": [
-        "lib/architecture-layout.ts"
+        "components/architecture/graph/colors.ts",
+        "components/architecture/graph/data.ts",
+        "lib/architecture.ts"
       ],
       "external": []
     },

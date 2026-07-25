@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import ArchitectureGraph from "@/components/architecture/ArchitectureGraph";
+import GraphLegend from "@/components/architecture/GraphLegend";
 
 export const metadata: Metadata = {
   title: "Arkitektur",
@@ -15,6 +16,7 @@ export default function ArchitecturePage() {
       style={{ backgroundColor: "var(--ds-color-neutral-background-default)" }}
     >
       <div className="mx-auto max-w-6xl">
+        <GraphLegend />
         <ArchitectureGraph />
       </div>
     </div>
