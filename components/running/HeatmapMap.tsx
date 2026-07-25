@@ -1,6 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+// Låst til 5.x, ikke av latskap: 6.x utleder adressen til sin egen web worker
+// fra `import.meta.url` og gir tom streng med mindre den adressen er http(s).
+// Etter Next-bundlingen er den ikke det, så workeren starter aldri og kartet
+// blir stående tomt. Eneste vei rundt er å legge workeren fra `dist` i
+// `public/` og peke på den med `setWorkerUrl`, altså en kopiert fil som må
+// synkes manuelt ved hver oppgradering. 5.x finner workeren selv.
 import { MapLibreMap, NavigationControl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { getColorScheme, useColorScheme } from "@/lib/color-scheme";
