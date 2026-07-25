@@ -1,7 +1,7 @@
 import { Link as NextLink } from "next-view-transitions";
 import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
 import { Activity } from "lucide-react";
-import { rasterizeCells } from "@/lib/heatmap";
+import { cellsWithinBounds, dominantClusterBounds, rasterizeCells } from "@/lib/heatmap";
 import type { RunningHeatmap } from "@/services/api/heatmap";
 
 // Omtrent kvadratisk, fordi utstrekningen på turene er det. Et bredere utsnitt
@@ -29,9 +29,14 @@ const cardStyle = {
 };
 
 const HeatmapTeaser = ({ heatmap }: { heatmap: RunningHeatmap }) => {
+  // Utstrekningen fra backend dekker ferieturer i andre land, så den ville
+  // krympet Oslo til noen få piksler. Teaseren viser bare den tetteste klyngen,
+  // og cellene utenfor filtreres vekk — ellers ville de blitt klemt inn til
+  // kanten av flaten og lagt seg der som varme som ikke finnes.
+  const bounds = dominantClusterBounds(heatmap.cells) ?? heatmap.bounds;
   const points = rasterizeCells(
-    heatmap.cells,
-    heatmap.bounds,
+    cellsWithinBounds(heatmap.cells, bounds),
+    bounds,
     TEASER_WIDTH,
     TEASER_HEIGHT,
     TEASER_PIXEL_SIZE,

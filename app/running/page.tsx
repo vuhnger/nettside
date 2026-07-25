@@ -29,11 +29,6 @@ export default async function RunningPage() {
           <Heading data-size="lg" style={{ marginBottom: "0.25rem" }}>
             Løping
           </Heading>
-          <Paragraph data-size="sm" style={{ margin: 0, color: "var(--ds-color-neutral-text-default)" }}>
-            Hver tur jeg har logget på Strava, lagt oppå hverandre. Rutene er slått sammen
-            til et rutenett på serveren, så kartet viser hvor ofte jeg har løpt et sted -
-            ikke enkeltturer.
-          </Paragraph>
         </div>
 
         <HydrationBoundary state={dehydrate(queryClient)}>

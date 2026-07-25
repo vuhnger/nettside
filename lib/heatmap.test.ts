@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  cellsWithinBounds,
+  dominantClusterBounds,
   maxCellCount,
   normalizeWeight,
   projectCells,
@@ -125,6 +127,53 @@ describe("projectCells", () => {
     const projected = projectCells([cell(0, 10, 1), cell(10, 0, 40)], bounds, 100, 100);
     expect(projected[1].weight).toBe(1);
     expect(projected[0].weight).toBeLessThan(1);
+  });
+});
+
+describe("dominantClusterBounds", () => {
+  // Oslo-aktig klynge mot en ferietur i Sør-Frankrike, som er formen på ekte data.
+  const oslo = [cell(10.7, 59.92, 30), cell(10.71, 59.93, 25), cell(10.72, 59.94, 20)];
+  const nice = [cell(7.0, 43.55, 2), cell(7.01, 43.56, 1)];
+
+  it("velger klyngen med flest treff, ikke den med flest celler", () => {
+    // Ferieklyngen har flere celler, men langt færre treff.
+    const many = Array.from({ length: 20 }, (_, i) => cell(7 + i * 0.001, 43.55, 1));
+    const bounds = dominantClusterBounds([...oslo, ...many]);
+
+    expect(bounds).toEqual([10.7, 59.92, 10.72, 59.94]);
+  });
+
+  it("holder fjerne turer utenfor utstrekningen", () => {
+    const bounds = dominantClusterBounds([...oslo, ...nice]);
+
+    expect(bounds).toEqual([10.7, 59.92, 10.72, 59.94]);
+  });
+
+  it("samler naboruter i samme klynge, også på skrå", () => {
+    // Under én rutebredde fra hverandre, men på hver sin side av et rutehjørne.
+    const bounds = dominantClusterBounds([cell(10.24, 59.99, 5), cell(10.26, 60.01, 5)]);
+
+    expect(bounds).toEqual([10.24, 59.99, 10.26, 60.01]);
+  });
+
+  it("faller tilbake til null for et tomt datasett", () => {
+    expect(dominantClusterBounds([])).toBeNull();
+  });
+
+  it("takler at alt ligger i én celle", () => {
+    expect(dominantClusterBounds([cell(10.7, 59.92, 1)])).toEqual([10.7, 59.92, 10.7, 59.92]);
+  });
+});
+
+describe("cellsWithinBounds", () => {
+  it("beholder cellene innenfor og på kanten", () => {
+    const cells = [cell(0, 0, 1), cell(5, 5, 1), cell(10, 10, 1), cell(11, 5, 1)];
+
+    expect(cellsWithinBounds(cells, [0, 0, 10, 10])).toEqual([
+      cell(0, 0, 1),
+      cell(5, 5, 1),
+      cell(10, 10, 1),
+    ]);
   });
 });
 

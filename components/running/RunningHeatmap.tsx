@@ -45,10 +45,14 @@ const RunningHeatmap = () => {
     return "Kartet er klart.";
   };
 
+  // Tallene beskriver all løpingen, ikke det kartet viser: `activityCount` teller
+  // også tredemølleturer, som ikke har GPS og dermed ingen geometri å tegne. De
+  // står derfor som en egen opplysning framfor «varmekart over N turer», som
+  // ville vært en påstand om kartet som ikke holder.
   const summary = heatmap
-    ? `Varmekart over ${heatmap.activityCount} løpeturer, til sammen ${formatKm(
+    ? `Varmekart over løpeturene mine. ${heatmap.activityCount} turer og ${formatKm(
         heatmap.totalDistanceM,
-      )} kilometer.`
+      )} kilometer til sammen.`
     : null;
 
   return (
@@ -80,8 +84,9 @@ const RunningHeatmap = () => {
               data-size="sm"
               style={{ marginTop: "0.75rem", marginBottom: 0, color: "var(--ds-color-neutral-text-subtle)" }}
             >
-              {summary} Jo sterkere farge, jo flere turer har gått samme vei. Området rundt
-              hjemmet mitt er filtrert bort.
+              {summary} Kartet åpner over Oslo, der jeg løper mest — zoom ut for turer
+              lenger unna. Jo sterkere farge, jo flere turer har gått samme vei. Turer
+              uten GPS vises ikke, og området rundt hjemmet mitt er filtrert bort.
             </Paragraph>
           </figcaption>
         </figure>

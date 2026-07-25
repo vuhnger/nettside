@@ -10,7 +10,7 @@ import { useEffect, useRef } from "react";
 import { MapLibreMap, NavigationControl } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { getColorScheme, useColorScheme } from "@/lib/color-scheme";
-import { toHeatmapGeoJson } from "@/lib/heatmap";
+import { dominantClusterBounds, toHeatmapGeoJson } from "@/lib/heatmap";
 import type { RunningHeatmap } from "@/services/api/heatmap";
 import { basemapStyleUrl } from "./basemap";
 import {
@@ -52,7 +52,12 @@ const HeatmapMap = ({ heatmap, label }: HeatmapMapProps) => {
       // Utsnittet settes i konstruktøren framfor med fitBounds, slik at kartet
       // åpner ferdig plassert. Da finnes det ingen innzooming å hoppe over for
       // brukere som har slått av bevegelse.
-      bounds: heatmap.bounds,
+      //
+      // Åpner på den tetteste klyngen, ikke på hele utstrekningen: aggregatet
+      // inneholder ferieturer, og `heatmap.bounds` spenner derfor over halve
+      // Europa. Alle cellene ligger uansett i kartlaget, så turene lenger unna
+      // finnes fortsatt for den som zoomer ut.
+      bounds: dominantClusterBounds(heatmap.cells) ?? heatmap.bounds,
       fitBoundsOptions: { padding: 40, animate: false },
       attributionControl: { compact: true },
       // Uten dette spiser kartet rullingen når man scroller forbi det.
