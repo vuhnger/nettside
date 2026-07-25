@@ -1,6 +1,16 @@
 {
   "modules": [
     {
+      "id": "app/architecture/page.tsx",
+      "directive": null,
+      "imports": [
+        "components/architecture/ArchitectureGraph.tsx"
+      ],
+      "external": [
+        "next"
+      ]
+    },
+    {
       "id": "app/cv/cv.data.ts",
       "directive": null,
       "imports": [],
@@ -161,6 +171,28 @@
       "external": [
         "next"
       ]
+    },
+    {
+      "id": "components/architecture/ArchitectureGraph.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/architecture/graph/settings.ts",
+        "components/visualization/useVisualizationEnvironment.ts",
+        "data/architecture-graph.json",
+        "lib/architecture-layout.ts",
+        "lib/architecture.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/architecture/graph/settings.ts",
+      "directive": null,
+      "imports": [
+        "lib/architecture-layout.ts"
+      ],
+      "external": []
     },
     {
       "id": "components/home/astar/colors.ts",
@@ -696,6 +728,14 @@
       "external": [
         "react"
       ]
+    },
+    {
+      "id": "lib/architecture-layout.ts",
+      "directive": null,
+      "imports": [
+        "lib/architecture.ts"
+      ],
+      "external": []
     },
     {
       "id": "lib/architecture.ts",
