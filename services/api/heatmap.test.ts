@@ -59,8 +59,14 @@ describe("fetchRunningHeatmap", () => {
     await expect(fetchRunningHeatmap()).resolves.toMatchObject({ activityCount: 512 });
   });
 
-  it("accepts an empty heatmap", async () => {
-    mockFetch({ ...validBody, cells: [], activity_count: 0, total_distance_m: 0 });
+  it("accepts an empty heatmap reporting zero hits", async () => {
+    mockFetch({
+      ...validBody,
+      cells: [],
+      max_count: 0,
+      activity_count: 0,
+      total_distance_m: 0,
+    });
     await expect(fetchRunningHeatmap()).resolves.toMatchObject({ cells: [] });
   });
 

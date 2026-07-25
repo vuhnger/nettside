@@ -24,7 +24,8 @@ const runningHeatmapSchema = z.object({
     z.number().min(-90).max(90),
   ]),
   // Vi regner ut maksverdien selv fra cellene, så denne er kun informativ.
-  max_count: z.number().positive().optional(),
+  // Må tåle 0: et heatmap uten turer rapporterer null treff, ikke ingen verdi.
+  max_count: z.number().nonnegative().optional(),
   activity_count: z.number().nonnegative(),
   total_distance_m: z.number().nonnegative(),
   cells: z.array(heatmapCellSchema),
