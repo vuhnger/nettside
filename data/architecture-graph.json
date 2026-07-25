@@ -1,0 +1,818 @@
+{
+  "modules": [
+    {
+      "id": "app/cv/cv.data.ts",
+      "directive": null,
+      "imports": [],
+      "external": [
+        "react-icons",
+        "react-icons/fa",
+        "react-icons/si"
+      ]
+    },
+    {
+      "id": "app/cv/page.tsx",
+      "directive": null,
+      "imports": [
+        "app/cv/cv.data.ts",
+        "components/ui/accessible-dialog.tsx"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "next",
+        "next-view-transitions",
+        "next/image",
+        "react-icons/fa",
+        "react-icons/fi"
+      ]
+    },
+    {
+      "id": "app/error.tsx",
+      "directive": "use client",
+      "imports": [],
+      "external": [
+        "@digdir/designsystemet-react",
+        "react"
+      ]
+    },
+    {
+      "id": "app/layout.tsx",
+      "directive": null,
+      "imports": [
+        "app/globals.css",
+        "components/layout/Footer.tsx",
+        "components/layout/Navbar.tsx",
+        "components/layout/VisitTracker.tsx",
+        "providers/ReactQueryProvider.tsx"
+      ],
+      "external": [
+        "@vercel/analytics/next",
+        "next",
+        "next-view-transitions",
+        "next/font/google",
+        "next/script"
+      ]
+    },
+    {
+      "id": "app/master/page.tsx",
+      "directive": null,
+      "imports": [
+        "components/master/EdgeComputingVisualization.tsx",
+        "components/master/MasterProgress.tsx",
+        "lib/master.ts"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "next"
+      ]
+    },
+    {
+      "id": "app/mst/page.tsx",
+      "directive": null,
+      "imports": [
+        "components/home/MstVisualization.tsx"
+      ],
+      "external": [
+        "next"
+      ]
+    },
+    {
+      "id": "app/not-found.tsx",
+      "directive": null,
+      "imports": [
+        "components/home/AStarVisualization.tsx"
+      ],
+      "external": [
+        "@digdir/designsystemet-react"
+      ]
+    },
+    {
+      "id": "app/opengraph-image.tsx",
+      "directive": null,
+      "imports": [
+        "lib/mst.ts"
+      ],
+      "external": [
+        "next/og"
+      ]
+    },
+    {
+      "id": "app/page.tsx",
+      "directive": null,
+      "imports": [
+        "components/home/BentoGrid.tsx",
+        "components/home/HomeVisualization.tsx"
+      ],
+      "external": []
+    },
+    {
+      "id": "app/projects/page.tsx",
+      "directive": null,
+      "imports": [
+        "app/projects/projects.data.ts",
+        "components/projects/AutoSnakeBackground.tsx",
+        "components/ui/accessible-dialog.tsx"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "next",
+        "next/image"
+      ]
+    },
+    {
+      "id": "app/projects/projects.data.ts",
+      "directive": null,
+      "imports": [],
+      "external": [
+        "react-icons",
+        "react-icons/si"
+      ]
+    },
+    {
+      "id": "app/robots.ts",
+      "directive": null,
+      "imports": [],
+      "external": [
+        "next"
+      ]
+    },
+    {
+      "id": "app/running/page.tsx",
+      "directive": null,
+      "imports": [
+        "components/running/RunningHeatmap.tsx",
+        "components/running/queries.ts",
+        "lib/features.ts",
+        "lib/query-client.ts"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "@tanstack/react-query",
+        "next",
+        "next/navigation"
+      ]
+    },
+    {
+      "id": "app/sitemap.ts",
+      "directive": null,
+      "imports": [
+        "lib/features.ts"
+      ],
+      "external": [
+        "next"
+      ]
+    },
+    {
+      "id": "components/home/astar/colors.ts",
+      "directive": null,
+      "imports": [
+        "components/visualization/canvas.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/home/astar/render.ts",
+      "directive": null,
+      "imports": [
+        "components/home/astar/colors.ts",
+        "components/home/astar/scene.ts",
+        "components/home/astar/settings.ts",
+        "lib/astar.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/home/astar/scene.ts",
+      "directive": null,
+      "imports": [
+        "components/home/astar/settings.ts",
+        "lib/astar.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/home/astar/settings.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "components/home/AStarVisualization.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/home/astar/colors.ts",
+        "components/home/astar/render.ts",
+        "components/home/astar/scene.ts",
+        "components/home/astar/settings.ts",
+        "components/visualization/canvas.ts",
+        "components/visualization/useVisualizationEnvironment.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/home/BentoGrid.tsx",
+      "directive": null,
+      "imports": [
+        "components/home/MasterCountdown.tsx",
+        "components/home/PrefetchedStatsCards.tsx",
+        "components/home/StatsCards.tsx",
+        "components/running/PrefetchedHeatmapTeaser.tsx",
+        "lib/features.ts"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "next-view-transitions",
+        "next/image",
+        "react",
+        "react-icons/ai",
+        "react-icons/fa",
+        "react-icons/fi"
+      ]
+    },
+    {
+      "id": "components/home/HomeVisualization.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/home/AStarVisualization.tsx",
+        "components/home/MstVisualization.tsx",
+        "lib/background-visualization.ts"
+      ],
+      "external": [
+        "next/dynamic",
+        "react"
+      ]
+    },
+    {
+      "id": "components/home/MasterCountdown.tsx",
+      "directive": "use client",
+      "imports": [
+        "lib/master.ts"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "next-view-transitions",
+        "react"
+      ]
+    },
+    {
+      "id": "components/home/mst/scene.ts",
+      "directive": null,
+      "imports": [
+        "components/home/mst/settings.ts",
+        "lib/mst.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/home/mst/settings.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "components/home/MstVisualization.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/home/mst/scene.ts",
+        "components/home/mst/settings.ts",
+        "components/visualization/useVisualizationEnvironment.ts",
+        "lib/mst.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/home/PrefetchedStatsCards.tsx",
+      "directive": null,
+      "imports": [
+        "components/home/StatsCards.tsx",
+        "components/home/queries.ts",
+        "lib/query-client.ts"
+      ],
+      "external": [
+        "@tanstack/react-query"
+      ]
+    },
+    {
+      "id": "components/home/queries.ts",
+      "directive": null,
+      "imports": [
+        "services/api/stats.ts"
+      ],
+      "external": [
+        "@tanstack/react-query"
+      ]
+    },
+    {
+      "id": "components/home/StatsCards.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/home/queries.ts"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "@tanstack/react-query",
+        "lucide-react"
+      ]
+    },
+    {
+      "id": "components/layout/ApiStatusLink.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/layout/queries.ts"
+      ],
+      "external": [
+        "@tanstack/react-query"
+      ]
+    },
+    {
+      "id": "components/layout/BackgroundVisualizationToggle.tsx",
+      "directive": "use client",
+      "imports": [
+        "lib/background-visualization.ts"
+      ],
+      "external": [
+        "lucide-react",
+        "react"
+      ]
+    },
+    {
+      "id": "components/layout/CurrentYear.tsx",
+      "directive": "use client",
+      "imports": [],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/layout/Footer.tsx",
+      "directive": null,
+      "imports": [
+        "components/layout/CurrentYear.tsx"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "react-icons/ai",
+        "react-icons/fa"
+      ]
+    },
+    {
+      "id": "components/layout/Navbar.tsx",
+      "directive": null,
+      "imports": [
+        "components/layout/BackgroundVisualizationToggle.tsx",
+        "components/layout/PrefetchedApiStatusLink.tsx",
+        "components/layout/ThemeToggle.tsx"
+      ],
+      "external": [
+        "lucide-react",
+        "next-view-transitions",
+        "react"
+      ]
+    },
+    {
+      "id": "components/layout/PrefetchedApiStatusLink.tsx",
+      "directive": null,
+      "imports": [
+        "components/layout/ApiStatusLink.tsx",
+        "components/layout/queries.ts",
+        "lib/query-client.ts"
+      ],
+      "external": [
+        "@tanstack/react-query"
+      ]
+    },
+    {
+      "id": "components/layout/queries.ts",
+      "directive": null,
+      "imports": [
+        "services/api/client.ts"
+      ],
+      "external": [
+        "@tanstack/react-query",
+        "zod"
+      ]
+    },
+    {
+      "id": "components/layout/ThemeToggle.tsx",
+      "directive": "use client",
+      "imports": [
+        "lib/color-scheme.ts"
+      ],
+      "external": [
+        "lucide-react"
+      ]
+    },
+    {
+      "id": "components/layout/VisitTracker.tsx",
+      "directive": "use client",
+      "imports": [
+        "services/api/analytics.ts"
+      ],
+      "external": [
+        "next/navigation",
+        "react"
+      ]
+    },
+    {
+      "id": "components/master/edge/config.ts",
+      "directive": null,
+      "imports": [
+        "components/master/edge/types.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/master/edge/NetworkControls.tsx",
+      "directive": null,
+      "imports": [
+        "components/master/edge/config.ts",
+        "components/master/edge/types.ts",
+        "components/ui/badge.tsx",
+        "components/ui/slider.tsx",
+        "components/ui/switch.tsx",
+        "components/ui/tabs.tsx"
+      ],
+      "external": [
+        "lucide-react"
+      ]
+    },
+    {
+      "id": "components/master/edge/NetworkMap.tsx",
+      "directive": null,
+      "imports": [
+        "components/master/edge/config.ts",
+        "components/master/edge/particles.ts",
+        "components/master/edge/types.ts",
+        "lib/utils.ts"
+      ],
+      "external": [
+        "framer-motion",
+        "lucide-react",
+        "react"
+      ]
+    },
+    {
+      "id": "components/master/edge/particles.ts",
+      "directive": null,
+      "imports": [
+        "components/master/edge/config.ts",
+        "components/master/edge/types.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/master/edge/types.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "components/master/EdgeComputingVisualization.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/master/edge/NetworkControls.tsx",
+        "components/master/edge/NetworkMap.tsx",
+        "components/master/edge/config.ts",
+        "components/master/edge/particles.ts",
+        "components/master/edge/types.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/master/MasterProgress.tsx",
+      "directive": "use client",
+      "imports": [],
+      "external": [
+        "@digdir/designsystemet-react",
+        "react"
+      ]
+    },
+    {
+      "id": "components/projects/AutoSnakeBackground.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/projects/snake/colors.ts",
+        "components/projects/snake/game.ts",
+        "components/projects/snake/settings.ts",
+        "components/visualization/canvas.ts",
+        "components/visualization/useVisualizationEnvironment.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/projects/snake/colors.ts",
+      "directive": null,
+      "imports": [
+        "components/visualization/canvas.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/projects/snake/game.ts",
+      "directive": null,
+      "imports": [
+        "components/projects/snake/settings.ts",
+        "lib/astar.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/projects/snake/settings.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "components/running/basemap.ts",
+      "directive": null,
+      "imports": [
+        "lib/color-scheme.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/running/heatmap-layer.ts",
+      "directive": null,
+      "imports": [
+        "lib/color-scheme.ts"
+      ],
+      "external": [
+        "maplibre-gl"
+      ]
+    },
+    {
+      "id": "components/running/HeatmapMap.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/running/basemap.ts",
+        "components/running/heatmap-layer.ts",
+        "lib/color-scheme.ts",
+        "lib/heatmap.ts",
+        "services/api/heatmap.ts"
+      ],
+      "external": [
+        "maplibre-gl",
+        "maplibre-gl/dist/maplibre-gl.css",
+        "react"
+      ]
+    },
+    {
+      "id": "components/running/HeatmapTeaser.tsx",
+      "directive": null,
+      "imports": [
+        "lib/heatmap.ts",
+        "services/api/heatmap.ts"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "lucide-react",
+        "next-view-transitions"
+      ]
+    },
+    {
+      "id": "components/running/PrefetchedHeatmapTeaser.tsx",
+      "directive": null,
+      "imports": [
+        "components/running/HeatmapTeaser.tsx",
+        "components/running/queries.ts",
+        "lib/query-client.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "components/running/queries.ts",
+      "directive": null,
+      "imports": [
+        "services/api/heatmap.ts"
+      ],
+      "external": [
+        "@tanstack/react-query"
+      ]
+    },
+    {
+      "id": "components/running/RunningHeatmap.tsx",
+      "directive": "use client",
+      "imports": [
+        "components/running/HeatmapMap.tsx",
+        "components/running/queries.ts"
+      ],
+      "external": [
+        "@digdir/designsystemet-react",
+        "@tanstack/react-query",
+        "next/dynamic"
+      ]
+    },
+    {
+      "id": "components/ui/accessible-dialog.tsx",
+      "directive": "use client",
+      "imports": [
+        "lib/utils.ts"
+      ],
+      "external": [
+        "framer-motion",
+        "react"
+      ]
+    },
+    {
+      "id": "components/ui/badge.tsx",
+      "directive": null,
+      "imports": [
+        "lib/utils.ts"
+      ],
+      "external": [
+        "class-variance-authority",
+        "react"
+      ]
+    },
+    {
+      "id": "components/ui/button.tsx",
+      "directive": null,
+      "imports": [
+        "lib/utils.ts"
+      ],
+      "external": [
+        "class-variance-authority",
+        "react"
+      ]
+    },
+    {
+      "id": "components/ui/card.tsx",
+      "directive": null,
+      "imports": [
+        "lib/utils.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/ui/slider.tsx",
+      "directive": null,
+      "imports": [
+        "lib/utils.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/ui/switch.tsx",
+      "directive": null,
+      "imports": [
+        "lib/utils.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/ui/tabs.tsx",
+      "directive": "use client",
+      "imports": [
+        "lib/utils.ts"
+      ],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "components/visualization/canvas.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "components/visualization/useVisualizationEnvironment.ts",
+      "directive": "use client",
+      "imports": [],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "lib/architecture.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "lib/astar.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "lib/background-visualization.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "lib/color-scheme.ts",
+      "directive": "use client",
+      "imports": [],
+      "external": [
+        "react"
+      ]
+    },
+    {
+      "id": "lib/features.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "lib/heatmap.ts",
+      "directive": null,
+      "imports": [
+        "services/api/heatmap.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "lib/master.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "lib/mst.ts",
+      "directive": null,
+      "imports": [],
+      "external": []
+    },
+    {
+      "id": "lib/query-client.ts",
+      "directive": null,
+      "imports": [],
+      "external": [
+        "@tanstack/react-query"
+      ]
+    },
+    {
+      "id": "lib/utils.ts",
+      "directive": null,
+      "imports": [],
+      "external": [
+        "clsx",
+        "tailwind-merge"
+      ]
+    },
+    {
+      "id": "providers/ReactQueryProvider.tsx",
+      "directive": "use client",
+      "imports": [
+        "lib/query-client.ts"
+      ],
+      "external": [
+        "@tanstack/react-query",
+        "@tanstack/react-query-devtools",
+        "react"
+      ]
+    },
+    {
+      "id": "services/api/analytics.ts",
+      "directive": null,
+      "imports": [
+        "services/api/client.ts"
+      ],
+      "external": []
+    },
+    {
+      "id": "services/api/client.ts",
+      "directive": null,
+      "imports": [],
+      "external": [
+        "zod"
+      ]
+    },
+    {
+      "id": "services/api/heatmap.ts",
+      "directive": null,
+      "imports": [
+        "services/api/client.ts"
+      ],
+      "external": [
+        "zod"
+      ]
+    },
+    {
+      "id": "services/api/stats.ts",
+      "directive": null,
+      "imports": [
+        "services/api/client.ts"
+      ],
+      "external": [
+        "zod"
+      ]
+    }
+  ]
+}
