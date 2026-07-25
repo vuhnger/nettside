@@ -14,8 +14,12 @@ const HeatmapMap = dynamic(() => import("./HeatmapMap"), {
   loading: () => <MapPlaceholder>Laster kart...</MapPlaceholder>,
 });
 
-const formatKm = (meters: number) =>
-  new Intl.NumberFormat("no-NO", { maximumFractionDigits: 0 }).format(meters / 1000);
+/**
+ * Lerretet har ikke noe innhold en skjermleser kan lese, så uten et navn blir
+ * kartet et tomt element. Holdes kort og usynlig — det er en merkelapp, ikke en
+ * bildetekst.
+ */
+const MAP_LABEL = "Varmekart over løpeturene mine";
 
 const MapPlaceholder = ({ children }: { children: React.ReactNode }) => (
   <div
@@ -40,20 +44,10 @@ const RunningHeatmap = () => {
     if (isPending) return "Henter løpedata...";
     if (isError) return "Fikk ikke tak i løpedataen akkurat nå. Prøv igjen senere.";
     if (!heatmap) return "Ingen turer å vise ennå.";
-    // Kartet står for seg selv visuelt, så her trengs bare bekreftelsen på at
-    // ventingen er over. Tallene ligger i teksten under kartet.
+    // Kartet står for seg selv visuelt. Her trengs bare bekreftelsen på at
+    // ventingen er over, for den som ikke ser at lerretet ble fylt.
     return "Kartet er klart.";
   };
-
-  // Tallene beskriver all løpingen, ikke det kartet viser: `activityCount` teller
-  // også tredemølleturer, som ikke har GPS og dermed ingen geometri å tegne. De
-  // står derfor som en egen opplysning framfor «varmekart over N turer», som
-  // ville vært en påstand om kartet som ikke holder.
-  const summary = heatmap
-    ? `Varmekart over løpeturene mine. ${heatmap.activityCount} turer og ${formatKm(
-        heatmap.totalDistanceM,
-      )} kilometer til sammen.`
-    : null;
 
   return (
     <>
@@ -70,27 +64,7 @@ const RunningHeatmap = () => {
         )}
       </div>
 
-      {heatmap && summary && (
-        <figure style={{ margin: 0 }}>
-          {/*
-            Lerretet har ikke noe innhold en skjermleser kan lese, og
-            oppsummeringen under er uansett den informasjonen kartet formidler.
-            Den dobles derfor som tilgjengelig navn framfor at kartet blir et
-            tomt element.
-          */}
-          <HeatmapMap heatmap={heatmap} label={summary} />
-          <figcaption>
-            <Paragraph
-              data-size="sm"
-              style={{ marginTop: "0.75rem", marginBottom: 0, color: "var(--ds-color-neutral-text-subtle)" }}
-            >
-              {summary} Kartet åpner over Oslo, der jeg løper mest — zoom ut for turer
-              lenger unna. Jo sterkere farge, jo flere turer har gått samme vei. Turer
-              uten GPS vises ikke, og området rundt hjemmet mitt er filtrert bort.
-            </Paragraph>
-          </figcaption>
-        </figure>
-      )}
+      {heatmap && <HeatmapMap heatmap={heatmap} label={MAP_LABEL} />}
     </>
   );
 };

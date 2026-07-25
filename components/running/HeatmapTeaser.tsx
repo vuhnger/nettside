@@ -1,5 +1,5 @@
 import { Link as NextLink } from "next-view-transitions";
-import { Card, Heading, Paragraph } from "@digdir/designsystemet-react";
+import { Card, Heading } from "@digdir/designsystemet-react";
 import { Activity } from "lucide-react";
 import { cellsWithinBounds, dominantClusterBounds, rasterizeCells } from "@/lib/heatmap";
 import type { RunningHeatmap } from "@/services/api/heatmap";
@@ -15,9 +15,6 @@ const TEASER_HEIGHT = 260;
  * HTML-en uten å endre hva man ser.
  */
 const TEASER_PIXEL_SIZE = 3;
-
-const formatKm = (meters: number) =>
-  new Intl.NumberFormat("no-NO", { maximumFractionDigits: 0 }).format(meters / 1000);
 
 const cardStyle = {
   padding: "0.75rem",
@@ -45,7 +42,9 @@ const HeatmapTeaser = ({ heatmap }: { heatmap: RunningHeatmap }) => {
   return (
     <NextLink
       href="/running"
-      aria-label="Løping"
+      // Ingen aria-label: overskriften i kortet er allerede lenkens navn, og en
+      // egen merkelapp med annen ordlyd ville gjort at det man hører ikke er det
+      // man ser.
       className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
     >
       <Card
@@ -66,26 +65,17 @@ const HeatmapTeaser = ({ heatmap }: { heatmap: RunningHeatmap }) => {
                 data-size="xs"
                 style={{ margin: 0, color: "var(--ds-color-accent-base-default)" }}
               >
-                Løping
+                Heatmap art
               </Heading>
             </div>
-            <Paragraph
-              data-size="xs"
-              style={{ margin: "0.25rem 0 0", color: "var(--ds-color-neutral-text-default)" }}
-            >
-              {heatmap.activityCount} turer · {formatKm(heatmap.totalDistanceM)} km
-            </Paragraph>
-            <Paragraph
-              data-size="xs"
-              style={{ margin: 0, color: "var(--ds-color-neutral-text-subtle)", opacity: 0.78 }}
-            >
-              Se hele varmekartet
-            </Paragraph>
+            
+            
           </div>
 
           {/*
-            Dekorativt: alt kartet forteller står allerede i teksten ved siden av,
-            så en skjermleser skal hoppe over det framfor å få en beskrivelse til.
+            Dekorativt. Punktskyen er en stemningsskisse i kortformat, ikke et kart
+            man kan lese noe presist ut av, så en skjermleser skal hoppe over den
+            framfor å få den beskrevet.
           */}
           <svg
             className="order-1 h-28 w-auto sm:order-2 sm:h-32"

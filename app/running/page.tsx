@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { Heading, Paragraph } from "@digdir/designsystemet-react";
+import { Heading } from "@digdir/designsystemet-react";
+import { isRunningHeatmapEnabled } from "@/lib/features";
 import { createQueryClient } from "@/lib/query-client";
 import RunningHeatmap from "@/components/running/RunningHeatmap";
 import { runningHeatmapQueryOptions } from "@/components/running/queries";
@@ -8,10 +10,15 @@ import { runningHeatmapQueryOptions } from "@/components/running/queries";
 export const metadata: Metadata = {
   title: "Løping",
   description:
-    "Varmekart over alle løpeturene mine, aggregert fra Strava. Jo sterkere farge, jo flere turer har gått samme vei.",
+    "",
 };
 
 export default async function RunningPage() {
+  // Er bryteren av, skal ruten ikke finnes. `notFound` framfor en redirect eller
+  // en «kommer snart»-side: en avslått funksjon skal ikke kunne oppdages ved å
+  // gjette på adressen, og den skal ikke ligge i indeksen.
+  if (!isRunningHeatmapEnabled) notFound();
+
   const queryClient = createQueryClient(false);
 
   // Aggregatet er den tyngste responsen på siden. Hentes den på serveren, står
