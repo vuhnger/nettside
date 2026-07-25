@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { maxCellCount, normalizeWeight, projectCells, toHeatmapGeoJson } from "./heatmap";
+import {
+  maxCellCount,
+  normalizeWeight,
+  projectCells,
+  rasterizeCells,
+  toHeatmapGeoJson,
+} from "./heatmap";
 import type { HeatmapBounds, HeatmapCell } from "@/services/api/heatmap";
 
 const cell = (lon: number, lat: number, count: number): HeatmapCell => ({ lon, lat, count });
@@ -119,5 +125,57 @@ describe("projectCells", () => {
     const projected = projectCells([cell(0, 10, 1), cell(10, 0, 40)], bounds, 100, 100);
     expect(projected[1].weight).toBe(1);
     expect(projected[0].weight).toBeLessThan(1);
+  });
+});
+
+describe("rasterizeCells", () => {
+  const bounds: HeatmapBounds = [0, 0, 10, 10];
+
+  it("collapses cells that land in the same grid square", () => {
+    // Tre celler så tett at de havner innenfor samme 20px-rute.
+    const dense = [cell(0.01, 9.99, 1), cell(0.02, 9.98, 1), cell(0.03, 9.97, 1)];
+
+    expect(rasterizeCells(dense, bounds, 100, 100, 20)).toHaveLength(1);
+  });
+
+  it("keeps cells in different grid squares apart", () => {
+    const spread = [cell(0, 10, 1), cell(10, 0, 1)];
+
+    expect(rasterizeCells(spread, bounds, 100, 100, 20)).toHaveLength(2);
+  });
+
+  it("sums the hits inside a square so busy areas stay hottest", () => {
+    // Fire spredte enkeltturer mot én rute som er løpt tre ganger: summering
+    // gjør at området med mest løping vinner, ikke cellen med høyest enkelttall.
+    const cells = [
+      cell(0.01, 9.99, 1),
+      cell(0.02, 9.98, 1),
+      cell(0.03, 9.97, 1),
+      cell(0.04, 9.96, 1),
+      cell(9.99, 0.01, 3),
+    ];
+    const [busy, single] = rasterizeCells(cells, bounds, 100, 100, 20);
+
+    expect(busy.weight).toBe(1);
+    expect(single.weight).toBeLessThan(1);
+  });
+
+  it("snaps each square to its own centre", () => {
+    const [point] = rasterizeCells([cell(0.01, 9.99, 1)], bounds, 100, 100, 20);
+
+    expect(point.x).toBe(10);
+    expect(point.y).toBe(10);
+  });
+
+  it("falls back to per-cell projection when the grid is disabled", () => {
+    const cells = [cell(0.01, 9.99, 1), cell(0.02, 9.98, 1)];
+
+    expect(rasterizeCells(cells, bounds, 100, 100, 0)).toEqual(
+      projectCells(cells, bounds, 100, 100),
+    );
+  });
+
+  it("survives an empty dataset", () => {
+    expect(rasterizeCells([], bounds, 100, 100, 20)).toEqual([]);
   });
 });

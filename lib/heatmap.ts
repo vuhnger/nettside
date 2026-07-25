@@ -75,19 +75,14 @@ export type ProjectedCell = {
 };
 
 /**
- * Projiserer cellene inn i et SVG-koordinatsystem for den statiske teaseren.
- * Samme Web Mercator-projeksjon som kartbiblioteket bruker, slik at teaseren og
- * det interaktive kartet viser nøyaktig samme form.
+ * Bygger projeksjonen fra geografiske koordinater til et SVG-koordinatsystem.
+ * Samme Web Mercator som kartbiblioteket bruker, slik at teaseren og det
+ * interaktive kartet viser nøyaktig samme form.
  *
  * Målforholdet bevares og innholdet sentreres — strekker vi bildet for å fylle
  * viewBoxen blir byen visuelt feil.
  */
-export function projectCells(
-  cells: readonly HeatmapCell[],
-  bounds: HeatmapBounds,
-  width: number,
-  height: number,
-): ProjectedCell[] {
+function createProjection(bounds: HeatmapBounds, width: number, height: number) {
   const [west, south, east, north] = bounds;
   const originX = mercatorX(west);
   const originY = mercatorY(north);
@@ -103,11 +98,81 @@ export function projectCells(
 
   const offsetX = (width - spanX * safeScale) / 2;
   const offsetY = (height - spanY * safeScale) / 2;
+
+  return (lon: number, lat: number) => ({
+    x: offsetX + (mercatorX(lon) - originX) * safeScale,
+    y: offsetY + (mercatorY(lat) - originY) * safeScale,
+  });
+}
+
+/** Projiserer hver celle for seg, uten nedskalering. */
+export function projectCells(
+  cells: readonly HeatmapCell[],
+  bounds: HeatmapBounds,
+  width: number,
+  height: number,
+): ProjectedCell[] {
+  const project = createProjection(bounds, width, height);
   const maxCount = maxCellCount(cells);
 
-  return cells.map((cell) => ({
-    x: offsetX + (mercatorX(cell.lon) - originX) * safeScale,
-    y: offsetY + (mercatorY(cell.lat) - originY) * safeScale,
-    weight: normalizeWeight(cell.count, maxCount),
+  return cells.map((cell) => {
+    const { x, y } = project(cell.lon, cell.lat);
+    return { x, y, weight: normalizeWeight(cell.count, maxCount) };
+  });
+}
+
+/**
+ * Slår cellene sammen til et grovere rutenett før de tegnes.
+ *
+ * Aggregatet dekker et par mil med 15-meters celler, altså tusenvis av punkter.
+ * I den lille teaseren på forsiden er en celle uansett mindre enn én piksel, så
+ * å sende hver enkelt ville blåst opp HTML-en uten å legge til noe man kan se.
+ *
+ * Treffene summeres innenfor hver rute, ikke maksimeres: da måler ruten hvor
+ * mye løping som har skjedd i området, som er samme tetthetsbegrep kartlagets
+ * `heatmap`-modus bruker. Teaser og kart leser dermed likt.
+ */
+export function rasterizeCells(
+  cells: readonly HeatmapCell[],
+  bounds: HeatmapBounds,
+  width: number,
+  height: number,
+  pixelSize: number,
+): ProjectedCell[] {
+  if (pixelSize <= 0) return projectCells(cells, bounds, width, height);
+
+  const project = createProjection(bounds, width, height);
+  const buckets = new Map<string, { x: number; y: number; count: number }>();
+
+  for (const cell of cells) {
+    const { x, y } = project(cell.lon, cell.lat);
+    const column = Math.floor(x / pixelSize);
+    const row = Math.floor(y / pixelSize);
+    const key = `${column}:${row}`;
+    const existing = buckets.get(key);
+
+    if (existing) {
+      existing.count += cell.count;
+      continue;
+    }
+
+    // Ruten plasseres i sitt eget sentrum, ikke der den første cellen tilfeldigvis
+    // traff, slik at punktene legger seg jevnt i rutenettet.
+    buckets.set(key, {
+      x: (column + 0.5) * pixelSize,
+      y: (row + 0.5) * pixelSize,
+      count: cell.count,
+    });
+  }
+
+  let maxCount = 0;
+  for (const bucket of buckets.values()) {
+    if (bucket.count > maxCount) maxCount = bucket.count;
+  }
+
+  return Array.from(buckets.values(), (bucket) => ({
+    x: bucket.x,
+    y: bucket.y,
+    weight: normalizeWeight(bucket.count, maxCount),
   }));
 }
