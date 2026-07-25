@@ -144,10 +144,25 @@ export function rasterizeCells(
   const project = createProjection(bounds, width, height);
   const buckets = new Map<string, { x: number; y: number; count: number }>();
 
+  // Utstrekningen kommer fra cellene selv, så det finnes alltid en celle helt ute
+  // ved øst- og sørkanten. Den projiseres til presis `width`/`height`, og et rent
+  // `Math.floor` ville gitt den en egen rute utenfor tegneflaten. Ytterpunktet av
+  // varmekartet ble dermed klippet bort. Kanten hører til siste rute.
+  const lastColumn = Math.max(Math.ceil(width / pixelSize) - 1, 0);
+  const lastRow = Math.max(Math.ceil(height / pixelSize) - 1, 0);
+
+  // Ruten plasseres i sentrum av den delen som er synlig, ikke der den første
+  // cellen tilfeldigvis traff. Da legger punktene seg jevnt i rutenettet, og en
+  // siste rute som stikker utenfor flaten trekkes inn framfor å havne på kanten.
+  const center = (index: number, size: number) => {
+    const start = index * pixelSize;
+    return (start + Math.min(start + pixelSize, size)) / 2;
+  };
+
   for (const cell of cells) {
     const { x, y } = project(cell.lon, cell.lat);
-    const column = Math.floor(x / pixelSize);
-    const row = Math.floor(y / pixelSize);
+    const column = Math.min(Math.floor(x / pixelSize), lastColumn);
+    const row = Math.min(Math.floor(y / pixelSize), lastRow);
     const key = `${column}:${row}`;
     const existing = buckets.get(key);
 
@@ -156,11 +171,9 @@ export function rasterizeCells(
       continue;
     }
 
-    // Ruten plasseres i sitt eget sentrum, ikke der den første cellen tilfeldigvis
-    // traff, slik at punktene legger seg jevnt i rutenettet.
     buckets.set(key, {
-      x: (column + 0.5) * pixelSize,
-      y: (row + 0.5) * pixelSize,
+      x: center(column, width),
+      y: center(row, height),
       count: cell.count,
     });
   }

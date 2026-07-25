@@ -167,6 +167,28 @@ describe("rasterizeCells", () => {
     expect(point.y).toBe(10);
   });
 
+  it("keeps the cells at the far edge inside the drawing area", () => {
+    // Utstrekningen kommer fra cellene, så hjørnecellene projiseres til presis
+    // 100. De skal havne i siste rute, ikke i en egen rute utenfor flaten.
+    const corners = [cell(0, 10, 1), cell(10, 0, 1), cell(10, 10, 1)];
+
+    for (const point of rasterizeCells(corners, bounds, 100, 100, 20)) {
+      expect(point.x).toBeGreaterThanOrEqual(0);
+      expect(point.x).toBeLessThanOrEqual(100);
+      expect(point.y).toBeGreaterThanOrEqual(0);
+      expect(point.y).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it("pulls a partial final square in from the edge", () => {
+    // 100px deles ikke jevnt på 30, så siste rute dekker bare 90..100. Sentrum
+    // skal ligge på 95, ikke på 105 som en full rute ville gitt.
+    const [point] = rasterizeCells([cell(10, 0, 1)], bounds, 100, 100, 30);
+
+    expect(point.x).toBe(95);
+    expect(point.y).toBe(95);
+  });
+
   it("falls back to per-cell projection when the grid is disabled", () => {
     const cells = [cell(0.01, 9.99, 1), cell(0.02, 9.98, 1)];
 

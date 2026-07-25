@@ -34,49 +34,59 @@ const MapPlaceholder = ({ children }: { children: React.ReactNode }) => (
 
 const RunningHeatmap = () => {
   const { data, isPending, isError } = useQuery(runningHeatmapQueryOptions());
+  const heatmap = data && data.cells.length > 0 ? data : null;
 
-  if (isPending) {
-    return (
-      <div aria-busy="true">
-        <MapPlaceholder>Henter løpedata...</MapPlaceholder>
-      </div>
-    );
-  }
+  const statusMessage = () => {
+    if (isPending) return "Henter løpedata...";
+    if (isError) return "Fikk ikke tak i løpedataen akkurat nå. Prøv igjen senere.";
+    if (!heatmap) return "Ingen turer å vise ennå.";
+    // Kartet står for seg selv visuelt, så her trengs bare bekreftelsen på at
+    // ventingen er over. Tallene ligger i teksten under kartet.
+    return "Kartet er klart.";
+  };
 
-  if (isError) {
-    return (
-      <MapPlaceholder>
-        Fikk ikke tak i løpedataen akkurat nå. Prøv igjen senere.
-      </MapPlaceholder>
-    );
-  }
-
-  if (data.cells.length === 0) {
-    return <MapPlaceholder>Ingen turer å vise ennå.</MapPlaceholder>;
-  }
-
-  const summary = `Varmekart over ${data.activityCount} løpeturer, til sammen ${formatKm(
-    data.totalDistanceM,
-  )} kilometer.`;
+  const summary = heatmap
+    ? `Varmekart over ${heatmap.activityCount} løpeturer, til sammen ${formatKm(
+        heatmap.totalDistanceM,
+      )} kilometer.`
+    : null;
 
   return (
-    <figure style={{ margin: 0 }}>
+    <>
       {/*
-        Lerretet har ikke noe innhold en skjermleser kan lese, og oppsummeringen
-        under er uansett den informasjonen kartet formidler. Den dobles derfor
-        som tilgjengelig navn framfor at kartet blir et tomt element.
+        Live-regionen står montert i alle tilstander. Byttet fra venting til feil
+        eller ferdig kart skjer etter at siden er lest opp, og en region som først
+        dukker opp sammen med meldingen blir ikke annonsert i det hele tatt.
       */}
-      <HeatmapMap heatmap={data} label={summary} />
-      <figcaption>
-        <Paragraph
-          data-size="sm"
-          style={{ marginTop: "0.75rem", marginBottom: 0, color: "var(--ds-color-neutral-text-subtle)" }}
-        >
-          {summary} Jo sterkere farge, jo flere turer har gått samme vei. Området rundt
-          hjemmet mitt er filtrert bort.
-        </Paragraph>
-      </figcaption>
-    </figure>
+      <div role="status" aria-busy={isPending}>
+        {heatmap ? (
+          <span className="sr-only">{statusMessage()}</span>
+        ) : (
+          <MapPlaceholder>{statusMessage()}</MapPlaceholder>
+        )}
+      </div>
+
+      {heatmap && summary && (
+        <figure style={{ margin: 0 }}>
+          {/*
+            Lerretet har ikke noe innhold en skjermleser kan lese, og
+            oppsummeringen under er uansett den informasjonen kartet formidler.
+            Den dobles derfor som tilgjengelig navn framfor at kartet blir et
+            tomt element.
+          */}
+          <HeatmapMap heatmap={heatmap} label={summary} />
+          <figcaption>
+            <Paragraph
+              data-size="sm"
+              style={{ marginTop: "0.75rem", marginBottom: 0, color: "var(--ds-color-neutral-text-subtle)" }}
+            >
+              {summary} Jo sterkere farge, jo flere turer har gått samme vei. Området rundt
+              hjemmet mitt er filtrert bort.
+            </Paragraph>
+          </figcaption>
+        </figure>
+      )}
+    </>
   );
 };
 
