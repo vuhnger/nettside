@@ -38,6 +38,28 @@ jobs:
             fi
           fi
 
+  skills:
+    name: Skill security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v9
+
+      # SkillSpector har ingen git-tagger, så pinningen må være en commit.
+      # Bumpen er bevisst manuell: en skanner som oppdaterer seg selv kan endre
+      # utfallet av en gate uten at noen har sett på diffen.
+      - name: Install SkillSpector
+        run: |
+          uv tool install \
+            'git+https://github.com/NVIDIA/skillspector.git@fd25398d7aa99353d86237b9c260759351f0e644'
+          uv tool dir --bin >> "$GITHUB_PATH"
+
+      - name: Scan skills
+        run: ./scripts/scan-skills.sh
+
   quality:
     name: Quality
     runs-on: ubuntu-latest
