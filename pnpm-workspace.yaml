@@ -1,5 +1,25 @@
 allowBuilds:
   sharp: true
   unrs-resolver: true
+# Next 16.2.11 pinner postcss eksakt til 8.4.31 og sharp til ^0.34.5, og begge
+# har åpne sårbarheter. En Next-bump løser det ikke — 16.2.11 er nyeste stabile.
+# Overridene kan derfor ikke fjernes før Next selv flytter pinningene sine.
+#
+# Eksakte versjoner, ikke ^: en override finnes fordi noen tok en avgjørelse,
+# og da skal bumpen også være en avgjørelse. Nyeste patch er dessuten ofte for
+# fersk for release-age-policyen, og å legge den i unntakslista for å komme
+# rundt det ville vært å skru av gjerdet istedenfor å gå gjennom porten.
+overrides:
+  # Tre separate advisories med ulike rekker, ikke én:
+  #   <= 8.5.17  path traversal via source-map-autolasting  (fikset i 8.5.18)
+  #   <= 8.5.11  vilkårlig fillesing og informasjonslekkasje (fikset i 8.5.12)
+  #   <  8.5.10  XSS gjennom uescapet </style> i stringify   (fikset i 8.5.10)
+  # 8.5.20 dekker alle tre, og ligger allerede i treet via @tailwindcss/postcss
+  # og vite — så overriden introduserer ingen ny kode, den samler to kopier
+  # til én.
+  postcss: 8.5.20
+  # < 0.35.0 arver libvips-sårbarheter. 0.34 -> 0.35 er et breaking-hopp i
+  # semver for 0.x, så bildeoptimaliseringen må verifiseres, ikke antas.
+  sharp: 0.35.3
 minimumReleaseAgeExclude:
   - react@19.2.8
