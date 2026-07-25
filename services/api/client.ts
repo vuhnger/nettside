@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-export const API_BASE_URL = "https://api.vuhnger.dev";
+/**
+ * Kan peke et annet sted for å kjøre mot et lokalt API eller et mock-endepunkt,
+ * uten at koden endres. Uten variabelen går alt mot produksjon som før.
+ */
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.vuhnger.dev";
 const API_REVALIDATE_SECONDS = 5 * 60;
 const API_TIMEOUT_MS = 5_000;
 

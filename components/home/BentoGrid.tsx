@@ -8,6 +8,8 @@ import { Suspense } from "react";
 import MasterCountdown from "./MasterCountdown";
 import { StatsCardsLoading } from "./StatsCards";
 import PrefetchedStatsCards from "./PrefetchedStatsCards";
+import PrefetchedHeatmapTeaser from "@/components/running/PrefetchedHeatmapTeaser";
+import { isRunningHeatmapEnabled } from "@/lib/features";
 
 const BentoGrid = () => {
   const clickableOutline = '2px solid var(--ds-color-accent-base-default)';
@@ -216,6 +218,13 @@ const BentoGrid = () => {
         <Suspense fallback={<StatsCardsLoading />}>
           <PrefetchedStatsCards />
         </Suspense>
+        {isRunningHeatmapEnabled && (
+          <div className="md:col-span-4">
+            <Suspense fallback={null}>
+              <PrefetchedHeatmapTeaser />
+            </Suspense>
+          </div>
+        )}
       </div>
     </div>
   );
