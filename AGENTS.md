@@ -94,3 +94,11 @@ as the base branch.
 - Local Git hooks may provide faster feedback but are never a substitute for
   CI because hooks can be skipped. Add Semgrep only when a security or
   cross-file rule cannot be expressed reliably with the existing toolchain.
+- Every skill in `.opencode/skills` is scanned with SkillSpector by the
+  `Skill security` CI job. Run `./scripts/scan-skills.sh` locally after
+  changing a skill; it needs `skillspector` on `PATH`
+  (`uv tool install git+https://github.com/NVIDIA/skillspector.git`).
+- The job blocks on `DO_NOT_INSTALL` and reports `CAUTION` without failing.
+  Accept a reviewed false positive into `.skillspector-baseline.yaml` with
+  `skillspector baseline <skill> -o .skillspector-baseline.yaml` rather than
+  weakening the gate.
