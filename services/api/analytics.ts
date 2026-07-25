@@ -3,14 +3,17 @@ import { API_BASE_URL } from "./client";
 /**
  * Fire-and-forget besøksnotis. Skal ALDRI kaste eller påvirke sidevisningen.
  *
- * Bruker `fetch` (ikke `sendBeacon`): endepunktet er cross-origin og krever
- * `Content-Type: application/json`, som utløser en CORS-preflight. `fetch`
- * håndterer preflighten (backend svarer på `OPTIONS`), mens `sendBeacon` ikke
- * kan preflighte og derfor ikke ville levere. `keepalive` lar kallet fullføre
- * selv om brukeren navigerer bort med en gang.
+ * Bruker `fetch`, ikke `sendBeacon`. Målt i produksjon med `sendBeacon`-varianten:
+ * ingen request til `/site/visit` ved vanlig sidelasting (6 lastinger, 0 treff),
+ * mens klientside-navigasjon ga 200. Altså ble akkurat landingsbesøket – det
+ * eneste de fleste besøkende utløser – aldri registrert. `fetch` med `keepalive`
+ * er verifisert mot samme endepunkt fra origin `vuhnger.dev` (200 `{"ok":true}`),
+ * håndterer CORS-preflighten som `Content-Type: application/json` krever, og lar
+ * kallet fullføre selv om brukeren navigerer bort med en gang.
  *
- * `.catch` tar async-avvisning; `try/catch` tar en synkron throw (kan skje når
- * en nettleser-utvidelse wrapper `window.fetch`), som `.catch` alene ikke fanger.
+ * Hele kroppen ligger i `try` fordi URL-bygging utenfor `try` ville kunne kaste
+ * ufanget. `.catch` tar async-avvisning; `try/catch` tar en synkron throw (skjer
+ * når en nettleser-utvidelse wrapper `window.fetch`), som `.catch` ikke fanger.
  */
 export function recordVisit(path: string, referrer: string): void {
   try {
