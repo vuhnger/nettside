@@ -13,8 +13,17 @@ import { useCursors, useCursorsEnabled, type LiveCursor } from "./useCursors";
  */
 const OVERLAY_Z_INDEX = 30;
 
-const CURSOR_WIDTH = 14;
+const CURSOR_WIDTH = 13;
 const CURSOR_HEIGHT = 18;
+
+/**
+ * Musepeker med spissen i (1, 1.2), som er punktet `transform` flytter til.
+ *
+ * Underkanten av hodet er vannrett — de to siste punktene deler y. Det er den
+ * detaljen som gjør at formen leser som en peker: heller den kanten oppover mot
+ * høyre, blir det i stedet en trekant som peker til siden.
+ */
+const CURSOR_PATH = "M1 1.2 L1 16.6 L5.9 12.1 L11.7 12.1 Z";
 
 type OverlaySize = { width: number; height: number };
 
@@ -84,10 +93,10 @@ const CursorGlyph = ({ color }: { color: string }) => (
       er validert som `#rrggbb` før den kommer hit.
     */}
     <path
-      d="M1 1 L1 16.4 L4.7 12.8 L11.4 10.8 Z"
+      d={CURSOR_PATH}
       fill={color}
       stroke="var(--ds-color-neutral-background-default)"
-      strokeWidth="1.5"
+      strokeWidth="1.2"
       strokeLinejoin="round"
     />
   </svg>
