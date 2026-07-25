@@ -45,8 +45,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      # Full versjon, ikke `v9`: setup-uv publiserer ingen flyttbar major-tag.
       - name: Set up uv
-        uses: astral-sh/setup-uv@v9
+        uses: astral-sh/setup-uv@v9.0.0
 
       # SkillSpector har ingen git-tagger, så pinningen må være en commit.
       # Bumpen er bevisst manuell: en skanner som oppdaterer seg selv kan endre
