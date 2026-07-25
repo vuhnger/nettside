@@ -6,8 +6,14 @@
  * teste, mens funksjonene under er rene og trivielle å kjøre.
  */
 
-/** Serverens grense per rom. Speilet her for å begrense hva vi tegner. */
-export const MAX_PEERS = 50;
+/**
+ * Sanity-tak på hvor mange peers vi holder i minne, med vilje godt over
+ * serverens romgrense (50). Å speile serverens eksakte grense ville betydd at
+ * en server-side økning stille kuttet roster-en her: en `join` forbi taket
+ * droppes for godt, og den personens frames matcher aldri noen — usynlig til
+ * neste reconnect. Taket skal bare stoppe en server som har løpt løpsk.
+ */
+export const MAX_PEERS = 200;
 
 /** Serveren avviser lengre romnavn i handshaket. */
 export const CURSOR_ROOM_MAX_LENGTH = 64;
@@ -60,6 +66,26 @@ export function clampFraction(value: number): number {
 export function viewportFraction(position: number, size: number): number | null {
   if (!Number.isFinite(position) || !Number.isFinite(size) || size <= 0) return null;
   return clampFraction(position / size);
+}
+
+/** Taket på hvor sjelden vi pinger. Holder med god margin på 15 min idle. */
+export const PING_INTERVAL_MAX_MS = 30_000;
+
+/**
+ * Hvor ofte en aktiv fane skal pinge, utledet av serverens egen idle-timeout.
+ *
+ * `welcome` oppgir timeouten, så den skal brukes framfor å anta 15 minutter: et
+ * miljø satt opp med en kortere timeout ville ellers lukket fanen før neste
+ * ping, som gir en koble-opp-og-falle-ut-løkke der ingen ser noe galt lokalt.
+ * En tredjedel gir rom for at én ping går tapt uten at det koster tilstedeværelsen.
+ */
+export function pingInterval(idleTimeoutSeconds: number | undefined): number {
+  if (!idleTimeoutSeconds || !Number.isFinite(idleTimeoutSeconds)) {
+    return PING_INTERVAL_MAX_MS;
+  }
+  // Nedre grense på ett sekund: en absurd liten timeout fra serveren skal ikke
+  // kunne gjøre klienten om til noe som spammer sin egen meldingsgrense.
+  return Math.max(1000, Math.min(PING_INTERVAL_MAX_MS, (idleTimeoutSeconds * 1000) / 3));
 }
 
 /** Policy-avvisning: feil origin, ulovlig rom, eller for mange faner fra samme IP. */

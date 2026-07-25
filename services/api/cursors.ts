@@ -34,11 +34,24 @@ const peerSchema = z.object({
   y: coordinateSchema.optional(),
 });
 
+/**
+ * Én ugyldig peer skal koste den peeren, ikke hele meldingen. Zod feiler ellers
+ * hele recorden/arrayen på ett dårlig innslag, og både `welcome` og `frame`
+ * beskriver alle i rommet — å forkaste dem kollektivt ville fryst samtlige
+ * cursors fordi én tilkobling sendte noe rart.
+ */
+const tolerantPeersSchema = z.array(z.unknown()).transform((list) =>
+  list.flatMap((entry) => {
+    const parsed = peerSchema.safeParse(entry);
+    return parsed.success ? [parsed.data] : [];
+  }),
+);
+
 const welcomeSchema = z.object({
   t: z.literal("welcome"),
   id: peerIdSchema,
   color: colorSchema,
-  peers: z.array(peerSchema),
+  peers: tolerantPeersSchema,
   tick_hz: z.number().positive().max(120).optional(),
   idle_timeout_seconds: z.number().positive().optional(),
 });
@@ -54,9 +67,22 @@ const leaveSchema = z.object({
   id: peerIdSchema,
 });
 
+const coordinatePairSchema = z.tuple([coordinateSchema, coordinateSchema]);
+
+// Samme prinsipp som `tolerantPeersSchema`. Resultatet bygges uten prototype,
+// slik at et oppslag på en id som ikke er med (f.eks. "constructor") gir
+// `undefined` og ikke noe arvet fra `Object.prototype`.
 const frameSchema = z.object({
   t: z.literal("frame"),
-  c: z.record(peerIdSchema, z.tuple([coordinateSchema, coordinateSchema])),
+  c: z.record(z.string(), z.unknown()).transform((entries) => {
+    const valid: Record<string, [number, number]> = Object.create(null);
+    for (const [id, value] of Object.entries(entries)) {
+      if (id.length === 0 || id.length > 64) continue;
+      const parsed = coordinatePairSchema.safeParse(value);
+      if (parsed.success) valid[id] = parsed.data;
+    }
+    return valid;
+  }),
 });
 
 const pongSchema = z.object({ t: z.literal("pong") });
@@ -76,7 +102,6 @@ const serverMessageSchema = z.discriminatedUnion("t", [
 ]);
 
 export type CursorServerMessage = z.output<typeof serverMessageSchema>;
-export type CursorPeerSnapshot = z.output<typeof peerSchema>;
 
 /**
  * Tak på hvor mye vi i det hele tatt forsøker å parse. En `welcome` med 50 peers

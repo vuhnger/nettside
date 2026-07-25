@@ -4,8 +4,10 @@ import {
   CLOSE_POLICY_VIOLATION,
   CURSOR_ROOM_MAX_LENGTH,
   DEFAULT_CURSOR_ROOM,
+  PING_INTERVAL_MAX_MS,
   RECONNECT_MAX_MS,
   clampFraction,
+  pingInterval,
   reconnectDelay,
   sanitizeRoom,
   shouldReconnect,
@@ -71,6 +73,28 @@ describe("viewportFraction", () => {
   it.each([0, -1, Number.NaN])("gir null for viewportstørrelse %p", (size) => {
     // Uten dette blir andelen `Infinity` eller `NaN` og går ut på socketen.
     expect(viewportFraction(100, size)).toBeNull();
+  });
+});
+
+describe("pingInterval", () => {
+  it("pinger flere ganger per idle-timeout", () => {
+    // Én tapt ping skal ikke koste tilstedeværelsen, så intervallet må være en
+    // god del kortere enn timeouten det holder unna.
+    expect(pingInterval(60)).toBe(20_000);
+  });
+
+  it("pinger aldri sjeldnere enn taket, uansett hvor romslig serveren er", () => {
+    expect(pingInterval(900)).toBe(PING_INTERVAL_MAX_MS);
+  });
+
+  it("faller tilbake til taket uten en oppgitt timeout", () => {
+    expect(pingInterval(undefined)).toBe(PING_INTERVAL_MAX_MS);
+  });
+
+  it("lar ikke en absurd timeout gjøre klienten om til en spammer", () => {
+    // Meldingsgrensen inn er 60/s; en timeout på under et sekund skal ikke
+    // presse pingene opp mot den.
+    expect(pingInterval(0.1)).toBeGreaterThanOrEqual(1000);
   });
 });
 

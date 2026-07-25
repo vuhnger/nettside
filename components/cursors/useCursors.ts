@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {
   MAX_PEERS,
   clampFraction,
+  pingInterval,
   reconnectDelay,
   shouldReconnect,
   viewportFraction,
@@ -17,18 +18,11 @@ import {
 } from "@/services/api/cursors";
 
 /**
- * Hvor ofte vi sender egen posisjon. Serveren samler opp og sender ut én
- * kombinert frame ved `tick_hz` (15), så alt over det blir slått sammen til
- * samme frame uansett og koster bare batteri. Over 60 meldinger i sekundet
- * stenges koblingen.
+ * Brukes til å tempo-sette både utsending og interpolasjon fram til `welcome`
+ * sier den faktiske raten. Å sende fortere enn serverens tick er bortkastet —
+ * alt over slås sammen til samme frame — og å sende saktere gir hakkete
+ * interpolasjon hos alle andre.
  */
-const SEND_HZ = 15;
-const SEND_INTERVAL_MS = 1000 / SEND_HZ;
-
-/** Serveren stenger etter 15 minutter uten trafikk. 30s gir god margin. */
-const PING_INTERVAL_MS = 30_000;
-
-/** Brukes til å tempo-sette interpolasjonen fram til `welcome` sier noe annet. */
 const DEFAULT_TICK_HZ = 15;
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
@@ -61,13 +55,15 @@ export type UseCursorsResult = {
 /**
  * Avgjør om cursors skal kobles opp i det hele tatt.
  *
- * To grunner til å la være, begge om brukeren framfor om nettverket:
+ * Tre grunner til å la være, alle om brukeren framfor om nettverket:
  *
  *  - `prefers-reduced-motion`: andres cursors er kontinuerlig, uforutsigbar
  *    bevegelse styrt av noen andre. Å bare gjøre interpolasjonen kortere hjelper
  *    ikke — bevegelsen er hele greia, så da dropper vi den.
  *  - `pointer: fine`: en touch-enhet har ingen cursor som svever. Det den ville
  *    sendt er hvor fingeren traff, som er støy for alle andre i rommet.
+ *  - container query-enheter: posisjonene tegnes i `cqw`/`cqh`. En nettleser
+ *    uten støtte ville stablet alle cursors i øverste venstre hjørne.
  */
 export function useCursorsEnabled(): boolean {
   // Starter som `false`: serveren rendrer uten matchMedia, og å anta «på» ville
@@ -75,6 +71,8 @@ export function useCursorsEnabled(): boolean {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    if (!CSS.supports("transform", "translate(1cqw, 1cqh)")) return;
+
     const reducedMotion = window.matchMedia(REDUCED_MOTION_QUERY);
     const finePointer = window.matchMedia(FINE_POINTER_QUERY);
     const update = () => setEnabled(finePointer.matches && !reducedMotion.matches);
@@ -97,26 +95,37 @@ export function useCursorsEnabled(): boolean {
  *
  * Alt av socket, timere og gjenoppkobling lever inne i én effekt. Det er med
  * vilje: da er «rydd opp» det samme som «kjør cleanup», og en socket kan ikke
- * overleve et rombytte ved et uhell.
+ * overleve et rombytte ved et uhell. Skal funksjonen skrus av, unmount
+ * komponenten som kaller hooken — cleanupen lukker socketen.
  */
-export function useCursors(room: string, enabled: boolean): UseCursorsResult {
+export function useCursors(room: string): UseCursorsResult {
   const [peers, setPeers] = useState<TrackedPeer[]>([]);
   const [tickHz, setTickHz] = useState(DEFAULT_TICK_HZ);
 
   useEffect(() => {
-    if (!enabled) return;
-
     const url = cursorSocketUrl(room);
     if (!url) return;
 
     let disposed = false;
     let socket: WebSocket | null = null;
     let attempt = 0;
+    /**
+     * Satt ved 1008: origin, romnavn og antall faner fra denne IP-en er de
+     * samme ved neste forsøk, så avvisningen er permanent. Uten flagget ville
+     * `onVisibilityChange` prøvd på nytt ved hvert fanebytte.
+     */
+    let refused = false;
     let reconnectTimer: number | undefined;
+    let sendTimer: number | undefined;
+    let pingTimer: number | undefined;
     /** Egen id, slik at vi kan droppe oss selv fra frames. */
     let selfId: string | null = null;
-    /** Siste pekerposisjon, sendt på timer framfor på hver `pointermove`. */
-    const pending = { x: 0, y: 0, dirty: false };
+    /**
+     * Siste pekerposisjon, sendt på timer framfor på hver `pointermove`.
+     * `has` skiller «aldri beveget» fra «beveget, men ikke sendt ennå» — den
+     * første skal ikke sende noe etter en reconnect, den andre skal.
+     */
+    const pending = { x: 0, y: 0, dirty: false, has: false };
 
     const clearPeers = () => setPeers((prev) => (prev.length === 0 ? prev : []));
 
@@ -134,8 +143,58 @@ export function useCursors(room: string, enabled: boolean): UseCursorsResult {
       }
     };
 
+    // En styreflate fyrer godt over 100 `pointermove` i sekundet. Serveren slår
+    // dem sammen uansett, så vi sampler til en variabel og sender på timer.
+    // `dirty` beholdes til socketen faktisk er åpen — ellers forsvinner den
+    // siste posisjonen under en reconnect, og brukeren forblir usynlig for
+    // rommet til neste fysiske musebevegelse.
+    const startSendTimer = (hz: number) => {
+      window.clearInterval(sendTimer);
+      sendTimer = window.setInterval(() => {
+        if (!pending.dirty || socket?.readyState !== WebSocket.OPEN) return;
+        pending.dirty = false;
+        trySend(cursorUpdateMessage(pending.x, pending.y));
+      }, 1000 / hz);
+    };
+
+    // `document.hidden` er hele mekanismen: en fane ingen ser på slutter å pinge
+    // og faller ut på idle-timeout av seg selv, framfor å okkupere en plass.
+    const startPingTimer = (ms: number) => {
+      window.clearInterval(pingTimer);
+      pingTimer = window.setInterval(() => {
+        if (document.hidden) return;
+        trySend(CURSOR_PING_MESSAGE);
+      }, ms);
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      // `documentElement.clientWidth`, ikke `innerWidth`: samme boks som
+      // overlayet måles mot hos mottakerne. `innerWidth` teller med et
+      // eventuelt rullefelt, og den differansen ville forskjøvet cursoren
+      // med rullefeltbredden hos alle andre.
+      const x = viewportFraction(event.clientX, document.documentElement.clientWidth);
+      const y = viewportFraction(event.clientY, document.documentElement.clientHeight);
+      if (x === null || y === null) return;
+      pending.x = x;
+      pending.y = y;
+      pending.dirty = true;
+      pending.has = true;
+    };
+
+    /** En permanent avvisning skal ikke etterlate timere som spinner for ingenting. */
+    const giveUp = () => {
+      refused = true;
+      window.clearInterval(sendTimer);
+      window.clearInterval(pingTimer);
+      window.removeEventListener("pointermove", onPointerMove);
+    };
+
     const connect = () => {
-      if (disposed) return;
+      // En skjult fane kobler ikke opp — verken ved oppstart i bakgrunnen eller
+      // fra en reconnect-timer som fyrte etter at fanen ble gjemt. Den skal
+      // ikke holde en av rommets plasser; `onVisibilityChange` tar den når den
+      // kommer fram igjen.
+      if (disposed || document.hidden) return;
 
       let opened: WebSocket;
       try {
@@ -143,6 +202,7 @@ export function useCursors(room: string, enabled: boolean): UseCursorsResult {
       } catch {
         // Konstruktøren kaster bare på en ugyldig URL, og den er den samme
         // neste gang. Ingenting å prøve på nytt.
+        giveUp();
         return;
       }
       socket = opened;
@@ -153,10 +213,6 @@ export function useCursors(room: string, enabled: boolean): UseCursorsResult {
       // tømt det nye rommet.
       const isCurrent = () => !disposed && socket === opened;
 
-      opened.onopen = () => {
-        if (isCurrent()) attempt = 0;
-      };
-
       opened.onmessage = (event: MessageEvent) => {
         if (!isCurrent()) return;
         const message = parseCursorMessage(event.data);
@@ -164,8 +220,20 @@ export function useCursors(room: string, enabled: boolean): UseCursorsResult {
 
         switch (message.t) {
           case "welcome": {
+            // Først her, ikke i `onopen`: en server i en accept-så-lukk-løkke
+            // (full, restart) fullfører handshaket uten å slippe oss inn, og en
+            // nullstilling der ville holdt backoffen på minimum for alltid.
+            attempt = 0;
             selfId = message.id;
-            if (message.tick_hz) setTickHz(message.tick_hz);
+            if (message.tick_hz) {
+              setTickHz(message.tick_hz);
+              startSendTimer(message.tick_hz);
+            }
+            startPingTimer(pingInterval(message.idle_timeout_seconds));
+            // Rommet fikk aldri siste posisjon hvis bruddet kom mellom to
+            // sendinger. Har pekeren vært borti siden i det hele tatt, sendes
+            // den på nytt — ellers står vi uplassert til neste musebevegelse.
+            if (pending.has) pending.dirty = true;
             setPeers(
               message.peers
                 .filter((peer) => peer.id !== message.id)
@@ -205,7 +273,6 @@ export function useCursors(room: string, enabled: boolean): UseCursorsResult {
             setPeers((prev) => {
               let changed = false;
               const next = prev.map((peer) => {
-                if (!Object.hasOwn(message.c, peer.id)) return peer;
                 const moved = message.c[peer.id];
                 if (!moved) return peer;
 
@@ -238,46 +305,30 @@ export function useCursors(room: string, enabled: boolean): UseCursorsResult {
         // rommet *nå*, og å la den stå igjen tegner folk som kan ha gått.
         clearPeers();
 
-        if (!shouldReconnect(event.code)) return;
+        if (!shouldReconnect(event.code)) {
+          giveUp();
+          return;
+        }
+        // En fane som ble gjemt og idle-timet ut skal *ikke* rett inn igjen —
+        // det ville okkupert plassen på ubestemt tid og gjort hele
+        // ping-mekanismen meningsløs. Den kobler opp igjen når den blir synlig.
+        if (document.hidden) return;
         reconnectTimer = window.setTimeout(connect, reconnectDelay(attempt, Math.random()));
         attempt += 1;
       };
     };
 
-    const onPointerMove = (event: PointerEvent) => {
-      const x = viewportFraction(event.clientX, window.innerWidth);
-      const y = viewportFraction(event.clientY, window.innerHeight);
-      if (x === null || y === null) return;
-      pending.x = x;
-      pending.y = y;
-      pending.dirty = true;
-    };
-
-    // En styreflate fyrer godt over 100 `pointermove` i sekundet. Serveren slår
-    // dem sammen uansett, så vi sampler til en variabel og sender på timer.
-    const sendTimer = window.setInterval(() => {
-      if (!pending.dirty) return;
-      pending.dirty = false;
-      trySend(cursorUpdateMessage(pending.x, pending.y));
-    }, SEND_INTERVAL_MS);
-
-    // `document.hidden` er hele mekanismen: en fane ingen ser på slutter å pinge
-    // og faller ut på idle-timeout av seg selv, framfor å okkupere en plass.
-    const pingTimer = window.setInterval(() => {
-      if (document.hidden) return;
-      trySend(CURSOR_PING_MESSAGE);
-    }, PING_INTERVAL_MS);
-
     const onVisibilityChange = () => {
-      // Baksiden av det over: fanen ble stengt mens den lå i bakgrunnen. Kommer
-      // den fram igjen, skal den koble opp med en gang framfor å vente ut en
-      // backoff som ble målt for en helt annen situasjon.
-      if (disposed || document.hidden || socket !== null) return;
+      // Motstykket til at skjulte faner ikke kobler opp: kommer fanen fram
+      // igjen uten socket, skal den rett inn framfor å vente ut en backoff som
+      // ble målt for en helt annen situasjon.
+      if (disposed || refused || document.hidden || socket !== null) return;
       window.clearTimeout(reconnectTimer);
-      attempt = 0;
       connect();
     };
 
+    startSendTimer(DEFAULT_TICK_HZ);
+    startPingTimer(pingInterval(undefined));
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     document.addEventListener("visibilitychange", onVisibilityChange);
     connect();
@@ -296,10 +347,10 @@ export function useCursors(room: string, enabled: boolean): UseCursorsResult {
       // cursors inn i det nye.
       clearPeers();
     };
-  }, [room, enabled]);
+  }, [room]);
 
   return {
-    peers: enabled ? peers.filter((peer) => peer.placed) : [],
+    peers: peers.filter((peer) => peer.placed),
     tickHz,
   };
 }

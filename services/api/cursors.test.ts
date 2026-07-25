@@ -40,6 +40,36 @@ describe("parseCursorMessage", () => {
     expect(message).toEqual({ t: "frame", c: { def: [0.1, 0.9] } });
   });
 
+  it("dropper et ugyldig frame-innslag uten å forkaste resten", () => {
+    // Én tilkobling som sender noe rart skal koste den tilkoblingen, ikke fryse
+    // samtlige cursors i rommet: zod feiler ellers hele recorden på ett innslag.
+    const message = parseCursorMessage(
+      JSON.stringify({
+        t: "frame",
+        c: { def: [0.1, 0.9], bad: [0.1], worse: "nope", ["x".repeat(100)]: [0.2, 0.2] },
+      }),
+    );
+
+    expect(message).toEqual({ t: "frame", c: { def: [0.1, 0.9] } });
+  });
+
+  it("slår ikke opp i Object.prototype for ukjente frame-nøkler", () => {
+    const message = parseCursorMessage(JSON.stringify({ t: "frame", c: {} }));
+
+    expect(message?.t === "frame" && message.c["constructor"]).toBeUndefined();
+  });
+
+  it("dropper en ugyldig peer i welcome uten å forkaste resten", () => {
+    const message = parseCursorMessage(
+      JSON.stringify({
+        ...welcome,
+        peers: [{ id: "def", color: "#0ea5e9" }, { id: "ghi", color: "ikke-en-farge" }],
+      }),
+    );
+
+    expect(message?.t === "welcome" && message.peers).toEqual([{ id: "def", color: "#0ea5e9" }]);
+  });
+
   it("avviser en farge som ikke er en hex-farge", () => {
     // `color` går rett inn i en SVG-fill. En streng som ikke har formen vi har
     // bestemt, skal aldri komme så langt.
@@ -60,7 +90,6 @@ describe("parseCursorMessage", () => {
   it.each([
     ["ukjent meldingstype", JSON.stringify({ t: "banana" })],
     ["ødelagt JSON", "{ ikke json"],
-    ["frame med feil arity", JSON.stringify({ t: "frame", c: { def: [0.1] } })],
     ["welcome uten id", JSON.stringify({ t: "welcome", color: "#ffffff", peers: [] })],
     ["ren tekst", "hei"],
   ])("gir null for %s", (_label, payload) => {
@@ -89,10 +118,17 @@ describe("parseCursorMessage", () => {
 });
 
 describe("cursorSocketUrl", () => {
-  it("bruker wss og legger rommet i query", () => {
+  // Verten kommer fra `NEXT_PUBLIC_API_BASE_URL` og varierer med miljøet, så
+  // testen sjekker formen framfor en bestemt adresse — en literal ville brutt
+  // `pnpm run check` for alle som peker mot en lokal backend.
+  it("bruker ws-protokoll og legger rommet i query", () => {
     const url = cursorSocketUrl("/projects");
 
-    expect(url).toBe("wss://api.vuhnger.dev/site/ws/cursors?room=%2Fprojects");
+    expect(url).not.toBeNull();
+    const parsed = new URL(url as string);
+    expect(["ws:", "wss:"]).toContain(parsed.protocol);
+    expect(parsed.pathname).toBe("/site/ws/cursors");
+    expect(parsed.searchParams.get("room")).toBe("/projects");
   });
 });
 
