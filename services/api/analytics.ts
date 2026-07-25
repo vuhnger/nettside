@@ -3,11 +3,18 @@ import { API_BASE_URL } from "./client";
 /**
  * Fire-and-forget besøksnotis. Skal ALDRI kaste eller påvirke sidevisningen.
  *
- * Bruker `fetch` (ikke `sendBeacon`): endepunktet er cross-origin og krever
- * `Content-Type: application/json`, som utløser en CORS-preflight. `fetch`
- * håndterer preflighten (backend svarer på `OPTIONS`), mens `sendBeacon` ikke
- * kan preflighte og derfor ikke ville levere. `keepalive` lar kallet fullføre
- * selv om brukeren navigerer bort med en gang.
+ * Bruker `fetch` med `keepalive` framfor `sendBeacon`. Begge leverer i praksis,
+ * men `fetch` gir en response vi kan observere og teste — `sendBeacon` returnerer
+ * bare «lagt i kø» og er dermed umulig å verifisere. Endepunktet er cross-origin
+ * og krever `Content-Type: application/json`, som utløser en CORS-preflight;
+ * backend svarer på `OPTIONS`. `keepalive` lar kallet fullføre selv om brukeren
+ * navigerer bort med en gang.
+ *
+ * NB for framtidig feilsøking: `keepalive`-requests dukker IKKE opp i Resource
+ * Timing, og verktøy som lytter utenfor sidekonteksten kan også gå glipp av dem.
+ * At du ikke ser requesten betyr ikke at den ikke ble sendt. Verifiser ved å
+ * wrappe `window.fetch` før hydrering (f.eks. via en same-origin iframe).
+ * Verifisert i produksjon: 200 `{"ok":true}` ved vanlig sidelasting.
  *
  * `.catch` tar async-avvisning; `try/catch` tar en synkron throw (kan skje når
  * en nettleser-utvidelse wrapper `window.fetch`), som `.catch` alene ikke fanger.
