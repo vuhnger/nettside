@@ -118,7 +118,11 @@ export const RECONNECT_MAX_ATTEMPT = 6;
  * på 30s faktisk holder; å legge jitter oppå ville brutt det.
  */
 export function reconnectDelay(attempt: number, jitter: number): number {
-  const bounded = Math.min(Math.max(attempt, 0), RECONNECT_MAX_ATTEMPT);
+  // `Math.min`/`Math.max` slipper NaN rett gjennom, og en NaN-forsinkelse inn i
+  // `setTimeout` fyrer umiddelbart — akkurat lastspennet backoffen skal hindre.
+  const safeAttempt = Number.isFinite(attempt) ? attempt : 0;
+  const safeJitter = Number.isFinite(jitter) ? jitter : 0;
+  const bounded = Math.min(Math.max(safeAttempt, 0), RECONNECT_MAX_ATTEMPT);
   const backoff = Math.min(RECONNECT_MAX_MS, RECONNECT_BASE_MS * 2 ** bounded);
-  return backoff * (0.5 + Math.min(Math.max(jitter, 0), 0.999) * 0.5);
+  return backoff * (0.5 + Math.min(Math.max(safeJitter, 0), 0.999) * 0.5);
 }

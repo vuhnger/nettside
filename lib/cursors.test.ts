@@ -138,4 +138,10 @@ describe("reconnectDelay", () => {
   it("er alltid positiv", () => {
     expect(reconnectDelay(0, 0)).toBeGreaterThan(0);
   });
+
+  it("gir en endelig forsinkelse selv for NaN", () => {
+    // NaN inn i `setTimeout` betyr 0ms — alle faner tilbake i samme øyeblikk.
+    expect(Number.isFinite(reconnectDelay(Number.NaN, Number.NaN))).toBe(true);
+    expect(reconnectDelay(Number.NaN, Number.NaN)).toBeGreaterThan(0);
+  });
 });

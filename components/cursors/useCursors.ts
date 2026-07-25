@@ -71,6 +71,9 @@ export function useCursorsEnabled(): boolean {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    // `typeof`-sjekken er for jsdom, som mangler `CSS.supports`: en testkjøring
+    // skal behandle det som manglende støtte, ikke kaste.
+    if (typeof CSS === "undefined" || typeof CSS.supports !== "function") return;
     if (!CSS.supports("transform", "translate(1cqw, 1cqh)")) return;
 
     const reducedMotion = window.matchMedia(REDUCED_MOTION_QUERY);
