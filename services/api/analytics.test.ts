@@ -8,45 +8,33 @@ afterEach(() => {
 });
 
 describe("recordVisit", () => {
-  it("uses sendBeacon when available", () => {
-    const sendBeacon = vi.fn().mockReturnValue(true);
-    vi.stubGlobal("navigator", { sendBeacon });
-
-    recordVisit("/prosjekter", "https://example.com");
-
-    expect(sendBeacon).toHaveBeenCalledOnce();
-    expect(String(sendBeacon.mock.calls[0][0])).toContain("/site/visit");
-  });
-
-  it("falls back to fetch when sendBeacon is unavailable", () => {
-    vi.stubGlobal("navigator", {});
+  it("posts path and referrer to the visit endpoint with keepalive", () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true } as Response);
     vi.stubGlobal("fetch", fetchMock);
 
-    recordVisit("/cv", "");
+    recordVisit("/prosjekter", "https://example.com");
 
     expect(fetchMock).toHaveBeenCalledOnce();
-    const [, init] = fetchMock.mock.calls[0];
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(String(url)).toContain("/site/visit");
     expect(init.method).toBe("POST");
     expect(init.keepalive).toBe(true);
+    expect(init.headers).toMatchObject({ "content-type": "application/json" });
+    expect(JSON.parse(init.body)).toEqual({
+      path: "/prosjekter",
+      referrer: "https://example.com",
+    });
   });
 
-  it("never throws even if sendBeacon throws synchronously", () => {
-    vi.stubGlobal("navigator", {
-      sendBeacon: () => {
-        throw new TypeError("Failed to fetch");
-      },
-    });
-
+  it("never throws when fetch rejects asynchronously", () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
     expect(() => recordVisit("/", "")).not.toThrow();
   });
 
-  it("never throws even if fetch throws synchronously", () => {
-    vi.stubGlobal("navigator", {});
+  it("never throws when fetch throws synchronously", () => {
     vi.stubGlobal("fetch", () => {
       throw new TypeError("Failed to fetch");
     });
-
     expect(() => recordVisit("/", "")).not.toThrow();
   });
 });
