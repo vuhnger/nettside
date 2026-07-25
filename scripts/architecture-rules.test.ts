@@ -18,13 +18,9 @@ import { describe, expect, it } from "vitest";
 import ts from "typescript";
 
 import { LAYERS, clientClosure } from "../lib/architecture";
-import {
-  GRAPH_FILE,
-  SCANNED_DIRECTORIES,
-  repositoryRoot,
-  scanRepository,
-  serializeGraph,
-} from "./architecture-graph";
+import { repositoryRoot } from "./architecture-graph.ts";
+import { SCANNED_DIRECTORIES, scanRepository } from "./architecture/scan.ts";
+import { GRAPH_FILE, serializeGraph } from "./architecture/serialize.ts";
 
 const root = repositoryRoot();
 const scan = scanRepository(root);
