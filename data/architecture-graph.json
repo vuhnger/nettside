@@ -7,16 +7,13 @@
         "components/architecture/ArchitectureGraph.tsx",
         "components/architecture/GraphLegend.tsx"
       ],
-      "external": [
-        "next"
-      ]
+      "external": []
     },
     {
       "id": "app/cv/cv.data.ts",
       "directive": null,
       "imports": [],
       "external": [
-        "react-icons",
         "react-icons/fa",
         "react-icons/si"
       ]
@@ -30,7 +27,6 @@
       ],
       "external": [
         "@digdir/designsystemet-react",
-        "next",
         "next-view-transitions",
         "next/image",
         "react-icons/fa",
@@ -50,7 +46,6 @@
       "id": "app/layout.tsx",
       "directive": null,
       "imports": [
-        "app/globals.css",
         "components/layout/Footer.tsx",
         "components/layout/Navbar.tsx",
         "components/layout/VisitTracker.tsx",
@@ -58,7 +53,6 @@
       ],
       "external": [
         "@vercel/analytics/next",
-        "next",
         "next-view-transitions",
         "next/font/google",
         "next/script"
@@ -73,8 +67,7 @@
         "lib/master.ts"
       ],
       "external": [
-        "@digdir/designsystemet-react",
-        "next"
+        "@digdir/designsystemet-react"
       ]
     },
     {
@@ -83,9 +76,7 @@
       "imports": [
         "components/home/MstVisualization.tsx"
       ],
-      "external": [
-        "next"
-      ]
+      "external": []
     },
     {
       "id": "app/not-found.tsx",
@@ -126,7 +117,6 @@
       ],
       "external": [
         "@digdir/designsystemet-react",
-        "next",
         "next/image"
       ]
     },
@@ -135,7 +125,6 @@
       "directive": null,
       "imports": [],
       "external": [
-        "react-icons",
         "react-icons/si"
       ]
     },
@@ -143,9 +132,7 @@
       "id": "app/robots.ts",
       "directive": null,
       "imports": [],
-      "external": [
-        "next"
-      ]
+      "external": []
     },
     {
       "id": "app/running/page.tsx",
@@ -159,7 +146,6 @@
       "external": [
         "@digdir/designsystemet-react",
         "@tanstack/react-query",
-        "next",
         "next/navigation"
       ]
     },
@@ -169,9 +155,7 @@
       "imports": [
         "lib/features.ts"
       ],
-      "external": [
-        "next"
-      ]
+      "external": []
     },
     {
       "id": "components/architecture/ArchitectureGraph.tsx",
@@ -192,16 +176,13 @@
     {
       "id": "components/architecture/graph/colors.ts",
       "directive": null,
-      "imports": [
-        "lib/architecture.ts"
-      ],
+      "imports": [],
       "external": []
     },
     {
       "id": "components/architecture/graph/data.ts",
       "directive": null,
       "imports": [
-        "data/architecture-graph.json",
         "lib/architecture.ts"
       ],
       "external": []
@@ -210,9 +191,7 @@
       "id": "components/architecture/graph/GraphEdges.tsx",
       "directive": null,
       "imports": [
-        "components/architecture/graph/colors.ts",
-        "components/architecture/graph/useGraphLayout.ts",
-        "lib/architecture-layout.ts"
+        "components/architecture/graph/colors.ts"
       ],
       "external": []
     },
@@ -220,9 +199,7 @@
       "id": "components/architecture/graph/GraphLabels.tsx",
       "directive": null,
       "imports": [
-        "components/architecture/graph/colors.ts",
-        "components/architecture/graph/useGraphLayout.ts",
-        "lib/architecture-layout.ts"
+        "components/architecture/graph/colors.ts"
       ],
       "external": []
     },
@@ -231,10 +208,7 @@
       "directive": null,
       "imports": [
         "components/architecture/graph/colors.ts",
-        "components/architecture/graph/summary.ts",
-        "components/architecture/graph/useGraphLayout.ts",
-        "lib/architecture-layout.ts",
-        "lib/architecture.ts"
+        "components/architecture/graph/summary.ts"
       ],
       "external": []
     },
@@ -247,9 +221,7 @@
     {
       "id": "components/architecture/graph/settings.ts",
       "directive": null,
-      "imports": [
-        "lib/architecture-layout.ts"
-      ],
+      "imports": [],
       "external": []
     },
     {
@@ -263,9 +235,7 @@
     {
       "id": "components/architecture/graph/useActiveNode.ts",
       "directive": "use client",
-      "imports": [
-        "lib/architecture-layout.ts"
-      ],
+      "imports": [],
       "external": [
         "react"
       ]
@@ -275,10 +245,8 @@
       "directive": "use client",
       "imports": [
         "components/architecture/graph/labels.ts",
-        "components/architecture/graph/settings.ts",
         "components/architecture/graph/summary.ts",
-        "lib/architecture-layout.ts",
-        "lib/architecture.ts"
+        "lib/architecture-layout.ts"
       ],
       "external": [
         "react"
@@ -305,19 +273,13 @@
     {
       "id": "components/home/astar/render.ts",
       "directive": null,
-      "imports": [
-        "components/home/astar/colors.ts",
-        "components/home/astar/scene.ts",
-        "components/home/astar/settings.ts",
-        "lib/astar.ts"
-      ],
+      "imports": [],
       "external": []
     },
     {
       "id": "components/home/astar/scene.ts",
       "directive": null,
       "imports": [
-        "components/home/astar/settings.ts",
         "lib/astar.ts"
       ],
       "external": []
@@ -392,7 +354,6 @@
       "id": "components/home/mst/scene.ts",
       "directive": null,
       "imports": [
-        "components/home/mst/settings.ts",
         "lib/mst.ts"
       ],
       "external": []
@@ -552,9 +513,7 @@
     {
       "id": "components/master/edge/config.ts",
       "directive": null,
-      "imports": [
-        "components/master/edge/types.ts"
-      ],
+      "imports": [],
       "external": []
     },
     {
@@ -562,7 +521,6 @@
       "directive": null,
       "imports": [
         "components/master/edge/config.ts",
-        "components/master/edge/types.ts",
         "components/ui/badge.tsx",
         "components/ui/slider.tsx",
         "components/ui/switch.tsx",
@@ -578,21 +536,18 @@
       "imports": [
         "components/master/edge/config.ts",
         "components/master/edge/particles.ts",
-        "components/master/edge/types.ts",
         "lib/utils.ts"
       ],
       "external": [
         "framer-motion",
-        "lucide-react",
-        "react"
+        "lucide-react"
       ]
     },
     {
       "id": "components/master/edge/particles.ts",
       "directive": null,
       "imports": [
-        "components/master/edge/config.ts",
-        "components/master/edge/types.ts"
+        "components/master/edge/config.ts"
       ],
       "external": []
     },
@@ -609,8 +564,7 @@
         "components/master/edge/NetworkControls.tsx",
         "components/master/edge/NetworkMap.tsx",
         "components/master/edge/config.ts",
-        "components/master/edge/particles.ts",
-        "components/master/edge/types.ts"
+        "components/master/edge/particles.ts"
       ],
       "external": [
         "react"
@@ -651,7 +605,6 @@
       "id": "components/projects/snake/game.ts",
       "directive": null,
       "imports": [
-        "components/projects/snake/settings.ts",
         "lib/astar.ts"
       ],
       "external": []
@@ -665,20 +618,14 @@
     {
       "id": "components/running/basemap.ts",
       "directive": null,
-      "imports": [
-        "lib/color-scheme.ts"
-      ],
+      "imports": [],
       "external": []
     },
     {
       "id": "components/running/heatmap-layer.ts",
       "directive": null,
-      "imports": [
-        "lib/color-scheme.ts"
-      ],
-      "external": [
-        "maplibre-gl"
-      ]
+      "imports": [],
+      "external": []
     },
     {
       "id": "components/running/HeatmapMap.tsx",
@@ -687,8 +634,7 @@
         "components/running/basemap.ts",
         "components/running/heatmap-layer.ts",
         "lib/color-scheme.ts",
-        "lib/heatmap.ts",
-        "services/api/heatmap.ts"
+        "lib/heatmap.ts"
       ],
       "external": [
         "maplibre-gl",
@@ -700,8 +646,7 @@
       "id": "components/running/HeatmapTeaser.tsx",
       "directive": null,
       "imports": [
-        "lib/heatmap.ts",
-        "services/api/heatmap.ts"
+        "lib/heatmap.ts"
       ],
       "external": [
         "@digdir/designsystemet-react",
@@ -872,9 +817,7 @@
     {
       "id": "lib/heatmap.ts",
       "directive": null,
-      "imports": [
-        "services/api/heatmap.ts"
-      ],
+      "imports": [],
       "external": []
     },
     {

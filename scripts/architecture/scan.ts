@@ -68,6 +68,7 @@ export function scanRepository(root: string): ScanResult {
   const files = SCANNED_DIRECTORIES.flatMap((directory) =>
     collectSourceFiles(root, directory),
   );
+  const sourceFiles = new Set(files);
 
   const unresolved: string[] = [];
   const modules = files.map((id): ModuleRecord => {
@@ -81,8 +82,11 @@ export function scanRepository(root: string): ScanResult {
     for (const specifier of specifiers) {
       const resolved = resolveSpecifier(root, id, specifier);
       if (resolved) {
-        // En fil som importerer seg selv er ikke en kant i grafen.
-        if (resolved !== id) imports.add(resolved);
+        // Bare filer som selv er noder i grafen. `app/globals.css` og
+        // `data/architecture-graph.json` løses opp fint, men de er ikke
+        // kildefiler, og en kant til en node som ikke finnes er en løgn om
+        // grafen. En fil som importerer seg selv er heller ingen kant.
+        if (resolved !== id && sourceFiles.has(resolved)) imports.add(resolved);
         continue;
       }
       if (isInternalSpecifier(specifier)) {

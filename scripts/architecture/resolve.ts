@@ -31,6 +31,13 @@ export function resolveSpecifier(
     return null;
   }
 
+  // `../../../utenfor.ts` normaliserer til noe som starter med `..`, og
+  // `join(root, ...)` ville da pekt ut av repoet og gitt en node med et lag som
+  // ikke finnes. Null her sender den videre til `unresolved`, der en test
+  // fanger den opp.
+  base = posix.normalize(base);
+  if (base === ".." || base.startsWith("../") || posix.isAbsolute(base)) return null;
+
   for (const suffix of RESOLUTION_SUFFIXES) {
     const candidate = `${base}${suffix}`;
     const absolute = join(root, candidate);

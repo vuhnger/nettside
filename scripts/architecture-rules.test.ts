@@ -53,6 +53,18 @@ describe("skanningen", () => {
     expect([...layers].sort()).toEqual([...LAYERS].sort());
   });
 
+  it("lager ingen kanter til filer som ikke er noder", () => {
+    // `app/globals.css` og `data/architecture-graph.json` løses opp fint, men
+    // de er ikke kildefiler og har ingen node. En kant til dem er en påstand om
+    // grafen som grafen selv motsier.
+    const ids = new Set(scan.modules.map((record) => record.id));
+    const dangling = scan.modules.flatMap((record) =>
+      record.imports.filter((id) => !ids.has(id)).map((id) => `${record.id} -> ${id}`),
+    );
+
+    expect(dangling).toEqual([]);
+  });
+
   it("skanner de samme mappene som grafen har lag for", () => {
     // Dupliseringen mellom SCANNED_DIRECTORIES og LAYERS er bevisst; denne
     // testen er prisen for den.
@@ -101,7 +113,14 @@ describe("server/klient-grensen", () => {
   });
 });
 
-/** Finner kall til `fetch(...)`, inkludert `globalThis.fetch(...)`, via AST-et. */
+/**
+ * Finner kall til den globale `fetch`, via AST-et.
+ *
+ * Bare `fetch(...)`, `globalThis.fetch(...)` og `window.fetch(...)` teller. Et
+ * hvilket som helst `.fetch()` ville også truffet metoder som tilfeldigvis
+ * heter det - en klient som eksponerer `api.fetch()` er ikke det regelen
+ * handler om.
+ */
 function findFetchCalls(source: string, fileName: string): number {
   const sourceFile = ts.createSourceFile(
     fileName,
@@ -115,12 +134,16 @@ function findFetchCalls(source: string, fileName: string): number {
   const visit = (node: ts.Node): void => {
     if (ts.isCallExpression(node)) {
       const target = node.expression;
-      const name = ts.isIdentifier(target)
-        ? target.text
-        : ts.isPropertyAccessExpression(target)
-          ? target.name.text
-          : null;
-      if (name === "fetch") count += 1;
+      if (ts.isIdentifier(target) && target.text === "fetch") {
+        count += 1;
+      } else if (
+        ts.isPropertyAccessExpression(target) &&
+        target.name.text === "fetch" &&
+        ts.isIdentifier(target.expression) &&
+        (target.expression.text === "globalThis" || target.expression.text === "window")
+      ) {
+        count += 1;
+      }
     }
     ts.forEachChild(node, visit);
   };
