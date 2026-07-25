@@ -136,6 +136,46 @@ describe("stepSimulation", () => {
     expect(closest).toBeGreaterThan(15);
   });
 
+  it("frastøter etter 1/d², ikke etter 1/d", () => {
+    // Fruchterman-Reingold oppgir k²/d. Denne layouten bruker k²/d² med vilje,
+    // og forskjellen er målbar: k²/d ga 18,1 px minsteavstand på den ekte
+    // grafen på sitt aller beste, mot 34,0 px for k²/d². Uten denne testen er
+    // det bare en kommentar som skiller de to, og en kommentar stopper ingen
+    // fra å «rette» formelen tilbake til læreboka.
+    //
+    // Ingen sentertrekk og ingen kanter, så det eneste som flytter noden er
+    // frastøtningen fra den andre. Temperaturen settes høyt nok til at
+    // klampen ikke slår inn: ellers ville begge kraftlovene endt på samme
+    // maksflytt, og da måler testen klampen istedenfor formelen.
+    const settings: LayoutSettings = { ...SETTINGS, centeringPull: 0, temperature: 5 };
+
+    const displacementAt = (separation: number): number => {
+      const simulation = createSimulation(
+        graphOf([mod("lib/a.ts"), mod("lib/b.ts")]),
+        WIDTH,
+        HEIGHT,
+        settings,
+        1,
+      );
+      const [a, b] = simulation.nodes;
+      a.x = WIDTH / 2 - separation / 2;
+      b.x = WIDTH / 2 + separation / 2;
+      a.y = HEIGHT / 2;
+      b.y = HEIGHT / 2;
+
+      const startX = a.x;
+      stepSimulation(simulation, settings);
+      return Math.abs(a.x - startX);
+    };
+
+    // Dobbelt så langt unna skal gi en fjerdedel av kraften. Halvparten ville
+    // betydd k²/d.
+    const near = displacementAt(100);
+    const far = displacementAt(200);
+
+    expect(near / far).toBeCloseTo(4, 1);
+  });
+
   it("gir aldri NaN, heller ikke når to noder starter oppå hverandre", () => {
     const records = [mod("lib/a.ts"), mod("lib/b.ts")];
     const simulation = createSimulation(graphOf(records), WIDTH, HEIGHT, SETTINGS, 1);

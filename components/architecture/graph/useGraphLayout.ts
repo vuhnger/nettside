@@ -28,8 +28,8 @@ export type GraphElements = {
 /**
  * Kjører layouten og skriver posisjonene rett på DOM-nodene.
  *
- * Posisjonene settes imperativt og ikke gjennom React-state. 85 noder, 85
- * navn og 132 kanter er over 300 elementer som flytter seg hver ramme, og en
+ * Posisjonene settes imperativt og ikke gjennom React-state. 93 noder, 93
+ * navn og 127 kanter er over 300 elementer som flytter seg hver ramme, og en
  * ny render per ramme av det ville vært bortkastet arbeid - ingenting annet enn
  * koordinatene endrer seg.
  *

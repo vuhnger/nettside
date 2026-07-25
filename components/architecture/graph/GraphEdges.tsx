@@ -60,7 +60,7 @@ const GraphEdges = ({ edges, elements, active, hasActive }: Props) => (
           stroke={highlighted ? EDGE_ACTIVE_COLOR : EDGE_COLOR}
           strokeOpacity={!hasActive ? 0.32 : highlighted ? 0.9 : 0.07}
           strokeWidth={highlighted ? 1.6 : 1}
-          // Dempede kanter mister pilspissen: 132 piler mens noe annet er
+          // Dempede kanter mister pilspissen: 127 piler mens noe annet er
           // markert er bare støy.
           markerEnd={
             dimmed

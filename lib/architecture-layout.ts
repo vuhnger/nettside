@@ -181,8 +181,15 @@ export function stepSimulation(simulation: Simulation, settings: LayoutSettings)
     node.displacementY = 0;
   }
 
-  // Frastøtning: k² / d. Faller av langsommere enn 1/d², så en node som havner
-  // nær en annen blir skjøvet bestemt unna uten å bli katapultert.
+  // Frastøtning: k² / d². Merk at dette ikke er k² / d, som er formelen
+  // Fruchterman-Reingold faktisk oppgir - avviket er målt og bevisst.
+  //
+  // Ekte FR er rundt 91 ganger sterkere ved typisk avstand, så summen over de
+  // 92 andre nodene treffer temperaturklampen og retningen blir det eneste som
+  // betyr noe. Målt på denne grafen ga k²/d 18,1 px minsteavstand på sitt aller
+  // beste, mens k²/d² gir 34,0 px og null par tettere enn 14 px. 1/d² faller
+  // raskere med avstanden, og det er den korte avstanden som avgjør om to
+  // sirkler overlapper. `stepSimulation`-testen låser forholdet.
   for (let first = 0; first < nodes.length; first += 1) {
     for (let second = first + 1; second < nodes.length; second += 1) {
       const a = nodes[first];
