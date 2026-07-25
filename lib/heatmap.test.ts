@@ -11,14 +11,15 @@ describe("normalizeWeight", () => {
   });
 
   it("keeps rarely-run cells visible instead of crushing them toward zero", () => {
-    const weight = normalizeWeight(1, 100);
-    // Lineær normalisering ville gitt 0.01 — praktisk talt usynlig på kartet.
-    expect(weight).toBeGreaterThan(0.1);
+    // 27 av 108 turer er den travleste cellen målt i ekte data.
+    const weight = normalizeWeight(1, 27);
+    // Lineær normalisering ville gitt 0.04 — praktisk talt usynlig på kartet.
+    expect(weight).toBeGreaterThan(0.15);
     expect(weight).toBeLessThan(1);
   });
 
   it("still ranks a repeated cell above a single-visit cell", () => {
-    expect(normalizeWeight(20, 100)).toBeGreaterThan(normalizeWeight(2, 100));
+    expect(normalizeWeight(20, 27)).toBeGreaterThan(normalizeWeight(2, 27));
   });
 
   it("handles a dataset where every cell has one hit", () => {

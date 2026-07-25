@@ -14,11 +14,18 @@ export type HeatmapFeatureCollection = {
 };
 
 /**
- * Treffantallene er kraftig skjevfordelt: gata jeg alltid starter i kan ha
- * hundrevis av treff, mens en tur jeg løp én gang har 1. Lineær normalisering
- * ville presset alt utenom de mest tråkkede rutene ned mot null og gjort
- * kartet nesten tomt. Logaritmisk skala holder engangsturene synlige samtidig
- * som gjentakelse fortsatt lyser sterkere.
+ * En celle teller antall aktiviteter som har passert den, ikke antall
+ * GPS-punkter. Backend valgte det bevisst: punkttetthet følger tempo, så rå
+ * punkttelling ville framhevet der jeg løper saktest framfor der jeg løper ofte.
+ *
+ * Fordelingen er likevel skjev — en gjennomgangsgate treffes av titalls turer
+ * mens en tur jeg løp én gang har 1 (målt: 27 av 108 turer i travleste celle).
+ * Lineær normalisering ville gitt engangsturen vekt 0.04 og gjort kartet nesten
+ * tomt. Logaritmisk skala gir 0.21 og holder dem synlige, samtidig som
+ * gjentakelse fortsatt lyser sterkere.
+ *
+ * Kurven bør finjusteres mot ekte data når endepunktet er live. Den ligger
+ * isolert her nettopp for at det skal være en énlinjes endring.
  */
 export function normalizeWeight(count: number, maxCount: number): number {
   if (maxCount <= 1) return count > 0 ? 1 : 0;
