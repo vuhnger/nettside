@@ -44,9 +44,11 @@ const RunningHeatmap = () => {
     if (isPending) return "Henter løpedata...";
     if (isError) return "Fikk ikke tak i løpedataen akkurat nå. Prøv igjen senere.";
     if (!heatmap) return "Ingen turer å vise ennå.";
-    // Kartet står for seg selv visuelt. Her trengs bare bekreftelsen på at
-    // ventingen er over, for den som ikke ser at lerretet ble fylt.
-    return "Kartet er klart.";
+    // Sier bevisst «hentet», ikke «klart»: kartbiblioteket lastes som en egen
+    // chunk, så spørringen kan være ferdig mens lerretet ennå viser
+    // reservevisningen. Å melde kartet klart før det er tegnet ville sendt en
+    // skjermleserbruker til et element som ikke finnes enda.
+    return "Løpedataen er hentet.";
   };
 
   return (

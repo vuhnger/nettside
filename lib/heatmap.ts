@@ -260,10 +260,15 @@ export function rasterizeCells(
   const project = createProjection(bounds, width, height);
   const buckets = new Map<string, { x: number; y: number; count: number }>();
 
-  // Utstrekningen kommer fra cellene selv, så det finnes alltid en celle helt ute
+  // Kommer utstrekningen fra cellene selv, finnes det alltid en celle helt ute
   // ved øst- og sørkanten. Den projiseres til presis `width`/`height`, og et rent
-  // `Math.floor` ville gitt den en egen rute utenfor tegneflaten. Ytterpunktet av
-  // varmekartet ble dermed klippet bort. Kanten hører til siste rute.
+  // `Math.floor` ville gitt den en egen rute utenfor tegneflaten.
+  //
+  // Klemmingen går begge veier. Kalles funksjonen med en utstrekning som er
+  // mindre enn dataene — slik teaseren gjør — havner celler også vest og nord
+  // for utsnittet, og de gir negative ruter. Kallere bør fortsatt filtrere med
+  // `cellsWithinBounds` for å slippe falsk varme langs kanten, men å tegne
+  // utenfor flaten skal ikke være mulig uansett hva som sendes inn.
   const lastColumn = Math.max(Math.ceil(width / pixelSize) - 1, 0);
   const lastRow = Math.max(Math.ceil(height / pixelSize) - 1, 0);
 
@@ -277,8 +282,8 @@ export function rasterizeCells(
 
   for (const cell of cells) {
     const { x, y } = project(cell.lon, cell.lat);
-    const column = Math.min(Math.floor(x / pixelSize), lastColumn);
-    const row = Math.min(Math.floor(y / pixelSize), lastRow);
+    const column = Math.min(Math.max(Math.floor(x / pixelSize), 0), lastColumn);
+    const row = Math.min(Math.max(Math.floor(y / pixelSize), 0), lastRow);
     const key = `${column}:${row}`;
     const existing = buckets.get(key);
 

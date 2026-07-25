@@ -229,6 +229,19 @@ describe("rasterizeCells", () => {
     }
   });
 
+  it("holder også celler vest og nord for utsnittet innenfor flaten", () => {
+    // Et snevrere utsnitt enn dataene, slik teaseren bruker det. Uten klemming i
+    // begge retninger blir ruten negativ og tegnes utenfor viewBoxen.
+    const outside = [cell(-5, 15, 1), cell(-1, 12, 1), cell(15, -5, 1)];
+
+    for (const point of rasterizeCells(outside, bounds, 100, 100, 20)) {
+      expect(point.x).toBeGreaterThanOrEqual(0);
+      expect(point.x).toBeLessThanOrEqual(100);
+      expect(point.y).toBeGreaterThanOrEqual(0);
+      expect(point.y).toBeLessThanOrEqual(100);
+    }
+  });
+
   it("pulls a partial final square in from the edge", () => {
     // 100px deles ikke jevnt på 30, så siste rute dekker bare 90..100. Sentrum
     // skal ligge på 95, ikke på 105 som en full rute ville gitt.
