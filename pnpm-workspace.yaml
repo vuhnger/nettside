@@ -10,10 +10,13 @@ allowBuilds:
 # fersk for release-age-policyen, og å legge den i unntakslista for å komme
 # rundt det ville vært å skru av gjerdet istedenfor å gå gjennom porten.
 overrides:
-  # <= 8.5.17 har path traversal via source-map-autolasting, vilkårlig
-  # fillesing, og XSS gjennom uescapet </style> i stringify-outputen.
-  # 8.5.20 ligger allerede i treet via @tailwindcss/postcss og vite, så denne
-  # overriden introduserer ingen ny kode — den samler to kopier til én.
+  # Tre separate advisories med ulike rekker, ikke én:
+  #   <= 8.5.17  path traversal via source-map-autolasting  (fikset i 8.5.18)
+  #   <= 8.5.11  vilkårlig fillesing og informasjonslekkasje (fikset i 8.5.12)
+  #   <  8.5.10  XSS gjennom uescapet </style> i stringify   (fikset i 8.5.10)
+  # 8.5.20 dekker alle tre, og ligger allerede i treet via @tailwindcss/postcss
+  # og vite — så overriden introduserer ingen ny kode, den samler to kopier
+  # til én.
   postcss: 8.5.20
   # < 0.35.0 arver libvips-sårbarheter. 0.34 -> 0.35 er et breaking-hopp i
   # semver for 0.x, så bildeoptimaliseringen må verifiseres, ikke antas.
