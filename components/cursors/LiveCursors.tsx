@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { sanitizeRoom } from "@/lib/cursors";
@@ -26,26 +26,42 @@ type OverlaySize = { width: number; height: number };
  * vertikalt rullefelt — da er `vw` bredere enn det synlige området, og hver
  * cursor havner litt for langt til høyre. Målingen tar også høyde for at
  * mobilnettlesere endrer viewporthøyden når adresselinjen gjemmer seg.
+ *
+ * Bruker en callback-ref og ikke `useEffect` med `[]`: overlayet finnes ikke i
+ * DOM ved første render — `useCursorsEnabled` starter som `false` og slår om
+ * først etter hydrering. En effekt som kjørte én gang på mount ville sett en
+ * tom ref, gitt opp, og aldri kjørt igjen. Da står `size` som `null` for alltid
+ * og ingen cursor tegnes, selv om både socketen og overlayet er helt i orden.
+ * React 19 kaller cleanupen som callback-refen returnerer når noden løsner.
  */
-function useOverlaySize(): [React.RefObject<HTMLDivElement | null>, OverlaySize | null] {
-  const ref = useRef<HTMLDivElement>(null);
+function useOverlaySize(): [(node: HTMLDivElement | null) => void, OverlaySize | null] {
   const [size, setSize] = useState<OverlaySize | null>(null);
 
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
+  const ref = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+
+    const apply = (width: number, height: number) => {
+      if (width <= 0 || height <= 0) return;
+      setSize((current) =>
+        current?.width === width && current?.height === height
+          ? current
+          : { width, height },
+      );
+    };
+
+    // Måles med en gang, ikke bare via observeren. En ResizeObserver leverer
+    // callbacken sin i «update the rendering»-steget, og det steget hoppes over
+    // i en fane som ikke tegnes. Uten denne linjen står `size` som `null` helt
+    // til fanen kommer i forgrunnen — og da tegnes ingen cursors i mellomtiden,
+    // selv om socketen har full oversikt over rommet.
+    apply(node.clientWidth, node.clientHeight);
 
     const observer = new ResizeObserver((entries) => {
       const box = entries[0]?.contentRect;
-      if (!box || box.width <= 0 || box.height <= 0) return;
-      setSize((current) =>
-        current?.width === box.width && current?.height === box.height
-          ? current
-          : { width: box.width, height: box.height },
-      );
+      if (box) apply(box.width, box.height);
     });
 
-    observer.observe(element);
+    observer.observe(node);
     return () => observer.disconnect();
   }, []);
 
