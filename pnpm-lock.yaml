@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@digdir/designsystemet-css':
-        specifier: ^1.13.2
-        version: 1.18.0
+        specifier: ^1.19.1
+        version: 1.19.1
       '@digdir/designsystemet-react':
         specifier: ^1.19.1
         version: 1.19.1(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -184,8 +184,8 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
-  '@digdir/designsystemet-css@1.18.0':
-    resolution: {integrity: sha512-AiJAOGOJa8XKnaGhlho+/I16jYYB8gJuXgdoCreotFGhZWf9FPjRp/3IXh4CoLmSwooNXJL/5/qmiFRBhbrJ2Q==}
+  '@digdir/designsystemet-css@1.19.1':
+    resolution: {integrity: sha512-hk+mWIzgfrk/eZh4IbwPtZOAGe82ufyuMS/pScEImbWLYSrk/RwwST8P5+U1jNtfRUSaR+IJKKGs8GePo0ij9w==}
 
   '@digdir/designsystemet-react@1.19.1':
     resolution: {integrity: sha512-mMoiWr9QsmyYgvRLdB8TcZOIIGleeqn/rHiOfetjAXd+0bvSALOEvwPfvmAVKIp64m8JfymWKJyPS8Xl7CjSCQ==}
@@ -2798,9 +2798,9 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
-  '@digdir/designsystemet-css@1.18.0':
+  '@digdir/designsystemet-css@1.19.1':
     dependencies:
-      '@digdir/designsystemet-types': 1.18.0
+      '@digdir/designsystemet-types': 1.19.1
 
   '@digdir/designsystemet-react@1.19.1(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
