@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@digdir/designsystemet-css':
-        specifier: ^1.19.1
-        version: 1.19.1
+        specifier: ^1.20.1
+        version: 1.20.1
       '@digdir/designsystemet-react':
         specifier: ^1.19.1
         version: 1.19.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -184,8 +184,8 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
-  '@digdir/designsystemet-css@1.19.1':
-    resolution: {integrity: sha512-hk+mWIzgfrk/eZh4IbwPtZOAGe82ufyuMS/pScEImbWLYSrk/RwwST8P5+U1jNtfRUSaR+IJKKGs8GePo0ij9w==}
+  '@digdir/designsystemet-css@1.20.1':
+    resolution: {integrity: sha512-6YAlQuNZ23kd3PMCOUjYmAXUaRzGa0wRT5DdL+IjWLYSFSW2h8KCSh/ovr70iMeeUKjXOZ92GwG48X+SHxtEMQ==}
 
   '@digdir/designsystemet-react@1.19.1':
     resolution: {integrity: sha512-mMoiWr9QsmyYgvRLdB8TcZOIIGleeqn/rHiOfetjAXd+0bvSALOEvwPfvmAVKIp64m8JfymWKJyPS8Xl7CjSCQ==}
@@ -202,6 +202,9 @@ packages:
 
   '@digdir/designsystemet-types@1.19.1':
     resolution: {integrity: sha512-TZXnZTuz0Du0qu0Du3zITeIINOi99ePD0ATgBNDapkcxWP4+a9c0ACTpEmkX5X1M/b0ZlhSQDp8ZEZHB57U1hg==}
+
+  '@digdir/designsystemet-types@1.20.1':
+    resolution: {integrity: sha512-Y8sKF7Xt/SAbZ+hR2CCwqPEHbCvkYazZlQkYRZwLOGGCyc8vjjVz86sA9jMSNIHxjAdLUsYJosYIYauCy0/Myw==}
 
   '@digdir/designsystemet-web@1.19.1':
     resolution: {integrity: sha512-WtwaiG0u8GRQ0E9VOn19YV1FsWnM3Q5BJU5angQOnV0i0kPJ8Bh7kn0Q3Q9wMbHOcEAAC1F+FANHJdcTsCgmDA==}
@@ -2798,9 +2801,9 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
-  '@digdir/designsystemet-css@1.19.1':
+  '@digdir/designsystemet-css@1.20.1':
     dependencies:
-      '@digdir/designsystemet-types': 1.19.1
+      '@digdir/designsystemet-types': 1.20.1
 
   '@digdir/designsystemet-react@1.19.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
@@ -2824,6 +2827,8 @@ snapshots:
   '@digdir/designsystemet-types@1.18.0': {}
 
   '@digdir/designsystemet-types@1.19.1': {}
+
+  '@digdir/designsystemet-types@1.20.1': {}
 
   '@digdir/designsystemet-web@1.19.1':
     dependencies:
