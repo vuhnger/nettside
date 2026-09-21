@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@digdir/designsystemet-css':
-        specifier: ^1.21.1
-        version: 1.21.1
+        specifier: ^1.22.0
+        version: 1.22.0
       '@digdir/designsystemet-react':
         specifier: ^1.22.0
         version: 1.22.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -190,8 +190,8 @@ packages:
   '@cacheable/utils@2.5.0':
     resolution: {integrity: sha512-buipgOVDkkPXNR5+xBpDw7Zk2n1EvU7qBJCNUcL7rhQ//kfpOXPAvQ511Os0vpLYJ1pZnvudNytkQt2hst3wqA==}
 
-  '@digdir/designsystemet-css@1.21.1':
-    resolution: {integrity: sha512-k01KHaYmkze7tYBt1S/XVPC5UzPIYrpH8pQJzMtRo9WX3EHSPy7llwuFeRvnP4RT3ctDowaIi3s3S3pHIAKevw==}
+  '@digdir/designsystemet-css@1.22.0':
+    resolution: {integrity: sha512-f/+YOK1Gvl7ypdeRh0TDGs28eu8DkOPDAR+T8yLpnys9FxNWX05UNuhXJwYwRuzF9WUgjAhpJ5JKdodTDxWMEA==}
 
   '@digdir/designsystemet-react@1.22.0':
     resolution: {integrity: sha512-0BrL6nZWjHu+FLtyBhcZwX3N0QHcI880l+JTIHCZhgdEvQ81eAWe8gIwmKfDHnPVnBZSZMzVIYDRZu0ISD+X6g==}
@@ -205,9 +205,6 @@ packages:
 
   '@digdir/designsystemet-types@1.18.0':
     resolution: {integrity: sha512-2Qfn9Pf59AZyjc95NcWpsNyma3vcsWbiNMLmoMjHG8o0oBNYQdaln4V7wJig5avjbz7Z1BcBhs60d/DOcP+j5w==}
-
-  '@digdir/designsystemet-types@1.21.1':
-    resolution: {integrity: sha512-kRkZb+XGIVzPseVnWGi1aryfBenpSh/U0QvaOWmH2MNTIrY+/OHqKaVU1x71lo/XFAlhlwpPrhqqJoaNMxvxsA==}
 
   '@digdir/designsystemet-types@1.22.0':
     resolution: {integrity: sha512-VsWH7iFAUBvRCVWuL/ukv1W3xgRH+7Ubbmmf9l7iRAqOFqn8J4GmdzD25YewDjGWUgiDs5rNsTgorK7KS+50WA==}
@@ -2847,9 +2844,9 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
-  '@digdir/designsystemet-css@1.21.1':
+  '@digdir/designsystemet-css@1.22.0':
     dependencies:
-      '@digdir/designsystemet-types': 1.21.1
+      '@digdir/designsystemet-types': 1.22.0
 
   '@digdir/designsystemet-react@1.22.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
@@ -2871,8 +2868,6 @@ snapshots:
       '@digdir/designsystemet-types': 1.18.0
 
   '@digdir/designsystemet-types@1.18.0': {}
-
-  '@digdir/designsystemet-types@1.21.1': {}
 
   '@digdir/designsystemet-types@1.22.0': {}
 
