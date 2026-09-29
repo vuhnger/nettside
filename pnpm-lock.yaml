@@ -13,8 +13,8 @@ importers:
   .:
     dependencies:
       '@digdir/designsystemet-css':
-        specifier: ^1.22.0
-        version: 1.22.0
+        specifier: ^1.23.0
+        version: 1.23.0
       '@digdir/designsystemet-react':
         specifier: ^1.22.0
         version: 1.22.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -195,8 +195,8 @@ packages:
     peerDependencies:
       solid-js: ^1.8
 
-  '@digdir/designsystemet-css@1.22.0':
-    resolution: {integrity: sha512-f/+YOK1Gvl7ypdeRh0TDGs28eu8DkOPDAR+T8yLpnys9FxNWX05UNuhXJwYwRuzF9WUgjAhpJ5JKdodTDxWMEA==}
+  '@digdir/designsystemet-css@1.23.0':
+    resolution: {integrity: sha512-OuqjDBxKl81K+X/5bDj2RydTq2+97kgImanjJOTB6uKe19mmEmnE22uLYuP6QWTjzU9LuBF5nTApM9zTtkRvSw==}
 
   '@digdir/designsystemet-react@1.22.0':
     resolution: {integrity: sha512-0BrL6nZWjHu+FLtyBhcZwX3N0QHcI880l+JTIHCZhgdEvQ81eAWe8gIwmKfDHnPVnBZSZMzVIYDRZu0ISD+X6g==}
@@ -213,6 +213,9 @@ packages:
 
   '@digdir/designsystemet-types@1.22.0':
     resolution: {integrity: sha512-VsWH7iFAUBvRCVWuL/ukv1W3xgRH+7Ubbmmf9l7iRAqOFqn8J4GmdzD25YewDjGWUgiDs5rNsTgorK7KS+50WA==}
+
+  '@digdir/designsystemet-types@1.23.0':
+    resolution: {integrity: sha512-fUDl1bMAWlV2pyo1GlWaN5heuVZNdNMW3/hEgzmYxQcCtaq0g8lNKsUt2GZEeWR5vKE1dfxahsOdKW1E9Udpyg==}
 
   '@digdir/designsystemet-web@1.22.0':
     resolution: {integrity: sha512-AhgkapDs7efBAR6VyvmEfMEmO+xp7q/BM6XvxTWt/Iff3dmlEs9M/wLKX8hOrBY71I3Q/SB6wTKF5u0gaSNeaQ==}
@@ -2985,9 +2988,9 @@ snapshots:
       '@floating-ui/dom': 1.8.0
       solid-js: 1.9.15
 
-  '@digdir/designsystemet-css@1.22.0':
+  '@digdir/designsystemet-css@1.23.0':
     dependencies:
-      '@digdir/designsystemet-types': 1.22.0
+      '@digdir/designsystemet-types': 1.23.0
 
   '@digdir/designsystemet-react@1.22.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
@@ -3011,6 +3014,8 @@ snapshots:
   '@digdir/designsystemet-types@1.18.0': {}
 
   '@digdir/designsystemet-types@1.22.0': {}
+
+  '@digdir/designsystemet-types@1.23.0': {}
 
   '@digdir/designsystemet-web@1.22.0':
     dependencies:
