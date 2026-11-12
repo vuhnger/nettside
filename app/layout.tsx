@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import VisitTracker from "@/components/layout/VisitTracker";
 import LiveCursors from "@/components/cursors/LiveCursors";
+import Snow from "@/components/snow/Snow";
 import { Analytics } from "@vercel/analytics/next";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
@@ -72,6 +73,7 @@ export default function RootLayout({
         </ReactQueryProvider>
         <VisitTracker />
         <LiveCursors />
+        <Snow />
         <Analytics />
         <Script
           src="https://analytics.vuhnger.dev/script.js"
