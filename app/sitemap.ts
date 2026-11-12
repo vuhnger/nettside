@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
   // `/running` svarer 404 når bryteren er av, så den skal ikke ligge her og
   // invitere søkemotorer til en død adresse.
-  const routes = ["", "/projects", "/cv", "/master", "/mst"];
+  const routes = ["", "/master", "/mst"];
   if (isRunningHeatmapEnabled) routes.push("/running");
 
   return routes.map((route) => ({
