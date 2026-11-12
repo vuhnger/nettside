@@ -1,9 +1,7 @@
 import Image from "next/image";
-import { Link as NextLink } from "next-view-transitions";
 import { Card, Heading, Paragraph, Link } from "@digdir/designsystemet-react";
 import { AiFillGithub } from "react-icons/ai";
 import { FaLinkedinIn, FaStrava } from "react-icons/fa";
-import { FiFileText, FiGrid } from "react-icons/fi";
 import { Suspense } from "react";
 import MasterCountdown from "./MasterCountdown";
 import { StatsCardsLoading } from "./StatsCards";
@@ -71,7 +69,7 @@ const BentoGrid = () => {
           </Card>
         </div>
 
-        <div className="md:col-span-2">
+        <div className="md:col-span-4">
           <Card
             style={{
               padding: '0.75rem',
@@ -148,70 +146,6 @@ const BentoGrid = () => {
           </Card>
         </div>
 
-        <div className="md:col-span-1">
-          <NextLink href="/cv" aria-label="CV" className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2">
-            <Card
-              className="relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-sm motion-reduce:transform-none"
-              style={{
-                padding: '0.75rem',
-                height: '100%',
-                backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
-                border: clickableOutline,
-                boxShadow: clickableShadow,
-                cursor: 'pointer'
-              }}
-            >
-              <span
-                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse motion-reduce:animate-none"
-                style={{
-                  borderColor: 'var(--ds-color-accent-base-default)',
-                  opacity: 0.35
-                }}
-                aria-hidden="true"
-              />
-              <div className="flex h-full items-center justify-center gap-2">
-                <FiFileText style={{ fontSize: '2rem', color: 'var(--ds-color-accent-base-default)' }} />
-                <Paragraph data-size="xs" style={{ margin: 0, color: 'var(--ds-color-accent-base-default)', fontWeight: 600 }}>
-                  CV
-                </Paragraph>
-              </div>
-            </Card>
-          </NextLink>
-        </div>
-        <div className="md:col-span-1">
-          <NextLink
-            href="/projects"
-            aria-label="Prosjekter"
-            className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-color-accent-base-default)] focus-visible:ring-offset-2"
-          >
-            <Card
-              className="relative overflow-hidden transition hover:-translate-y-0.5 hover:shadow-sm motion-reduce:transform-none"
-              style={{
-                padding: '0.75rem',
-                height: '100%',
-                backgroundColor: 'color-mix(in srgb, var(--ds-color-neutral-background-default) 85%, transparent)',
-                border: clickableOutline,
-                boxShadow: clickableShadow,
-                cursor: 'pointer'
-              }}
-            >
-              <span
-                className="pointer-events-none absolute inset-0 rounded-[0.5rem] border animate-pulse motion-reduce:animate-none"
-                style={{
-                  borderColor: 'var(--ds-color-accent-base-default)',
-                  opacity: 0.35
-                }}
-                aria-hidden="true"
-              />
-              <div className="flex h-full items-center justify-center gap-2">
-                <FiGrid style={{ fontSize: '2rem', color: 'var(--ds-color-accent-base-default)' }} />
-                <Paragraph data-size="xs" style={{ margin: 0, color: 'var(--ds-color-accent-base-default)', fontWeight: 600 }}>
-                  Prosjekter
-                </Paragraph>
-              </div>
-            </Card>
-          </NextLink>
-        </div>
         <div className="md:col-span-2">
           <MasterCountdown />
         </div>

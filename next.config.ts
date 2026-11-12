@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
   allowedDevOrigins: ["http://host.docker.internal", "http://host.docker.internal:3000"],
+  experimental: {
+    useTypeScriptCli: false,
+  },
   turbopack: {
     root: __dirname,
   },

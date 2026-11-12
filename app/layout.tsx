@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -7,6 +8,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import VisitTracker from "@/components/layout/VisitTracker";
 import LiveCursors from "@/components/cursors/LiveCursors";
+import Snow from "@/components/snow/Snow";
 import { Analytics } from "@vercel/analytics/next";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
@@ -72,6 +74,9 @@ export default function RootLayout({
         </ReactQueryProvider>
         <VisitTracker />
         <LiveCursors />
+        <Suspense>
+          <Snow />
+        </Suspense>
         <Analytics />
         <Script
           src="https://analytics.vuhnger.dev/script.js"
