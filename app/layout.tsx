@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -73,7 +74,9 @@ export default function RootLayout({
         </ReactQueryProvider>
         <VisitTracker />
         <LiveCursors />
-        <Snow />
+        <Suspense>
+          <Snow />
+        </Suspense>
         <Analytics />
         <Script
           src="https://analytics.vuhnger.dev/script.js"
