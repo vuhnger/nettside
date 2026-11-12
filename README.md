@@ -1,7 +1,7 @@
 # Nettside
 
 Personlig portfolio bygget med Next.js App Router, Designsystemet fra DigDir
-og Tailwind. Inneholder CV, prosjekter og små visualiseringer/eksperimenter.
+og Tailwind. Inneholder små visualiseringer/eksperimenter.
 
 ## Kjør lokalt
 
